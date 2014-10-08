@@ -12,4 +12,4 @@ Talks by Alex Dergachev
 
 * [markdown](https://github.com/dergachev/presentations/tree/gh-pages/drupalcamp-mtl-2014-docker/)
 * [slideshow](http://dergachev.github.io/presentations/drupalcamp-mtl-2014-docker/build/out.html)
-* [conference website](http://www.nyccamp.org/session/test-driven-drupal-using-docker)
+* [conference website](http://2014.drupalcampmontreal.com/fr/sessions/test-driven-drupal-using-docker)
