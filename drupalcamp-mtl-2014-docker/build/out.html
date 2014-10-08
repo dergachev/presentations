@@ -1,0 +1,450 @@
+<!DOCTYPE html><html><head>
+<title>README.md</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=1024, user-scalable=no">
+
+<!-- Required stylesheet -->
+<link rel="stylesheet" href="resources/deck.js/core/deck.core.css">
+
+<!-- Extension CSS files go here. Remove or add as needed. -->
+<link rel="stylesheet" href="resources/deck.js/extensions/goto/deck.goto.css">
+<link rel="stylesheet" href="resources/deck.js/extensions/menu/deck.menu.css">
+<link rel="stylesheet" href="resources/deck.js/extensions/navigation/deck.navigation.css">
+<link rel="stylesheet" href="resources/deck.js/extensions/status/deck.status.css">
+<link rel="stylesheet" href="resources/deck.js/extensions/hash/deck.hash.css">
+<link rel="stylesheet" href="resources/deck.js/extensions/scale/deck.scale.css">
+<!-- Style theme. More available in /themes/style/ or create your own. -->
+<link rel="stylesheet" href="resources/amir-deck.css">
+
+<!-- Transition theme. More available in /themes/transition/ or create your own. -->
+<link rel="stylesheet" href="resources/deck.js/themes/transition/vertical-slide.css">
+
+<!-- Required Modernizr file -->
+<script src="resources/deck.js/modernizr.custom.js"></script>
+
+<!-- Roboto Slab typeface -->
+<link href='http://fonts.googleapis.com/css?family=Roboto+Slab:300,700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Cardo:400,400italic,700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+<!-- Google Code Prettify -->
+<link rel="stylesheet" href="resources/google-code-prettify/styles/desert.css">
+</head><body class='deck-container'><section class='slide'>
+<div style="position: absolute; height: 97%; width: 90%;">
+<h2 style="margin:30px auto 100px auto; font-size:2.2em; font-weight:bold; float:right;">
+  Docker Powered Drupal Development
+</h2>
+  <code style="float:right; font-size:0.7em; clear:both; text-align: right;">
+    <div style="font-size:1.2em; font-weight:bold;">Alex Dergachev</div>
+    <div> alex@evolvingweb.ca </div>
+    <div> github.com/dergachev </div>
+    <div> twitter.com/dergachev </div>
+    <div> evolvingweb on drupal.org </div>
+  </code>
+<img src="resources/img/ew-good.png" style="height:130px; margin: 10px 0 0 0; position: absolute; bottom: 0;">
+</div>
+
+</section><section class='slide'>
+
+<h2>Outline</h2>
+
+<ul>
+<li>About Docker</li>
+<li>Docker demo</li>
+<li>Case study 1: D7 Upgrade
+<ul>
+<li>About the project</li>
+<li>Technical features</li>
+<li>Special challenges</li>
+<li>Solutions</li>
+</ul></li>
+<li>Case study 2: Markdown to Drupal migration</li>
+<li>Sitediff demo</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>What is Docker?</h2>
+
+<ul>
+<li>tool that automates the creation and running of VMs for dev and prod</li>
+<li>not a webservice, but a tool that runs on your machine</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>How Docker works?</h2>
+
+<ul>
+<li>VMs vs containers: light-weight, shared resources and kernel</li>
+<li>need to run on Linux, or in a Virtualbox VM</li>
+<li>Dockerfile: start from generic "ubuntu:14.04" container, convert to your drupal project</li>
+<li>Definition: image vs container</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Advantages of Docker</h2>
+
+<ul>
+<li>spin up dev env quickly, great for onboarding </li>
+<li>consistency (all dependencies are the same for all team members)</li>
+<li>easier to replicate bugs</li>
+<li>opportunity for CI (circle CI)</li>
+<li>build process: Dockerfile</li>
+<li>caching</li>
+<li>includes C libraries (yaml), and also tomcat, solr, memcache, APC, xhprof, xdebug, etc ...</li>
+<li>everyone and and their dog is considering it</li>
+<li>easily share images</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Caveats</h2>
+
+<ul>
+<li>we haven't made it industrial-grade yet</li>
+<li>lots of best practices to figure out, but the costs are up-front</li>
+<li>manual adaptation to new site</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Docker commands</h2>
+
+<ul>
+<li>docker build -t marriage .</li>
+<li>docker run -it marriage /bin/bash</li>
+<li>docker run marriage start.sh</li>
+<li>docker run -p 8080:80 marriage start.sh</li>
+<li>docker run -v /home/alex/source:/drupal marriage start.sh</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Docker tutorial / demo</h2>
+
+<ul>
+<li><a href="https://github.com/dergachev/drupal-docker-marriage/">https://github.com/dergachev/drupal-docker-marriage/</a></li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Docker for build process</h2>
+
+<ul>
+<li>instantly spin-up of container (lightweight VM) with EXACT dev environment</li>
+<li>easily script build of container</li>
+<li>smart caching FTW!</li>
+<li>sipmlicity (vs chef): just know bash</li>
+<li>copy on write - instant snapshots</li>
+<li>Makefile</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>How we used Docker</h2>
+
+<ul>
+<li>deployment in separate repo - see <a href="https://github.com/evolvingweb/allseen-deploy">README.md</a></li>
+<li>deploy.sh</li>
+<li>Dockerfile</li>
+<li>Makefile</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>SiteDiff</h2>
+
+<ul>
+<li><a href="https://github.com/dergachev/sitediff">github.com/dergachev/sitediff</a></li>
+<li>show pretty diffs of HTML contents of whole sites</li>
+<li>sanitization - easy to write! easy to maintain!</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>SiteDiff Input</h2>
+
+<pre class="prettyprint"><code>    paths:
+     - /
+     - /user
+
+    selector: 'body'
+
+    sanitization:
+    - title: 'remove form build id'
+      pattern:    '&lt;input type="hidden" name="form_build_id" value="form-[a-zA-Z0-9_-]+" *\/?&gt;'
+      substitute: '&lt;input type="hidden" name="form_build_id" value="__form_build_id__"&gt;'
+
+    before:
+      dom_transform:
+      - type: remove
+        selector: '#something'
+</code></pre>
+
+</section><section class='slide'>
+
+<h2>SiteDiff output</h2>
+
+<p><img src="https://dl.dropbox.com/u/29440342/screenshots/OTEHKZLG-2014.04.10-13-08-53.png" alt="" title="" />
+<img src="https://dl.dropbox.com/u/29440342/screenshots/TZWTBTFV-2014.04.10-13-26-25.png" alt="" title="" /></p>
+
+</section><section class='slide'>
+
+<h2>Case study 1: D7 upgrade</h2>
+
+<ul>
+<li>McGill University's Course Calendar (aka Catalogue)</li>
+<li>Programs, Courses, and University Regulations</li>
+<li>Legal documents, course schedules, metadata, cross-referencing</li>
+<li>Search-driven UI</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Technical features (UI)</h2>
+
+<ul>
+<li>search-driven navigation
+<ul>
+<li>tabs (heirarchical facets)</li>
+<li>custom facets</li>
+<li>indexing embedded content (via node refs)</li>
+<li>search this section (menu item)</li>
+<li>performance</li>
+</ul></li>
+<li>UI: all data lives in logical tree hierarchy
+<ul>
+<li>think 10k primary link items LOGICALLY, but really the tree is defined by biz logic</li>
+<li>menus (custom code, core, menu_block)</li>
+<li>breadcrumbs, context, flattening</li>
+</ul></li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Technical features (Data)</h2>
+
+<ul>
+<li>including revision, site has 70k nodes, imported from banner+documentum</li>
+<li>15 content types, 170 field instances</li>
+<li>a lot of cross-linking via node references</li>
+<li>kind-of i18n (hacks for continuing studies)</li>
+<li>web services</li>
+<li>input filters (auto-detection of course names in any HTML content)</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Extra requirements</h2>
+
+<ul>
+<li>Custom modules
+<ul>
+<li>Legacy => really really custom (4+ years of code drift)</li>
+<li>Extended apachesolr 6.x-2.x-dev</li>
+</ul></li>
+<li>Contrib Modules
+<ul>
+<li>Had to deduce which version of contrib modules were enabled from system table</li>
+<li>Many contrib modules were enabled but unused</li>
+</ul></li>
+<li>Concern about data and configuration integrity</li>
+<li>Test driven development</li>
+<li>Deliverable = upgrade script, not code + db dump</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Incidental challenges</h2>
+
+<ul>
+<li>Defeaturization</li>
+<li>Deploying a dev site (not the same as prod?)
+<ul>
+<li>missing content types, modules, blocks</li>
+</ul></li>
+<li>content migrate running time
+<ul>
+<li>prune the database (10% of the nodes, focused on 1 faculty, try to keep consistency)</li>
+<li>content<em>migrate</em>tweaks https://github.com/dergachev/content<em>migrate</em>tweaks</li>
+</ul></li>
+<li>git branch hecticness</li>
+<li>i18n<em>field allowed</em>values translation bug</li>
+<li>misc migration bugs (entityreference, nodeblock)</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Technical solutions</h2>
+
+<ul>
+<li>Refactoring first for sanity</li>
+<li>Docker for build process</li>
+<li>Unit tests for the new code we write; phpunit for filters and menus</li>
+<li>Sitediff for correctness</li>
+<li>Content migrate tweaks for speed</li>
+<li>Search API FTW!</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Unit testing</h2>
+
+<ul>
+<li>phpunit tests per module (works with D7 "OK")
+<ul>
+<li>bootstrap drupal => can't mock global functions, need process isolation</li>
+<li>instead, use fixtures and mocks in your tests w/o drupal process isolation, can't mock global functions </li>
+</ul></li>
+<li>autoloading: explored composer, manually, PSR0</li>
+<li>fixtures are awesome: menus, nodes</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Scripted upgrade process</h2>
+
+<ul>
+<li>D6 deploy script</li>
+<li>d6 refactor adjustments</li>
+<li>d6 prepare (defeaturize, turn off non-core modules, change theme to bartik, pm-uninstall several modules)</li>
+<li>core updb</li>
+<li>enable modules, run contrib updb</li>
+<li>content migrate</li>
+<li><a href="https://github.com/evolvingweb/coursecal-d7/blob/d7/build/upgrade/menu_adjustments.php">menu_adjustments.php</a></li>
+<li><a href="https://github.com/evolvingweb/coursecal-d7/blob/d7/build/scripts/d7_adjustments.sh">d7_adjustments.sh</a></li>
+<li><a href="https://github.com/evolvingweb/coursecal-d7/blob/d7/build/scripts/d7_adjustments_solr.sh">d7_adjustments_solr.sh</a></li>
+<li>all glued together by Makefile and multiple Dockerfile-s</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>About the project</h2>
+
+<ul>
+<li>Linux Foundation Collaborative Project</li>
+<li>Existing D7 site</li>
+<li>Goal is to use Markdown + git workflow, custom nodejs static site generator, import into Drupal</li>
+<li>Use migrate module to import: nodes, files, menu_links</li>
+<li>UI challenges: building a responsive menu with depth up to 7 levels</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Migrate strengths</h2>
+
+<ul>
+<li>analysis/verification of field mappings</li>
+<li>hash-based incremental updates </li>
+<li>existing sources: files, JSON, csv, d2d, sql...</li>
+<li>existing destinations: node, menu_link, user, file, entity</li>
+<li>extensible via OO</li>
+<li>drush ui</li>
+<li>rollback and undo</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Migrate weaknesses</h2>
+
+<ul>
+<li>crufty code base</li>
+<li>some sources are limited (no recursive sources, eg for menus or books)</li>
+<li>incremental updates don't track deletions</li>
+<li>error handling: eg. crashes if source content missing</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Our improvements</h2>
+
+<ul>
+<li>NavSource for recursive yaml parsing, uses RecursiveIteratorIterator</li>
+<li>git workflow integration (status, diff, rollback)</li>
+<li>dry run</li>
+<li>lots of validation of content (eg broken links in HTML, broken references, invalid HTML)</li>
+<li>deletion on incremental updates</li>
+<li>html parsing with query path in prepareRow()</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Content migrate tweaks</h2>
+
+<ul>
+<li><a href="/https://github.com/dergachev/content_migrate_tweaks/">https://github.com/dergachev/content_migrate_tweaks</a></li>
+<li>content_migrate submodule of CCK is sloooow</li>
+<li>one field at a time, one node at a time, one value at a time</li>
+<li>stopped it after about 10 hours</li>
+<li>query optimization</li>
+<li>unit and integration testing</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Any questions about...?</h2>
+
+<ul>
+<li>Docker</li>
+<li>Sitediff</li>
+<li>D7 Upgrades</li>
+<li>Content migrate</li>
+<li>Unit testing</li>
+<li>Migrate</li>
+</ul>
+
+</section><section class='slide'>
+</section>
+<!-- End slides. -->
+
+
+<!-- Begin extension snippets. Add or remove as needed. -->
+
+<!-- deck.navigation snippet -->
+<a href="resources/#" class="deck-prev-link" title="Previous">&#8592;</a>
+<a href="resources/#" class="deck-next-link" title="Next">&#8594;</a>
+
+<!-- deck.status snippet -->
+<p class="deck-status">
+	<span class="deck-status-current"></span>
+	/
+	<span class="deck-status-total"></span>
+</p>
+
+<!-- deck.goto snippet -->
+<form action="." method="get" class="goto-form">
+	<label for="goto-slide">Go to slide:</label>
+	<input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+	<datalist id="goto-datalist"></datalist>
+	<input type="submit" value="Go">
+</form>
+
+<!-- deck.hash snippet -->
+<a href="resources/." title="Permalink to this slide" class="deck-permalink">#</a>
+
+<!-- End extension snippets. -->
+
+
+<!-- Required JS files. -->
+<script src="resources/deck.js/jquery-1.7.2.min.js"></script>
+<script src="resources/deck.js/core/deck.core.js"></script>
+
+<!-- Extension JS files. Add or remove as needed. -->
+<script src="resources/deck.js/core/deck.core.js"></script>
+<script src="resources/deck.js/extensions/hash/deck.hash.js"></script>
+<script src="resources/deck.js/extensions/menu/deck.menu.js"></script>
+<script src="resources/deck.js/extensions/goto/deck.goto.js"></script>
+<script src="resources/deck.js/extensions/status/deck.status.js"></script>
+<script src="resources/deck.js/extensions/navigation/deck.navigation.js"></script>
+<script src="resources/deck.js/extensions/scale/deck.scale.js"></script>
+
+<!-- Initialize the deck. You can put this in an external file if desired. -->
+<script>
+	$(function() {
+		$.deck('.slide');
+	});
+</script>
+<script src="resources/google-code-prettify/src/run_prettify.js"></script>
+</body></html>
