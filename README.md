@@ -13,3 +13,9 @@ Talks by Alex Dergachev
 * [markdown](https://github.com/dergachev/presentations/tree/gh-pages/drupalcamp-mtl-2014-docker/)
 * [slideshow](http://dergachev.github.io/presentations/drupalcamp-mtl-2014-docker/build/out.html)
 * [conference website](http://2014.drupalcampmontreal.com/fr/sessions/test-driven-drupal-using-docker)
+
+### JS Montreal - BabelFrog Demo and Intro to Chrome Extensions
+
+* [markdown](https://github.com/dergachev/presentations/tree/gh-pages/jsmtl-2014-babelfrog)
+* [slideshow](http://dergachev.github.io/presentations/jsmtl-2014-babelfrog/build/out.html)
+* [conference website](http://js-montreal.org/)
