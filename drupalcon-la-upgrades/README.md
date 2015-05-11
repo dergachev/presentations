@@ -219,6 +219,17 @@
 
 --end--
 
+## Content migrate tweaks
+
+* [https://github.com/dergachev/content\_migrate\_tweaks](/https://github.com/dergachev/content_migrate_tweaks/)
+* content\_migrate submodule of CCK is sloooow
+* one field at a time, one node at a time, one value at a time
+* stopped it after about 10 hours
+* query optimization
+* unit and integration testing
+
+--end--
+
 
 ## What is Docker?
 
@@ -329,60 +340,6 @@
 
 ![](https://dl.dropbox.com/u/29440342/screenshots/OTEHKZLG-2014.04.10-13-08-53.png)
 ![](https://dl.dropbox.com/u/29440342/screenshots/TZWTBTFV-2014.04.10-13-26-25.png)
-
---end--
-
-## About the project
-
-* Linux Foundation Collaborative Project
-* Existing D7 site
-* Goal is to use Markdown + git workflow, custom nodejs static site generator, import into Drupal
-* Use migrate module to import: nodes, files, menu_links
-* UI challenges: building a responsive menu with depth up to 7 levels
-
---end--
-
-## Migrate strengths
-
-* analysis/verification of field mappings
-* hash-based incremental updates
-* existing sources: files, JSON, csv, d2d, sql...
-* existing destinations: node, menu_link, user, file, entity
-* extensible via OO
-* drush ui
-* rollback and undo
-
---end--
-
-## Migrate weaknesses
-
-* crufty code base
-* some sources are limited (no recursive sources, eg for menus or books)
-* incremental updates don't track deletions
-* error handling: eg. crashes if source content missing
-
---end--
-
-## Our improvements
-
-* NavSource for recursive yaml parsing, uses RecursiveIteratorIterator
-* git workflow integration (status, diff, rollback)
-* dry run
-* lots of validation of content (eg broken links in HTML, broken references, invalid HTML)
-* deletion on incremental updates
-* html parsing with query path in prepareRow()
-
---end--
-
-
-## Content migrate tweaks
-
-* [https://github.com/dergachev/content\_migrate\_tweaks](/https://github.com/dergachev/content_migrate_tweaks/)
-* content\_migrate submodule of CCK is sloooow
-* one field at a time, one node at a time, one value at a time
-* stopped it after about 10 hours
-* query optimization
-* unit and integration testing
 
 --end--
 
