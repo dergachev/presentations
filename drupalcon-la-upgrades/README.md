@@ -324,6 +324,9 @@
 
 --end--
 
+## SiteDiff demo
+
+![](img/sitediff-screenshot.png)
 
 ## Any questions about...?
 
