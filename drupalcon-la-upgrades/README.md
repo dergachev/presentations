@@ -328,13 +328,11 @@
 
 ![](img/sitediff-screenshot.png)
 
-## Any questions about...?
+--end--
 
-* Docker
-* Sitediff
-* D7 Upgrades
-* Content migrate
-* Unit testing
-* Migrate
+## Any questions?
 
---end-- 
+* Evolving Web: [http://evolvingweb.ca](http://evolvingweb.ca)
+* SiteDiff: [https://github.com/evolvingweb/sitediff](https://github.com/evolvingweb/sitediff)
+* Demo of SiteDiff: [https://github.com/vasi/sitediff-update-demo](https://github.com/vasi/sitediff-update-demo)
+* Demo of docker, behat, CircleCI: [https://github.com/evolvingweb/drupal-docker-marriage](https://github.com/evolvingweb/drupal-docker-marriage)
