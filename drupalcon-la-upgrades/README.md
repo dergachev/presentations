@@ -75,25 +75,150 @@
 ## About the speakers
 
 * Alex co-founded Evolving Web straight out of undergrad
-* Dave 1st dev, taught us version control and Linux
+* Dave was there to show us version control and Linux
 * Besides doing Drupal projects since 2008...
 
 --end--
 
-## How to do minor version updates 
+## Minor updates HOWTO
 
-* `git branch UPDATE-DRUPAL-6-37`
-* `drush dl drupal-6.37`
+* `git branch UPDATE-DRUPAL-7-37`
+* `drush dl drupal-7.37`
 * commit to 
 * run tests (manual and automatic)
 
-* __Intro__ (9m)
-  * Testing, Minor Updates, Major Core Upgrades
-* __Case study__: McGill Courses and Programs D7 (15m)
-  * Project description, Challenges, Solutions
-  * Tools: Docker, phpunit, SiteDiff
+--end--
+
+## Major upgrades HOWTO
+
+* prepare in D6: 
+  * cleanup, fix bugs, defeaturize
+* `git branch UPGRADE-DRUPAL7`
+* `drush dl drupal`
 
 --end--
+
+## D7 Upgrade Case Study
+
+* Project description
+* Challenges
+* Solutions
+* Tools
+  * Docker
+  * phpunit
+  * SiteDiff
+
+--end--
+
+## Case study D7 upgrade
+
+<img src="https://dl.dropboxusercontent.com/u/29440342/screenshots/CJQQBDZE-2015.05.11-15-37-20.png" width="45%" style="float: right; margin-left: 40px; margin-right: 20px" />
+
+* McGill University's Course Calendar (aka Catalogue)
+* Programs, Courses, and University Regulations
+* Legal documents, course schedules, metadata, cross-referencing
+* Search-driven UI
+
+--end--
+
+## Search-driven UI
+
+<img src="https://dl.dropbox.com/u/29440342/screenshots/GJKGZCAJ-2015.05.11-15-29-43.png" width="45%" style="float: right; margin-left: 40px; margin-right: 20px" />
+
+* tabs (heirarchical facets)
+* custom facets
+* indexing embedded content (via node refs)
+* search this section (menu item)
+* performance
+
+--end--
+
+## Logically nested menus
+
+<img src="https://dl.dropboxusercontent.com/u/29440342/screenshots/YEEHOHIF-2015.05.11-15-46-28.png" width="40%" style="float: right; margin-left: 40px; margin-right: 20px" />
+
+* all data lives in logical tree hierarchy
+* think 10k primary link items LOGICALLY, but really the tree is defined by biz logic
+* menus (custom code, core, menu_block)
+* breadcrumbs, context, flattening
+
+--end--
+
+## Technical features (Data)
+
+* including revision, site has 70k nodes, imported from banner+documentum
+* 15 content types, 170 field instances
+* a lot of cross-linking via node references
+* kind-of i18n (hacks for continuing studies)
+* web services
+* input filters (auto-detection of course names in any HTML content)
+
+--end--
+
+## Extra requirements
+
+* Custom modules
+  * Legacy => really really custom (4+ years of code drift)
+  * Extended apachesolr 6.x-2.x-dev
+* Contrib Modules
+  * Had to deduce which version of contrib modules were enabled from system table
+  * Many contrib modules were enabled but unused
+* Concern about data and configuration integrity
+* Test driven development
+* Deliverable = upgrade script, not code + db dump
+
+--end--
+
+## Incidental challenges
+
+* Defeaturization
+* Deploying a dev site (not the same as prod?)
+  * missing content types, modules, blocks
+* content migrate running time
+  * prune the database (10% of the nodes, focused on 1 faculty, try to keep consistency)
+  * content_migrate_tweaks https://github.com/dergachev/content_migrate_tweaks
+* git branch hecticness
+* i18n_field allowed_values translation bug
+* misc migration bugs (entityreference, nodeblock)
+
+--end--
+
+## Technical solutions
+
+* Refactoring first for sanity
+* Docker for build process
+* Unit tests for the new code we write; phpunit for filters and menus
+* Sitediff for correctness
+* Content migrate tweaks for speed
+* Search API FTW!
+
+--end--
+
+## Unit testing
+
+* phpunit tests per module (works with D7 "OK")
+ * bootstrap drupal => can't mock global functions, need process isolation
+ * instead, use fixtures and mocks in your tests w/o drupal process isolation, can't mock global functions
+* autoloading: explored composer, manually, PSR0
+* fixtures are awesome: menus, nodes
+
+--end--
+
+## Scripted upgrade process
+
+* D6 deploy script
+* d6 refactor adjustments
+* d6 prepare (defeaturize, turn off non-core modules, change theme to bartik, pm-uninstall several modules)
+* core updb
+* enable modules, run contrib updb
+* content migrate
+* [menu\_adjustments.php](https://github.com/evolvingweb/coursecal-d7/blob/d7/build/upgrade/menu_adjustments.php)
+* [d7\_adjustments.sh](https://github.com/evolvingweb/coursecal-d7/blob/d7/build/scripts/d7_adjustments.sh)
+* [d7\_adjustments\_solr.sh](https://github.com/evolvingweb/coursecal-d7/blob/d7/build/scripts/d7_adjustments_solr.sh)
+* all glued together by Makefile and multiple Dockerfile-s
+
+--end--
+
 
 ## What is Docker?
 
@@ -204,106 +329,6 @@
 
 ![](https://dl.dropbox.com/u/29440342/screenshots/OTEHKZLG-2014.04.10-13-08-53.png)
 ![](https://dl.dropbox.com/u/29440342/screenshots/TZWTBTFV-2014.04.10-13-26-25.png)
-
---end--
-
-
-## Case study 1: D7 upgrade
-
-* McGill University's Course Calendar (aka Catalogue)
-* Programs, Courses, and University Regulations
-* Legal documents, course schedules, metadata, cross-referencing
-* Search-driven UI
-
---end--
-
-## Technical features (UI)
-
-* search-driven navigation
-  * tabs (heirarchical facets)
-  * custom facets
-  * indexing embedded content (via node refs)
-  * search this section (menu item)
-  * performance
-* UI: all data lives in logical tree hierarchy
-  * think 10k primary link items LOGICALLY, but really the tree is defined by biz logic
-  * menus (custom code, core, menu_block)
-  * breadcrumbs, context, flattening
-
---end--
-
-## Technical features (Data)
-
-* including revision, site has 70k nodes, imported from banner+documentum
-* 15 content types, 170 field instances
-* a lot of cross-linking via node references
-* kind-of i18n (hacks for continuing studies)
-* web services
-* input filters (auto-detection of course names in any HTML content)
-
---end--
-
-## Extra requirements
-
-* Custom modules
-  * Legacy => really really custom (4+ years of code drift)
-  * Extended apachesolr 6.x-2.x-dev
-* Contrib Modules
-  * Had to deduce which version of contrib modules were enabled from system table
-  * Many contrib modules were enabled but unused
-* Concern about data and configuration integrity
-* Test driven development
-* Deliverable = upgrade script, not code + db dump
-
---end--
-
-## Incidental challenges
-
-* Defeaturization
-* Deploying a dev site (not the same as prod?)
-  * missing content types, modules, blocks
-* content migrate running time
-  * prune the database (10% of the nodes, focused on 1 faculty, try to keep consistency)
-  * content_migrate_tweaks https://github.com/dergachev/content_migrate_tweaks
-* git branch hecticness
-* i18n_field allowed_values translation bug
-* misc migration bugs (entityreference, nodeblock)
-
---end--
-
-## Technical solutions
-
-* Refactoring first for sanity
-* Docker for build process
-* Unit tests for the new code we write; phpunit for filters and menus
-* Sitediff for correctness
-* Content migrate tweaks for speed
-* Search API FTW!
-
---end--
-
-## Unit testing
-
-* phpunit tests per module (works with D7 "OK")
- * bootstrap drupal => can't mock global functions, need process isolation
- * instead, use fixtures and mocks in your tests w/o drupal process isolation, can't mock global functions
-* autoloading: explored composer, manually, PSR0
-* fixtures are awesome: menus, nodes
-
---end--
-
-## Scripted upgrade process
-
-* D6 deploy script
-* d6 refactor adjustments
-* d6 prepare (defeaturize, turn off non-core modules, change theme to bartik, pm-uninstall several modules)
-* core updb
-* enable modules, run contrib updb
-* content migrate
-* [menu\_adjustments.php](https://github.com/evolvingweb/coursecal-d7/blob/d7/build/upgrade/menu_adjustments.php)
-* [d7\_adjustments.sh](https://github.com/evolvingweb/coursecal-d7/blob/d7/build/scripts/d7_adjustments.sh)
-* [d7\_adjustments\_solr.sh](https://github.com/evolvingweb/coursecal-d7/blob/d7/build/scripts/d7_adjustments_solr.sh)
-* all glued together by Makefile and multiple Dockerfile-s
 
 --end--
 
