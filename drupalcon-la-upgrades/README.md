@@ -19,7 +19,7 @@
     </td>
   </tr></table>
 
-  <p><img src="resources/img/ew-good.png" style="height:130px; margin: 10px 0 0 0; position: absolute; bottom: 0;"></p>
+  <p><img src="img/ew-good.png" style="height:130px; margin: 10px 0 0 0; position: absolute; bottom: 0;"></p>
 </div>
 
 --end--
