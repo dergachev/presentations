@@ -328,11 +328,15 @@
 
 ![](img/pull-request-screenshot.png)
 
+https://github.com/evolvingweb/drupal-docker-marriage
+
 --end--
 
 ## SiteDiff demo
 
 ![](img/sitediff-screenshot.png)
+
+https://github.com/vasi/sitediff-update-demo
 
 --end--
 
