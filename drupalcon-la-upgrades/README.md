@@ -8,14 +8,14 @@
       <div> alex@evolvingweb.ca </div>
       <div> github.com/dergachev </div>
       <div> twitter.com/dergachev </div>
-      <div> evolvingweb on d.o. </div>
+      <div> drupal.org/u/evolvingweb </div>
     </td>
     <td style="font-size:0.7em; text-align: center; width:50%;">
       <div style="font-size:1.2em; font-weight:bold;">Dave Vasilevsky</div>
       <div> vasi@evolvingweb.ca </div>
       <div> github.com/vasi </div>
       <div> twitter.com/djvasi </div>
-      <div> evolvingweb-vasi on d.o. </div>
+      <div> drupal.org/u/vasi </div>
     </td>
   </tr></table>
 
@@ -26,35 +26,72 @@
 
 ## Outline
 
-* About us (3m)
-* Intro (9m)
-  * Testing
-  * Minor Updates
-  * Major Core Upgrades
-* Case study: McGill Academic Calendar to D7 Upgrade (15m)
-  * Project description
-  * Challenges
+* __About us__ (3m)
+* __Intro__ (9m)
+  * Testing, Minor Updates, Major Core Upgrades
+* __Case study__: McGill Courses and Programs D7 (15m)
+  * Project description, Challenges, Solutions
   * Tools: Docker, phpunit, SiteDiff
-	* Solutions
-* Other tools	(4m)
-  * behat
-	* CircleCI
-* Demo of drupal-docker-marriage (8m)
-* Even more tools (4m)
-  * git
-	* backups
-	* upgrade path tests
-* Demo of SiteDiff (8m)
+* __Other tools__: behat, CircleCI	(4m)
+* __drupal-docker-marriage demo__ (8m)
+* __More tools__: git, backups, upgrade path tests (4m)
+* __SiteDiff demo__ (8m)
 
 --end--
 
-## About Us
+## About Evolving Web
 
-* Alex co-founded Evolving Web straight out of McGill, 2007
-* Dave was there to teach us SVN
+* Drupal development, consulting and training since 2007
+* Very involved with the Drupal community
+* Specialties
+  * Large, scalable infrastructure and deployments
+  * Multilingual content management
+  * Apache Solr search interfaces
+  * Content import and synchronization
+  * Custom theme development
+  * Custom module development
+  * Search engine optimization for Drupal (SEO)
+  * Integration with legacy systems
+  * Expert Drupal training
+* Based in Montreal, clients in Canada and USA
 
-* tool that automates the creation and running of VMs for dev and prod
-* not a webservice, but a tool that runs on your machine
+--end--
+
+
+![](https://dl.dropbox.com/u/29440342/screenshots/TMFBQGIR-2015.05.11-14-42-45.png)
+
+--end--
+
+## Drupal training program
+
+<img src="http://evolvingweb.ca/sites/default/files/styles/large/public/_Q4A1828_0.jpg" width="25%" style="float: right; margin-left: 40px; margin-right: 20px" />
+
+* Public: Montreal, Ottawa, Toronto, DC Munich, NJ, NYC, Boston
+* Private: Health Canada, Parks Canada, Tourism Quebec, Trent U, McGill U
+* Enterprise teams, dev shops, remote
+
+--end--
+
+## About the speakers
+
+* Alex co-founded Evolving Web straight out of undergrad
+* Dave 1st dev, taught us version control and Linux
+* Besides doing Drupal projects since 2008...
+
+--end--
+
+## How to do minor version updates 
+
+* `git branch UPDATE-DRUPAL-6-37`
+* `drush dl drupal-6.37`
+* commit to 
+* run tests (manual and automatic)
+
+* __Intro__ (9m)
+  * Testing, Minor Updates, Major Core Upgrades
+* __Case study__: McGill Courses and Programs D7 (15m)
+  * Project description, Challenges, Solutions
+  * Tools: Docker, phpunit, SiteDiff
 
 --end--
 
