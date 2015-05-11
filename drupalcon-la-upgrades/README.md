@@ -1,30 +1,60 @@
-<div style="position: absolute; height: 97%; width: 90%;">
-<h2 style="margin:30px auto 100px auto; font-size:2.2em; font-weight:bold; float:right;">
-  Docker Powered Drupal Development
-</h2>
-  <code style="float:right; font-size:0.7em; clear:both; text-align: right;">
-    <div style="font-size:1.2em; font-weight:bold;">Alex Dergachev</div>
-    <div> alex@evolvingweb.ca </div>
-    <div> github.com/dergachev </div>
-    <div> twitter.com/dergachev </div>
-    <div> evolvingweb on drupal.org </div>
-  </code>
-<img src="resources/img/ew-good.png" style="height:130px; margin: 10px 0 0 0; position: absolute; bottom: 0;">
+<div style="position: absolute; height: 97%; width: 100%;">
+  <h2 style="margin:30px auto 50px 0px; font-size:1.8em; font-weight:bold; width: 90%; text-align: center">
+    Test Driven Drupal Upgrades
+  </h2>
+  <table style="width: 90%"><tr>
+    <td style="font-size:0.7em; text-align: center; width:50%;">
+      <div style="font-size:1.2em; font-weight:bold;">Alex Dergachev</div>
+      <div> alex@evolvingweb.ca </div>
+      <div> github.com/dergachev </div>
+      <div> twitter.com/dergachev </div>
+      <div> evolvingweb on d.o. </div>
+    </td>
+    <td style="font-size:0.7em; text-align: center; width:50%;">
+      <div style="font-size:1.2em; font-weight:bold;">Dave Vasilevsky</div>
+      <div> vasi@evolvingweb.ca </div>
+      <div> github.com/vasi </div>
+      <div> twitter.com/djvasi </div>
+      <div> evolvingweb-vasi on d.o. </div>
+    </td>
+  </tr></table>
+
+  <p><img src="resources/img/ew-good.png" style="height:130px; margin: 10px 0 0 0; position: absolute; bottom: 0;"></p>
 </div>
 
 --end--
 
 ## Outline
 
-* About Docker
-* Docker demo
-* Case study 1: D7 Upgrade
-  * About the project
-  * Technical features
-  * Special challenges
-  * Solutions
-* Case study 2: Markdown to Drupal migration
-* Sitediff demo
+* About us (3m)
+* Intro (9m)
+  * Testing
+  * Minor Updates
+  * Major Core Upgrades
+* Case study: McGill Academic Calendar to D7 Upgrade (15m)
+  * Project description
+  * Challenges
+  * Tools: Docker, phpunit, SiteDiff
+	* Solutions
+* Other tools	(4m)
+  * behat
+	* CircleCI
+* Demo of drupal-docker-marriage (8m)
+* Even more tools (4m)
+  * git
+	* backups
+	* upgrade path tests
+* Demo of SiteDiff (8m)
+
+--end--
+
+## About Us
+
+* Alex co-founded Evolving Web straight out of McGill, 2007
+* Dave was there to teach us SVN
+
+* tool that automates the creation and running of VMs for dev and prod
+* not a webservice, but a tool that runs on your machine
 
 --end--
 
