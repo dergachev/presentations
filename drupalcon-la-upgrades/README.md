@@ -386,15 +386,48 @@
 
 --end--
 
-## Docker, behat, CircleCI demo
+## UI tests
+
+TODO: behat
+
+--end--
+
+## Continuous integration
+
+TODO: CircleCI
+
+--end--
+
+## Docker, behat, CircleCI demo<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
 
 ![](img/pull-request-screenshot.png)
 
 https://github.com/evolvingweb/drupal-docker-marriage
 
+<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">foo</a>
+
+--end--
+
+## Version control<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
+
+TODO: git
+
+--end--
+
+## Backups<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
+
+TODO
+
+--end--
+
+## Upgrade path tests<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
+
+TODO
+
 --end--
 
 ## SiteDiff demo
+<a id="sitediff-demo" />
 
 ![](img/sitediff-screenshot.png)
 
