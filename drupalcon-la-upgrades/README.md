@@ -80,11 +80,11 @@
 
 --end--
 
-## How to do minor version updates 
+## How to do minor version updates
 
 * `git branch UPDATE-DRUPAL-6-37`
 * `drush dl drupal-6.37`
-* commit to 
+* commit to
 * run tests (manual and automatic)
 
 * __Intro__ (9m)
@@ -373,33 +373,36 @@ TODO: CircleCI
 
 --end--
 
-## Docker, behat, CircleCI demo
+## Docker, behat, CircleCI demo<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
 
 ![](img/pull-request-screenshot.png)
 
 https://github.com/evolvingweb/drupal-docker-marriage
 
+<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">foo</a>
+
 --end--
 
-## Version control
+## Version control<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
 
 TODO: git
 
 --end--
 
-## Backups
+## Backups<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
 
 TODO
 
 --end--
 
-## Upgrade path tests
+## Upgrade path tests<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
 
 TODO
 
 --end--
 
 ## SiteDiff demo
+<a id="sitediff-demo" />
 
 ![](img/sitediff-screenshot.png)
 
