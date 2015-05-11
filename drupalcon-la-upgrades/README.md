@@ -361,11 +361,41 @@
 
 --end--
 
+## UI tests
+
+TODO: behat
+
+--end--
+
+## Continuous integration
+
+TODO: CircleCI
+
+--end--
+
 ## Docker, behat, CircleCI demo
 
 ![](img/pull-request-screenshot.png)
 
 https://github.com/evolvingweb/drupal-docker-marriage
+
+--end--
+
+## Version control
+
+TODO: git
+
+--end--
+
+## Backups
+
+TODO
+
+--end--
+
+## Upgrade path tests
+
+TODO
 
 --end--
 
