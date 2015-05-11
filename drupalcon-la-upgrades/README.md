@@ -76,7 +76,7 @@
 
 ## Advantages of Docker
 
-* spin up dev env quickly, great for onboarding 
+* spin up dev env quickly, great for onboarding
 * consistency (all dependencies are the same for all team members)
 * easier to replicate bugs
 * opportunity for CI (circle CI)
@@ -147,14 +147,14 @@
         paths:
          - /
          - /user
-         
+
         selector: 'body'
-           
+
         sanitization:
         - title: 'remove form build id'
           pattern:    '<input type="hidden" name="form_build_id" value="form-[a-zA-Z0-9_-]+" *\/?>'
           substitute: '<input type="hidden" name="form_build_id" value="__form_build_id__">'
-            
+
         before:
           dom_transform:
           - type: remove
@@ -249,7 +249,7 @@
 
 * phpunit tests per module (works with D7 "OK")
  * bootstrap drupal => can't mock global functions, need process isolation
- * instead, use fixtures and mocks in your tests w/o drupal process isolation, can't mock global functions 
+ * instead, use fixtures and mocks in your tests w/o drupal process isolation, can't mock global functions
 * autoloading: explored composer, manually, PSR0
 * fixtures are awesome: menus, nodes
 
@@ -283,7 +283,7 @@
 ## Migrate strengths
 
 * analysis/verification of field mappings
-* hash-based incremental updates 
+* hash-based incremental updates
 * existing sources: files, JSON, csv, d2d, sql...
 * existing destinations: node, menu_link, user, file, entity
 * extensible via OO
@@ -314,7 +314,7 @@
 
 
 ## Content migrate tweaks
- 
+
 * [https://github.com/dergachev/content\_migrate\_tweaks](/https://github.com/dergachev/content_migrate_tweaks/)
 * content\_migrate submodule of CCK is sloooow
 * one field at a time, one node at a time, one value at a time
