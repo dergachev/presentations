@@ -218,6 +218,20 @@ Perform the upgrade:
 
 --end--
 
+## UI testing
+
+SimpleTest in Drupal is limited:
+
+* Mostly tests units, not whole site
+* Database is only from fixtures
+* Tests Drupal API, not web pages: CSS, forms, scrolling...
+* Can't test JavaScript at all
+
+<br />
+Many testing frameworks solve this using a real browser for testing: Selenium, PhantomJS, CasperJS...
+
+--end--
+
 ## D7 upgrade case study
 
 * Project description
@@ -498,36 +512,22 @@ TODO: CircleCI
 
 --end--
 
-## UI testing
+## behat
 
-SimpleTest in Drupal is limited:
+We do UI testing using behat, a Behavior Driven Development tool: [https://behat-drupal-extension.readthedocs.org](https://behat-drupal-extension.readthedocs.org)
 
-* Mostly tests units, not whole site
-* Database is only from fixtures
-* Tests Drupal API, not web pages: CSS, forms, scrolling...
-* Can't test JavaScript at all
-
-<br />
-Many testing frameworks solve this using a real browser for testing: Selenium, PhantomJS, CasperJS...
+* What is Test Driven Development?
+  * Write tests first, then implement it in the site
+* What is Behavior Driven Development?
+  * Word your tests using natural language, they'll be better
+* Why use behat?
+  * Integration testing
+  * UI testing
+  * Testing will be ready for upgrades
 
 --end--
 
-## behat
-
-We do UI testing using behat: [https://behat-drupal-extension.readthedocs.org](https://behat-drupal-extension.readthedocs.org)
-
-* Uses Selenium as a back-end, so it can do anything a browser can
-* Uses the existing site DB, so you can test real behavior
-* Has Drupal integration, with Drupal API Driver:
- * Create nodes
- * Login as users
- * Run cron...
-* Uses Gherkin syntax, readable to QA folks who don't know PHP
-* Extensible in PHP
-
---end--
-
-## behat
+## behat scenarios
 
 Here's an example of a test for behat:
 
@@ -535,10 +535,37 @@ Here's an example of a test for behat:
       Given I am viewing an "article" content:
       | title | author          | body  |
       | Lorem | bob@example.com | Ipsum |
-      When I hover over the 'author' region
+      When I hover over the "author" region
       Then I should see the text "Bob"
 
 --end--
+
+## behat syntax definitions
+
+Here's how we implemented the "hover" rule above, in a custom behat context:
+
+    /**
+      * @When I hover over the :region region
+      */
+    public function iHoverOverRegion($region) {
+      getRegion($region)->mouseOver();
+    }
+
+--end--
+
+## behat stack
+
+<pre class="nocode" style="font-size: 36px;">
+Behat Gherkin language
+Behat PHP contexts -------
+Mink PHP contexts        | Drupal extension
+Mink drivers             | Drupal API driver (or others)
+Selenium
+Chrome
+</pre>
+
+--end--
+
 
 ## Docker, behat, CircleCI demo<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
 
