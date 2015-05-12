@@ -31,7 +31,7 @@
   * Testing, Minor Updates, Major Core Upgrades
 * __Case study__: McGill Courses and Programs D7 (15m)
   * Project description, Challenges, Solutions
-  * Tools: Docker, phpunit, SiteDiff
+  * Tools: Docker, PHPUnit, SiteDiff
 * __Other tools__: behat, CircleCI	(4m)
 * __drupal-docker-marriage demo__ (8m)
 * __More tools__: git, backups, upgrade path tests (4m)
@@ -202,7 +202,7 @@ Perform the upgrade:
 ## Testing basics
 
 * Unit testing
-  * simpletest (d7), phpunit (d8, can use with D7)
+  * SimpleTest (d7), PHPUnit (d8, can use with D7)
   * fast, great for testing functions with specific inputs/outputs
   * Fixtures
   * Dependency injection (mocks)
@@ -212,7 +212,7 @@ Perform the upgrade:
   * behat
   * selenium
   * slow, brittle
-* sitediff
+* SiteDiff
 * Upgrade path testing
   * fixture: d6 db structure + data, resulting d7 upgraded data
 
@@ -238,20 +238,20 @@ Many testing frameworks solve this using a real browser for testing: Selenium, P
 * Challenges
 * Solutions
 * Tools
-  * Docker
-  * phpunit
-  * SiteDiff
+  * Docker for build automation
+  * PHPUnit and SiteDiff for testing
 
 --end--
 
-## Case study D7 upgrade
+## D7 upgrade case study
 
 <img src="https://dl.dropboxusercontent.com/u/29440342/screenshots/CJQQBDZE-2015.05.11-15-37-20.png" width="45%" style="float: right; margin-left: 40px; margin-right: 20px" />
 
-* McGill University's Course Calendar (aka Catalogue)
-* Programs, Courses, and University Regulations
+* McGill University's Course Calendar
+* "Academic Catalog": Programs, Courses, and University Regulations
 * Legal documents, course schedules, metadata, cross-referencing
 * Search-driven UI
+* Buckets of imported records
 
 --end--
 
@@ -259,11 +259,9 @@ Many testing frameworks solve this using a real browser for testing: Selenium, P
 
 <img src="https://dl.dropbox.com/u/29440342/screenshots/GJKGZCAJ-2015.05.11-15-29-43.png" width="45%" style="float: right; margin-left: 40px; margin-right: 20px" />
 
-* tabs (heirarchical facets)
-* custom facets
-* indexing embedded content (via node refs)
-* search this section (menu item)
-* performance
+* Custom seach tabs containing nested facets
+* Section specific search pages in menus
+* apachesolr-6.x-2.x -> Search API
 
 --end--
 
@@ -271,31 +269,28 @@ Many testing frameworks solve this using a real browser for testing: Selenium, P
 
 <img src="https://dl.dropboxusercontent.com/u/29440342/screenshots/YEEHOHIF-2015.05.11-15-46-28.png" width="40%" style="float: right; margin-left: 40px; margin-right: 20px" />
 
-* all data lives in logical tree hierarchy
-* think 10k primary link items LOGICALLY, but really the tree is defined by biz logic
-* menus (custom code, core, menu_block)
-* breadcrumbs, context, flattening
+* All pages live in a single logical menu hierarchy, ~10k items
+* ~100s menu items in primary\_links, rest in various book menus
+* UI consistency: menus, breadcrumbs, URLs
+* Merged via custom code, using core menu\_tree\_page_data, menu\_block
+* To upgrade this code, we refactored extensively and wrote PHPUnit tests with fixtures
 
 --end--
 
 ## Many records, complex structure
 
-* 70k node revisions PER YEAR; most imported from banner+documentum
-* 15 content types, 170 field instances
-* cross-linking via node reference fields
-* incomplete i18n implementation
-* web services
-* input filters (auto-detection of course names in any HTML content)
+* 70k node revisions per year; mostly imported from banner+documentum
+* 15 content types, 170 field instances; cross-linked via node reference fields
+* Incomplete i18n implementation
+* Custom input filters (auto-detection of course names in any HTML content)
 
 --end--
 
 ## Hard to upgrade
 
-* Custom modules
-  * Legacy => really really custom, with 4 years of cruft
-  * Extended apachesolr 6.x-2.x-dev
-* Concern about data and configuration integrity
-  * Legal requirement that data shown must be correct and complete
+* Lots of custom modules
+  * Legacy, with 4 years of cruft, lots of coupling
+* Legal requirement that data shown must be correct and complete
 * Deliverable = upgrade script, not code + db dump
   * Must be able to re-run on prod database
   * Must also be adaptable for 4 previous years (separate DBs)
@@ -303,154 +298,100 @@ Many testing frameworks solve this using a real browser for testing: Selenium, P
 
 --end--
 
-## ... easier than expected
+## Easier parts
 
 * Around 20-30 contrib modules
 * No auth users except admins
 * Little dynamic content except via import scripts
 * Evolving Web wrote the original code
-* Disciplined client, no scope creep: only upgrade, no new features
+* Disciplined client, no scope creep
 
 --end--
 
-## Surprise complexity
+## Harder parts
 
-* Defeaturization
-* Deploying a dev site (not the same as prod?)
-  * had to deduce which contrib modules enabled, version
-  * missing content types, modules, blocks;
-  * these were defined in proprietary code not shared with us
-* performance
-  * content migrate running time... measured in days
-  * prune the database (10% of the nodes, focused on 1 faculty, try to keep consistency)
-  * content_migrate_tweaks https://github.com/dergachev/content_migrate_tweaks
-* git branch hecticness
-* i18n_field allowed_values translation bug
-* misc migration bugs (entityreference, nodeblock)
+* Features have no upgrade path
+* Client unable to provide complete dev environment
+  * We had to deduce which contrib modules enabled, version
+  * Missing some custom modules defining content types, modules, blocks
+* Performance: 2 days to run content migrate
+* i18n bug related to field allowed\_values translation
+* Misc upgrade path bugs (entityreference, nodeblock)
 
 --end--
 
 ## Technical solutions
 
-* Refactoring first for sanity
-* Docker for build process automation
-* Unit tests for the new code we write; phpunit for filters and menus
-* Sitediff for correctness
+* Test-driven refactoring first for sanity
+* Build automation
 * Content migrate tweaks for speed
-  * [https://github.com/dergachev/content\_migrate\_tweaks](/https://github.com/dergachev/content_migrate_tweaks/)
-  * content\_migrate (submodule of CCK) is slow (~2 days)
-  * one field record (delta) at a time, one node at a time, one value at a time
-  * replaced with INSERT ... SELECT ... queries as >100x optimization
-  * validated with table checksums, sitediff
-* unit and integration testing
-* Search API
+* SiteDiff for correctness
+* Docker for build process automation
 
 --end--
 
-## Unit testing
+## Refactoring and unit testing
 
-* phpunit tests per custom module (works with D7 "OK")
-  * sometimes had to bootstrap drupal
-  * can't mock/swap drupal functions, need process isolation
-  * use fixtures and mocks in your tests of custom code that allows dependency injection
-* autoloading: tried composer, manually, PSR0; settled for manually
-* fixtures were great for menu trees and nodes
+* PHPUnit tests for custom modules
+* Feasible to make it work with D7 (autoloading vs manual)
+* Use fixtures in your test (eg. for menu trees and nodes)
+* Sometimes had to bootstrap drupal (eg. for input filters)
+* Can't mock/swap drupal functions, need process isolation
+* Refactor custom code to allow dependency injection of mocks
 
 --end--
 
-## Scripted upgrade process
+
+## Build process
 
 * D6 deploy script
-* d6 refactor adjustments
-* d6 prepare (defeaturize, turn off non-core modules, change theme to bartik, pm-uninstall several modules)
-* core updb
-* enable modules, run contrib updb
+* D6 refactor adjustments
+* D6 prepare (defeaturize, turn off non-core modules, change theme to bartik, pm-uninstall several modules)
+* drush updb
+* Enable modules, run contrib updb
 * content migrate
 * [menu\_adjustments.php](https://github.com/evolvingweb/coursecal-d7/blob/d7/build/upgrade/menu_adjustments.php)
 * [d7\_adjustments.sh](https://github.com/evolvingweb/coursecal-d7/blob/d7/build/scripts/d7_adjustments.sh)
 * [d7\_adjustments\_solr.sh](https://github.com/evolvingweb/coursecal-d7/blob/d7/build/scripts/d7_adjustments_solr.sh)
-* all glued together by Makefile and multiple Dockerfile-s
 
 --end--
 
-## Content migrate tweaks
+## Performance tweaks
+
+* content\_migrate (submodule of CCK) is slow (~2 days)
+  * One field record (delta) at a time, one node at a time, one value at a time
+  * Prune the database (10% of the nodes, focused on 1 faculty, try to keep consistency)
+  * [https://github.com/dergachev/content\_migrate\_tweaks](/https://github.com/dergachev/content_migrate_tweaks/)
+  * Replaced with INSERT ... SELECT ... queries as >100x optimization
+  * Validated with unit tests, table checksums, SiteDiff
+* `drush php-script` vs hook_update_N
 
 --end--
 
+## Build automation
 
-## What is Docker?
+Requirements:
 
-* tool that automates the creation and running of VMs for dev and prod
-* not a webservice, but a tool that runs on your machine
-
---end--
-
-## How Docker works
-
-* VMs vs containers: light-weight, shared resources and kernel
-* need to run on Linux, or in a Virtualbox VM
-* Dockerfile: start from generic "ubuntu:14.04" container, convert to your drupal project
-* Definition: image vs container
+* Easily deployed dev environments
+* Consistency between dev and prod
+* Checkpoints for testing
+* Caching
+* Simplicity (bash)
 
 --end--
 
-## Advantages of Docker
+## Docker
 
-* spin up dev env quickly, great for onboarding
-* consistency (all dependencies are the same for all team members)
-* easier to replicate bugs
-* opportunity for CI (circle CI)
-* build process: Dockerfile
-* caching
-* includes C libraries (yaml), and also tomcat, solr, memcache, APC, xhprof, xdebug, etc ...
-* everyone and and their dog is considering it
-* easily share images
-
---end--
-
-
-## Caveats
-
-* we haven't made it industrial-grade yet
-* lots of best practices to figure out, but the costs are up-front
-* manual adaptation to new site
-
---end--
-
-## Docker commands
-
-* docker build -t marriage .
-* docker run -it marriage /bin/bash
-* docker run marriage start.sh
-* docker run -p 8080:80 marriage start.sh
-* docker run -v /home/alex/source:/drupal marriage start.sh
-
---end--
-
-## Docker tutorial / demo
-
-* [https://github.com/dergachev/drupal-docker-marriage/](https://github.com/dergachev/drupal-docker-marriage/)
-
---end--
-
-## Docker for build process
-
-* instantly spin-up of container (lightweight VM) with EXACT dev environment
-* easily script build of container
-* smart caching FTW!
-* sipmlicity (vs chef): just know bash
-* copy on write - instant snapshots
-* Makefile
-
---end--
-
-
-## How we used Docker
-
-* deployment in separate repo - see [README.md](https://github.com/evolvingweb/allseen-deploy)
-* deploy.sh
-* Dockerfile
-* Makefile
+* Docker gives a dev friendly UI to automate building and running virtualized containers
+* Allows consistent dev, testing, and prod environments
+  * Easier to onboard developers, replicate bugs, works great with CI
+* Dockerfile build process:
+  * Bash-like
+  * Starts with clean Ubuntu image 
+  * Installs all necessary packages: tomcat, solr, memcache, nginx, xhprof, xdebug, ...
+  * Runs our deploy scripts
+  * Caching
+  * Caveats (Makefiles, Linux, TIMTOWTDI)
 
 --end--
 

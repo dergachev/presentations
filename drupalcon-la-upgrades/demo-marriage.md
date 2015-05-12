@@ -4,6 +4,7 @@
 **Show website**
 
 * We already built a docker image for this site
+  * This site is a simple example of how to Dockerize a Drupal site, see the README
 * ```make run``` runs the image we have, with some port mapping
 * Visit http://docker2:8080
 * There's a navigation menu, with active links
