@@ -80,16 +80,81 @@
 
 --end--
 
-## Minor updates basics
+## Introduction
 
-* `git branch UPDATE-DRUPAL-7-37`
-* `drush dl drupal-7.37`
-* commit to
-* run tests (manual and automatic)
+* Upgrades are important for security
+  * Security bugs are constantly found in Drupal and Drupal modules
+  * Eg: Drupalgeddon (SA-CORE-2014-005) fixed in 7.32
+* Upgrades bring new features
+  * Drupal 7 has many performance improving features over D6
+  * Webform 4 brings token support
+* After Drupal 8 is released, Drupal 6 will become unsupported!
 
 --end--
 
-## Major upgrades basics
+## Introduction
+
+* Many Drupal developers aren't great at upgrading. Why?
+  * Not everyone knows how
+  * It can take time
+  * We're afraid of regressions
+  * We hate manual testing
+
+--end--
+
+## How to change
+
+* Learn how to do upgrades
+* Good tools make it easier and faster
+* Testing makes it safe
+
+--end--
+
+## Minor updates vs. major upgrades
+
+* Minor updates: 7.35 -> 7.36
+  * Modules need updates too!
+  * Perform these as often as possible, to keep up with security
+* Major upgrades: 6.28 -> 7.36
+  * Brings many, many new features and opportunities
+  * Necessary before D6 is obsolute
+* Major upgrades can be almost as hard as a site rebuild
+  * API can change in ways that aren't backwards-compatible
+  * Modules may not be updated yet, or at all
+
+--end--
+
+## Minor update basics
+
+* When to update: Use the Drupal Security Advisories mailing list: https://www.drupal.org/security
+  * Or use the update module
+* Where to update: In staging
+  * Never do an update for the first time in production, you don't know if anything will break
+* Watch out for hacks or patches to your modules!
+  * Use the ```hacked``` module to find them
+
+![](img/update-module.png)
+
+--end--
+
+## Minor update basics
+
+* How to update in place:
+  * ```drush pm-updatestatus``` to list available updates
+  * ```drush pm-update``` to perform updates
+* For real sites in production:
+  * Run update on dev/staging
+  * Test that everything is working
+  * Check your code changes into version control
+  * On prod, pull changes and ```drush updb```
+* Update hooks
+  * Keep database in sync with versions of code
+  * Eg: new column in database; rename variable
+  * Running them: ```update.php``` or ```drush updb```
+
+--end--
+
+## Major upgrade basics
 
 * prepare in D6:
   * cleanup, fix bugs, defeaturize
