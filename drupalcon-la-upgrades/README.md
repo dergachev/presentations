@@ -215,6 +215,7 @@ Perform the upgrade:
 * SiteDiff
 * Upgrade path testing
   * fixture: d6 db structure + data, resulting d7 upgraded data
+* Continuous Integration
 
 --end--
 
@@ -364,7 +365,7 @@ Many testing frameworks solve this using a real browser for testing: Selenium, P
   * [https://github.com/dergachev/content\_migrate\_tweaks](/https://github.com/dergachev/content_migrate_tweaks/)
   * Replaced with INSERT ... SELECT ... queries as >100x optimization
   * Validated with unit tests, table checksums, SiteDiff
-* `drush php-script` vs hook_update_N
+* `drush php-script` vs `hook_update_N`
 
 --end--
 
@@ -447,36 +448,59 @@ Requirements:
 
 --end--
 
-## Tools: Continuous integration
+## Continuous integration
 
-* Run your tests automatically for every commit
-  * You can't forget to run them, it happens on a server
-  *
+* Tests can be slow
+* It's easy to forget to run them
+* Continuous integration
+  * Run your tests automatically for every commit
+  * Usually uses a build server
+  * Reports on the results
+  * For upgrades, best with Test-Driven Development
 
 --end--
 
 ## CircleCI
 
-We use CircleCI for our continuous integration: [http://circleci.com](http://circleci.com)
+We use [CircleCI](http://circleci.com) for our continuous integration:
 
-* Integrates with GitHub branches and
-* Uses docker, so test environment is standardized
+* Integrates with GitHub branches and pull requests
+* Allows use of docker, so test environment is consistent with dev/prod
 * Email notifications when something breaks
-
-TODO: CircleCI
-
-* Catches deployment too
-* CircleCI
-  * Docker
-  * Hosted
-  * Free
-  * Github integration
-* DB changes
-* Triggered runs
 
 --end--
 
-## Tools: UI testing
+## circle.yml configuration
+
+Simple configuration via circle.yml file:
+
+<pre>
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker build -t myproject .
+    - docker run -p 9022:22 myproject
+
+test:
+  override:
+    - ssh -p 9022 drupal@localhost 'cd /var/www && drush test-run'
+</pre>
+
+--end--
+
+## CI tips
+
+* Make sure CI has access to a recent DB
+* If your content changes often, trigger builds via cron
+* Catches very unexpected bugs, eg: servers disappearing, unmaintained packages
+* Do upgrades on branches, CircleCI will test them for you
+
+--end--
+
+## UI testing
 
 We do UI testing using behat, a Behavior Driven Development tool: [https://behat-drupal-extension.readthedocs.org](https://behat-drupal-extension.readthedocs.org)
 
