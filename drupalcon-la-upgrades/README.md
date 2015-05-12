@@ -80,25 +80,44 @@
 
 --end--
 
-## Minor updates HOWTO
+## Minor updates basics
 
 * `git branch UPDATE-DRUPAL-7-37`
 * `drush dl drupal-7.37`
-* commit to 
+* commit to
 * run tests (manual and automatic)
 
 --end--
 
-## Major upgrades HOWTO
+## Major upgrades basics
 
-* prepare in D6: 
+* prepare in D6:
   * cleanup, fix bugs, defeaturize
 * `git branch UPGRADE-DRUPAL7`
 * `drush dl drupal`
 
 --end--
 
-## D7 Upgrade Case Study
+## Testing basics
+
+* Unit testing
+  * simpletest (d7), phpunit (d8, can use with D7)
+  * fast, great for testing functions with specific inputs/outputs
+  * Fixtures
+  * Dependency injection (mocks)
+  * Limitations: architecture, coverage
+* Integration testing
+  * simpletest
+  * behat
+  * selenium
+  * slow, brittle
+* sitediff
+* Upgrade path testing
+  * fixture: d6 db structure + data, resulting d7 upgraded data
+
+--end--
+
+## Case Study of a D7 upgrade
 
 * Project description
 * Challenges
@@ -144,37 +163,50 @@
 
 --end--
 
-## Technical features (Data)
+## Many records, complex structure
 
-* including revision, site has 70k nodes, imported from banner+documentum
+* 70k node revisions PER YEAR; most imported from banner+documentum
 * 15 content types, 170 field instances
-* a lot of cross-linking via node references
-* kind-of i18n (hacks for continuing studies)
+* cross-linking via node reference fields
+* incomplete i18n implementation
 * web services
 * input filters (auto-detection of course names in any HTML content)
 
 --end--
 
-## Extra requirements
+## Hard to upgrade
 
 * Custom modules
-  * Legacy => really really custom (4+ years of code drift)
+  * Legacy => really really custom, with 4 years of cruft
   * Extended apachesolr 6.x-2.x-dev
-* Contrib Modules
-  * Had to deduce which version of contrib modules were enabled from system table
-  * Many contrib modules were enabled but unused
 * Concern about data and configuration integrity
-* Test driven development
+  * Legal requirement that data shown must be correct and complete
 * Deliverable = upgrade script, not code + db dump
+  * Must be able to re-run on prod database
+  * Must also be adaptable for 4 previous years (separate DBs)
+* Limited time and resources: 2 devs, 12 weeks
 
 --end--
 
-## Incidental challenges
+## ... easier than expected
+
+* Around 20-30 contrib modules
+* No auth users except admins
+* Little dynamic content except via import scripts
+* Evolving Web wrote the original code
+* Disciplined client, no scope creep: only upgrade, no new features
+
+--end--
+
+## Surprise complexity
 
 * Defeaturization
 * Deploying a dev site (not the same as prod?)
-  * missing content types, modules, blocks
-* content migrate running time
+  * had to deduce which contrib modules enabled, version
+  * missing content types, modules, blocks;
+  * these were defined in proprietary code not shared with us
+* performance
+  * content migrate running time... measured in days
   * prune the database (10% of the nodes, focused on 1 faculty, try to keep consistency)
   * content_migrate_tweaks https://github.com/dergachev/content_migrate_tweaks
 * git branch hecticness
@@ -186,21 +218,28 @@
 ## Technical solutions
 
 * Refactoring first for sanity
-* Docker for build process
+* Docker for build process automation
 * Unit tests for the new code we write; phpunit for filters and menus
 * Sitediff for correctness
 * Content migrate tweaks for speed
-* Search API FTW!
+  * [https://github.com/dergachev/content\_migrate\_tweaks](/https://github.com/dergachev/content_migrate_tweaks/)
+  * content\_migrate (submodule of CCK) is slow (~2 days)
+  * one field record (delta) at a time, one node at a time, one value at a time
+  * replaced with INSERT ... SELECT ... queries as >100x optimization
+  * validated with table checksums, sitediff
+* unit and integration testing
+* Search API
 
 --end--
 
 ## Unit testing
 
-* phpunit tests per module (works with D7 "OK")
- * bootstrap drupal => can't mock global functions, need process isolation
- * instead, use fixtures and mocks in your tests w/o drupal process isolation, can't mock global functions
-* autoloading: explored composer, manually, PSR0
-* fixtures are awesome: menus, nodes
+* phpunit tests per custom module (works with D7 "OK")
+  * sometimes had to bootstrap drupal
+  * can't mock/swap drupal functions, need process isolation
+  * use fixtures and mocks in your tests of custom code that allows dependency injection
+* autoloading: tried composer, manually, PSR0; settled for manually
+* fixtures were great for menu trees and nodes
 
 --end--
 
@@ -221,13 +260,6 @@
 
 ## Content migrate tweaks
 
-* [https://github.com/dergachev/content\_migrate\_tweaks](/https://github.com/dergachev/content_migrate_tweaks/)
-* content\_migrate submodule of CCK is sloooow
-* one field at a time, one node at a time, one value at a time
-* stopped it after about 10 hours
-* query optimization
-* unit and integration testing
-
 --end--
 
 
@@ -238,7 +270,7 @@
 
 --end--
 
-## How Docker works?
+## How Docker works
 
 * VMs vs containers: light-weight, shared resources and kernel
 * need to run on Linux, or in a Virtualbox VM
@@ -312,6 +344,22 @@
 * [github.com/dergachev/sitediff](https://github.com/dergachev/sitediff)
 * show pretty diffs of HTML contents of whole sites
 * sanitization - easy to write! easy to maintain!
+* History: buyandsell
+* Compares sites HTML, one page at a time
+* Spurious diffs: needs sanitization rules
+** Several types
+** Some are common for Drupal, eg: form build IDs
+* Demo with 7.36 bug?
+* Limitations
+** JavaScript
+** Dynamic content
+** Admin UI
+* Case study: AllSeen DevDocs
+** Drupal vs non-Drupal, migration
+** Easy to generate the sitemap automatically
+** Needed heavy sanitization
+** Caught useful bugs: HTML entity issues, bad quoting
+** Good on updates to migration source, we could verify that changes to site matched changes to source
 
 --end--
 
