@@ -506,13 +506,36 @@ Many testing frameworks solve this using a real browser for testing: Selenium, P
 
 --end--
 
-## Continuous integration
+## Tools: Continuous integration
 
-TODO: CircleCI
+* Run your tests automatically for every commit
+  * You can't forget to run them, it happens on a server
+  *
 
 --end--
 
-## behat
+## CircleCI
+
+We use CircleCI for our continuous integration: [http://circleci.com](http://circleci.com)
+
+* Integrates with GitHub branches and
+* Uses docker, so test environment is standardized
+* Email notifications when something breaks
+
+TODO: CircleCI
+
+* Catches deployment too
+* CircleCI
+  * Docker
+  * Hosted
+  * Free
+  * Github integration
+* DB changes
+* Triggered runs
+
+--end--
+
+## Tools: UI testing
 
 We do UI testing using behat, a Behavior Driven Development tool: [https://behat-drupal-extension.readthedocs.org](https://behat-drupal-extension.readthedocs.org)
 
