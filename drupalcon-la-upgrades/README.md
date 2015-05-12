@@ -118,9 +118,6 @@
 * Major upgrades: 6.28 -> 7.36
   * Brings many, many new features and opportunities
   * Necessary before D6 is obsolute
-* Major upgrades can be almost as hard as a site rebuild
-  * API can change in ways that aren't backwards-compatible
-  * Modules may not be updated yet, or at all
 
 --end--
 
@@ -156,10 +153,49 @@
 
 ## Major upgrade basics
 
-* prepare in D6:
-  * cleanup, fix bugs, defeaturize
-* `git branch UPGRADE-DRUPAL7`
-* `drush dl drupal`
+There are is no such thing as a basic major upgrade.
+
+--end--
+
+## Major upgrade basics
+
+* Major upgrades can be harder than a site rebuild
+  * APIs can change in ways that aren't backwards-compatible
+  * Modules may not be updated yet, or at all
+* We are talking about D6 to D7
+  * Not clear whether it's possible to upgrade D7 to D8
+  * D8 might require use of migrate module instead of update hooks
+
+--end--
+
+## Major upgrade basics
+
+Before you can start the upgrade (still in D6):
+
+* Update core and ALL contrib modules to latest d6 version
+* Defeaturize
+* Cleanup and fix bugs
+* Disable all contrib and optional modules
+* If modules have bad upgrade path, may need to uninstall
+* Switch to core theme (garland)
+
+--end--
+
+## Major upgrade basics
+
+Perform the upgrade:
+
+* Update code of core and remaining modules to highest D7 version
+* Run `drush updb`
+* Use content_migrate for CCK->fields upgrade path
+* Reenable and test contrib modules
+  * Iterate on upgrading code and testing
+  * Often need to find alternatives (popups -> references_dialog)
+* Reenable and test custom modules
+  * Start with coder upgrade
+* Restore project-specific theme
+* Adjust site as necessary to rebuild missing functionality
+  * Lots of misc testing, development, database tweaks
 
 --end--
 
@@ -182,7 +218,7 @@
 
 --end--
 
-## Case Study of a D7 upgrade
+## D7 upgrade case study
 
 * Project description
 * Challenges
