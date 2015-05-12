@@ -492,15 +492,51 @@ Perform the upgrade:
 
 --end--
 
-## UI tests
-
-TODO: behat
-
---end--
-
 ## Continuous integration
 
 TODO: CircleCI
+
+--end--
+
+## UI testing
+
+SimpleTest in Drupal is limited:
+
+* Mostly tests units, not whole site
+* Database is only from fixtures
+* Tests Drupal API, not web pages: CSS, forms, scrolling...
+* Can't test JavaScript at all
+
+<br />
+Many testing frameworks solve this using a real browser for testing: Selenium, PhantomJS, CasperJS...
+
+--end--
+
+## behat
+
+We do UI testing using behat: [https://behat-drupal-extension.readthedocs.org](https://behat-drupal-extension.readthedocs.org)
+
+* Uses Selenium as a back-end, so it can do anything a browser can
+* Uses the existing site DB, so you can test real behavior
+* Has Drupal integration, with Drupal API Driver:
+ * Create nodes
+ * Login as users
+ * Run cron...
+* Uses Gherkin syntax, readable to QA folks who don't know PHP
+* Extensible in PHP
+
+--end--
+
+## behat
+
+Here's an example of a test for behat:
+
+    Scenario: Show author on hover
+      Given I am viewing an "article" content:
+      | title | author          | body  |
+      | Lorem | bob@example.com | Ipsum |
+      When I hover over the 'author' region
+      Then I should see the text "Bob"
 
 --end--
 
@@ -509,8 +545,6 @@ TODO: CircleCI
 ![](img/pull-request-screenshot.png)
 
 https://github.com/evolvingweb/drupal-docker-marriage
-
-<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">foo</a>
 
 --end--
 
