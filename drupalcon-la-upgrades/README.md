@@ -387,9 +387,6 @@ Requirements:
 
 ## Docker
 
-* Friendly UI to build and run virtualized containers
-* Allows consistent dev, test, and prod environments
-* Easy to onboard developers, replicate bugs, CI
 * Dockerfile build process:
   * Bash-like
   * Starts with clean Ubuntu image
