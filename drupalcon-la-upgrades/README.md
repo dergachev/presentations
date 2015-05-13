@@ -215,54 +215,47 @@ Perform the upgrade:
 
 --end--
 
-## Testing basics
+## Unit testing
 
-* Unit testing
-  * D7: SimpleTest (DrupalUnitTestCase)
-  * D8: PHPUnit
-  * Fast, good for standalone functions
-  * Use fixtures for testing
-  * Can't test integration
-* Not too useful for upgrades
-  * Contrib modules are already tested
-  * What's likely to break: integration
-* Useful for your custom modules during major upgrades
+* Fast, good for standalone functions
+* Use fixtures for testing
+* D7: SimpleTest (DrupalUnitTestCase)
+* D8: PHPUnit
+* Contrib module's unit tests won't help you much for updates
+* Good for custom modules
 
 --end--
 
-## Testing basics
+## Integration testing
 
-* Integration testing
-  * SimpleTest (DrupalWebTestCase)
-  * Powerful Drupal integration: Enable modules, create content, add users...
-  * By default, tests your module in isolation
-  * Much slower, needs to site-install for each test
-  * Can't test things like JavaScript, CSS
-  * Tight coupling, hard to maintain
-
---end--
-
-## Testing basics
-
-* UI testing
-  * Eg: Selenium, CasperJS, behat
-  * Tests your site by controlling a real browser
-  * Pretty slow, and very tight coupling
-  * Usually no Drupal integration
-  * Very powerful and thorough
-  * Great replacement for manual testing
+* SimpleTest (DrupalWebTestCase)
+* Powerful Drupal integration: Enable modules, create content, add users...
+* By default, tests your module in isolation
+  * Or tight coupling, hard to maintain
+* Much slower, needs to site-install for each test
+* Can't test things like JavaScript, CSS
 
 --end--
 
 ## UI testing
 
+* Tests your site by controlling a real browser
+* Very powerful and thorough
+* Eg: Selenium, CasperJS, behat
+* Great replacement for manual testing
+
+--end--
+
+## Behat
+
 [behat](http://docs.behat.org) and its [Drupal extension](https://behat-drupal-extension.readthedocs.org)
 
-* What is BDD?
+* Why BDD?
+  * Testing will be ready for upgrades!
 * Why use behat?
-  * Integration testing
   * UI testing
-  * Testing will be ready for upgrades
+  * Drupal integration
+  * Easily understood tests
 
 --end--
 
@@ -317,15 +310,25 @@ Chrome
 We use [CircleCI](http://circleci.com) for our continuous integration:
 
 * Integrates with GitHub branches and pull requests
-* Allows use of docker, so test environment is consistent with dev/prod
 * Email notifications when something breaks
 * Catches very unexpected bugs, eg: servers disappearing, unmaintained packages
+* Allows use of docker, so test environment is consistent with dev/prod
 
 --end--
 
-## circle.yml configuration
+## Docker
 
-Simple configuration via circle.yml file:
+* Easily build and run virtualized containers
+* Easy to spin up an exact copy of your site
+  * If something breaks, just spin it up again
+  * This is very useful for minor updates!
+* Consistent environment in dev/staging/prod
+
+--end--
+
+## CircleCI & Docker
+
+CircleCI is configured with a circle.yml file:
 
 <pre class="prettyprint lang-yaml">
 machine:
@@ -341,16 +344,6 @@ test:
   override:
     - "ssh -p 9022 drupal@localhost 'cd /var/www && drush test-run'"
 </pre>
-
---end--
-
-## Docker
-
-* Docker allows you to run lightweight containers
-* Easy to spin up an exact copy of your site
-* If something breaks, just spin it up again
-* Consistent environment in dev/staging/prod
-* This is very useful for minor updates!
 
 --end--
 
