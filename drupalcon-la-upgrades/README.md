@@ -400,43 +400,40 @@ Requirements:
 
 --end--
 
-## SiteDiff
-
-Course Calendar had specific requirements
+## Testing requirements
 
 * Ensure dev mirrors prod
 * Ensure D6 refactoring changed nothing
 * D7 should mostly mirror D6
-* Mostly static content
-
-<br/>
-
-So we built a tool to compare web sites: SiteDiff
-[github.com/evolvingweb/sitediff](https://github.com/evolvingweb/sitediff)
+* Mostly static HTML content
+* Too big to test manually
 
 --end--
 
 ## SiteDiff
 
-What it does:
+[github.com/evolvingweb/sitediff](https://github.com/evolvingweb/sitediff)
 
-* Downloads HTML pages from  a set of pages from two similar sites
+* Downloads subset of pages from _before_ and _after_
 * Computes diff of HTML
 * Cleans up spurious changes, like absolute domains
-* Reports the changes, both on command-line and on web UI
+* Reports changes via command-line UI and web report
+* Break down huge upgrade into simple tasks
 
 --end--
 
 ## SiteDiff configuration
 
 <pre class="prettyprint lang-yaml">
+before_url: http://docker:9179
 after_url: http://docker:9180
 sanitization:
 - pattern: http:\/\/[a-zA-Z0-9.:-]+
   substitute: __domain__
 paths:
 - /
-- /node/1
+- /about-us
+- /user/3/track
 </pre>
 
 --end--
