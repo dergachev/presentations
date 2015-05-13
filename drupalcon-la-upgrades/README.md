@@ -351,7 +351,9 @@ test:
 
 ![](img/pull-request-screenshot.png)
 
-https://github.com/evolvingweb/drupal-docker-marriage
+[github.com/evolvingweb/drupal-docker-marriage](https://github.com/evolvingweb/drupal-docker-marriage)
+
+[Demo notes](https://github.com/dergachev/presentations/blob/gh-pages/drupalcon-la-upgrades/demo-marriage.md)
 
 --end--
 
@@ -382,7 +384,7 @@ https://github.com/evolvingweb/drupal-docker-marriage
 
 <img src="img/coursecal-search.png" width="45%" style="float: right; margin-left: 40px; margin-right: 20px" />
 
-* Custom seach tabs containing nested facets
+* Custom search tabs containing nested facets
 * Section specific search pages in menus
 * apachesolr-6.x-2.x -> Search API
 
@@ -392,19 +394,17 @@ https://github.com/evolvingweb/drupal-docker-marriage
 
 <img src="img/coursecal-faculty.png" width="40%" style="float: right; margin-left: 40px; margin-right: 20px" />
 
-* All pages live in a single logical menu hierarchy, ~10k items
+* For users, consistent global menu tree with ~10k items
+  * consistency between menus, breadcrumbs, URLs
 * ~100s menu items in primary\_links, rest in various book menus
-* UI consistency: menus, breadcrumbs, URLs
 * Merged via custom code, using core menu\_tree\_page_data, menu\_block
-* To upgrade this code, we refactored extensively and wrote PHPUnit tests with fixtures
 
 --end--
 
-## Many records, complex structure
+## Complex data structure
 
 * 70k node revisions per year; mostly imported from banner+documentum
 * 15 content types, 170 field instances; cross-linked via node reference fields
-* Incomplete i18n implementation
 * Custom input filters (auto-detection of course names in any HTML content)
 
 --end--
@@ -413,6 +413,7 @@ https://github.com/evolvingweb/drupal-docker-marriage
 
 * Lots of custom modules
   * Legacy, with 4 years of cruft, lots of coupling
+  * Needed extensive refactoring before upgrading
 * Legal requirement that data shown must be correct and complete
 * Deliverable = upgrade script, not code + db dump
   * Must be able to re-run on prod database
@@ -438,15 +439,13 @@ https://github.com/evolvingweb/drupal-docker-marriage
   * We had to deduce which contrib modules enabled, version
   * Missing some custom modules defining content types, modules, blocks
 * Performance: 2 days to run content migrate
-* i18n bug related to field allowed\_values translation
-* Misc upgrade path bugs (entityreference, nodeblock)
+* Misc upgrade path bugs (entityreference, nodeblock, i18n)
 
 --end--
 
 ## Technical solutions
 
 * Test-driven refactoring first for sanity
-* Build automation
 * Content migrate tweaks for speed
 * SiteDiff for correctness
 * Docker for build process automation
@@ -491,13 +490,10 @@ https://github.com/evolvingweb/drupal-docker-marriage
 
 --end--
 
-## Build automation
+## Build automation reqs
 
-Requirements:
-
-* Easily deployed dev environments
-* Consistency between dev and prod
-* Checkpoints for testing
+* Easily deployed, consistent dev and test environments
+* Checkpoints
 * Caching
 * Simplicity (bash)
 
@@ -588,7 +584,9 @@ SiteDiff turns out to be useful on many projects
 
 ![](img/sitediff-screenshot.png)
 
-https://github.com/vasi/sitediff-update-demo
+[github.com/vasi/sitediff-update-demo](https://github.com/vasi/sitediff-update-demo)
+
+[Demo notes](https://github.com/dergachev/presentations/blob/gh-pages/drupalcon-la-upgrades/demo-sitediff.md)
 
 --end--
 
