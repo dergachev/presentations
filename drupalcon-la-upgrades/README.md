@@ -28,13 +28,12 @@
 
 * __About us__ (3m)
 * __Intro__ (9m)
-  * Testing, Minor Updates, Major Core Upgrades
+  * Minor Updates, Major Core Upgrades, Testing
+* __Tools__: behat, CircleCI, docker	(4m)
+* __drupal-docker-marriage demo__ (8m)
 * __Case study__: McGill Courses and Programs D7 (15m)
   * Project description, Challenges, Solutions
-  * Tools: Docker, PHPUnit, SiteDiff
-* __Other tools__: behat, CircleCI	(4m)
-* __drupal-docker-marriage demo__ (8m)
-* __More tools__: git, backups, upgrade path tests (4m)
+  * Tools: More docker, PHPUnit, SiteDiff
 * __SiteDiff demo__ (8m)
 
 --end--
@@ -237,6 +236,123 @@ Perform the upgrade:
 
 --end--
 
+## UI testing
+
+[behat](http://docs.behat.org) and its [Drupal extension](https://behat-drupal-extension.readthedocs.org)
+
+* What are TDD and BDD?
+* Why use behat?
+  * Integration testing
+  * UI testing
+  * Testing will be ready for upgrades
+
+--end--
+
+## behat scenarios
+
+Here's an example of a test for behat:
+
+    Scenario: Show author on hover
+      Given I am viewing an "article" content:
+      | title | author          | body  |
+      | Lorem | bob@example.com | Ipsum |
+      When I hover over the "author" region
+      Then I should see the text "Bob"
+
+Here's how we implemented the "hover" rule above, in a custom behat context:
+
+    /**
+      * @When I hover over the :region region
+      */
+    public function iHoverOverRegion($region) {
+      getRegion($region)->mouseOver();
+    }
+
+--end--
+
+## behat stack
+
+<pre class="nocode" style="font-size: 30px;">
+Behat Gherkin language
+Behat PHP contexts -------
+Mink PHP contexts        | Drupal extension
+Mink drivers             | Drupal API driver (or others)
+Selenium
+Chrome
+</pre>
+
+--end--
+
+## CI
+
+* Tests can be slow
+* It's easy to forget to run them
+* **Continuous integration**
+  * Run your tests automatically for every commit
+  * Usually uses a build server
+  * Reports on the results
+  * For upgrades, best with Test-Driven Development
+
+--end--
+
+## CircleCI
+
+We use [CircleCI](http://circleci.com) for our continuous integration:
+
+* Integrates with GitHub branches and pull requests
+* Allows use of docker, so test environment is consistent with dev/prod
+* Email notifications when something breaks
+
+--end--
+
+## circle.yml configuration
+
+Simple configuration via circle.yml file:
+
+<pre class="prettyprint lang-yaml">
+machine:
+  services:
+    - docker
+
+dependencies:
+  override:
+    - docker build -t myproject .
+    - docker run -p 9022:22 myproject
+
+test:
+  override:
+    - "ssh -p 9022 drupal@localhost 'cd /var/www && drush test-run'"
+</pre>
+
+--end--
+
+## CI tips
+
+* Make sure CI has access to a recent DB
+* If your content changes often, trigger builds via cron
+* Catches very unexpected bugs, eg: servers disappearing, unmaintained packages
+* Do upgrades on branches, CircleCI will test them for you
+
+--end--
+
+## Docker
+
+* Docker allows you to run lightweight containers
+* Easy to spin up an exact copy of your site
+* If something breaks, just spin it up again
+* Consistent environment in dev/staging/prod
+* This is very useful for minor updates!
+
+--end--
+
+## Behat, CircleCI, Docker demo
+
+![](img/pull-request-screenshot.png)
+
+https://github.com/evolvingweb/drupal-docker-marriage
+
+--end--
+
 ## D7 upgrade case study
 
 * Project description
@@ -388,12 +504,12 @@ Requirements:
 ## Docker
 
 * Dockerfile build process:
-  * Bash-like
-  * Starts with clean Ubuntu image
-  * Installs all necessary packages: tomcat, solr, memcache, nginx, xhprof, xdebug, ...
-  * Runs our deploy scripts
-  * Caching
-  * Caveats (Makefiles, Linux, TIMTOWTDI)
+* Bash-like
+* Starts with clean Ubuntu image
+* Installs all necessary packages: tomcat, solr, nginx, xhprof, xdebug, ...
+* Runs our deploy scripts
+* Caching
+* Caveats (Makefiles, Linux, TIMTOWTDI)
 
 --end--
 
@@ -463,123 +579,6 @@ SiteDiff turns out to be useful on many projects
 * Dev vs Prod
 * Non-Drupal to Drupal migrations
 * Upgrades! Little should change
-
---end--
-
-## Continuous integration
-
-* Tests can be slow
-* It's easy to forget to run them
-* Continuous integration
-  * Run your tests automatically for every commit
-  * Usually uses a build server
-  * Reports on the results
-  * For upgrades, best with Test-Driven Development
-
---end--
-
-## CircleCI
-
-We use [CircleCI](http://circleci.com) for our continuous integration:
-
-* Integrates with GitHub branches and pull requests
-* Allows use of docker, so test environment is consistent with dev/prod
-* Email notifications when something breaks
-
---end--
-
-## circle.yml configuration
-
-Simple configuration via circle.yml file:
-
-<pre class="prettyprint lang-yaml">
-machine:
-  services:
-    - docker
-
-dependencies:
-  override:
-    - docker build -t myproject .
-    - docker run -p 9022:22 myproject
-
-test:
-  override:
-    - "ssh -p 9022 drupal@localhost 'cd /var/www && drush test-run'"
-</pre>
-
---end--
-
-## CI tips
-
-* Make sure CI has access to a recent DB
-* If your content changes often, trigger builds via cron
-* Catches very unexpected bugs, eg: servers disappearing, unmaintained packages
-* Do upgrades on branches, CircleCI will test them for you
-
---end--
-
-## UI testing
-
-[behat](http://docs.behat.org) and its [Drupal extension](https://behat-drupal-extension.readthedocs.org)
-
-* What are TDD and BDD?
-* Why use behat?
-  * Integration testing
-  * UI testing
-  * Testing will be ready for upgrades
-
---end--
-
-## behat scenarios
-
-Here's an example of a test for behat:
-
-    Scenario: Show author on hover
-      Given I am viewing an "article" content:
-      | title | author          | body  |
-      | Lorem | bob@example.com | Ipsum |
-      When I hover over the "author" region
-      Then I should see the text "Bob"
-
-Here's how we implemented the "hover" rule above, in a custom behat context:
-
-    /**
-      * @When I hover over the :region region
-      */
-    public function iHoverOverRegion($region) {
-      getRegion($region)->mouseOver();
-    }
-
---end--
-
-## behat stack
-
-<pre class="nocode" style="font-size: 36px;">
-Behat Gherkin language
-Behat PHP contexts -------
-Mink PHP contexts        | Drupal extension
-Mink drivers             | Drupal API driver (or others)
-Selenium
-Chrome
-</pre>
-
---end--
-
-## Docker
-
-* Docker allows you to run lightweight containers
-* Easy to spin up an exact copy of your site
-* If something breaks, just spin it up again
-* Consistent environment in dev/staging/prod
-* This is very useful for minor updates!
-
---end--
-
-## Docker, behat, CircleCI demo
-
-![](img/pull-request-screenshot.png)
-
-https://github.com/evolvingweb/drupal-docker-marriage
 
 --end--
 
