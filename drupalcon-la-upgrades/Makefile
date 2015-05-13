@@ -1,5 +1,6 @@
 build:
 	rsync -a resources/ build/
+	rsync -a img/ build/img/
 	bash md2deckprettyprez.sh README.md > build/out.html
 
 clean:
