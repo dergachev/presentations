@@ -1,10 +1,11 @@
-* Demo of behat and CircleCI
+* Demo of docker, behat, and CircleCI
 * Repo: https://github.com/evolvingweb/drupal-docker-marriage
 
 **Show website**
 
-* We're using docker for this site, we already have an image built
-* ```make run```
+* We already built a docker image for this site
+  * This site is a simple example of how to Dockerize a Drupal site, see the README
+* ```make run``` runs the image we have, with some port mapping
 * Visit http://docker2:8080
 * There's a navigation menu, with active links
 * There's an RSVP form, which shows "Thank you" on submit
@@ -33,7 +34,7 @@
 * Run ```drush up -y bootstrap```
 * Re-run the tests, notice one failed!
 * Visit the site, notice the nav menu is mussed up
-* Do ```make destroy run``` and show that we reverted! No harm in trying updates, even if they don't work.
+* Do ```docker destroy run``` and show that we reverted! No harm in trying updates, even if they don't work.
 
 **Demo CircleCI**
 
@@ -45,5 +46,8 @@
 
 * Show the CirleCI details for the failure
 * Click 'circle.yml', explain a bit
+* Show some of the ```make build``` log. Note some sections, to illustrate how the Dockerfile was run, eg:
+ * apt-get install
+ * drush updb
 * Show the test error that was found.
-
+ 
