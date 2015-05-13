@@ -57,8 +57,7 @@
 
 --end--
 
-
-![](https://dl.dropbox.com/u/29440342/screenshots/TMFBQGIR-2015.05.11-14-42-45.png)
+![](img/ew-projects.png)
 
 --end--
 
@@ -251,7 +250,7 @@ Perform the upgrade:
 
 ## D7 upgrade case study
 
-<img src="https://dl.dropboxusercontent.com/u/29440342/screenshots/CJQQBDZE-2015.05.11-15-37-20.png" width="45%" style="float: right; margin-left: 40px; margin-right: 20px" />
+<img src="img/coursecal-home.png" width="45%" style="float: right; margin-left: 40px; margin-right: 20px" />
 
 * McGill University's Course Calendar
 * "Academic Catalog": Programs, Courses, and University Regulations
@@ -263,7 +262,7 @@ Perform the upgrade:
 
 ## Search-driven UI
 
-<img src="https://dl.dropbox.com/u/29440342/screenshots/GJKGZCAJ-2015.05.11-15-29-43.png" width="45%" style="float: right; margin-left: 40px; margin-right: 20px" />
+<img src="img/coursecal-search.png" width="45%" style="float: right; margin-left: 40px; margin-right: 20px" />
 
 * Custom seach tabs containing nested facets
 * Section specific search pages in menus
@@ -273,7 +272,7 @@ Perform the upgrade:
 
 ## Logically nested menus
 
-<img src="https://dl.dropboxusercontent.com/u/29440342/screenshots/YEEHOHIF-2015.05.11-15-46-28.png" width="40%" style="float: right; margin-left: 40px; margin-right: 20px" />
+<img src="img/coursecal-faculty.png" width="40%" style="float: right; margin-left: 40px; margin-right: 20px" />
 
 * All pages live in a single logical menu hierarchy, ~10k items
 * ~100s menu items in primary\_links, rest in various book menus
@@ -444,8 +443,8 @@ paths:
 
 ## SiteDiff output
 
-![](https://dl.dropbox.com/u/29440342/screenshots/OTEHKZLG-2014.04.10-13-08-53.png)
-![](https://dl.dropbox.com/u/29440342/screenshots/TZWTBTFV-2014.04.10-13-26-25.png)
+![](img/sitediff-report.png)
+![](img/sitediff-diff.png)
 
 --end--
 
