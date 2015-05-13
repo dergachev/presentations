@@ -202,34 +202,39 @@ Perform the upgrade:
 ## Testing basics
 
 * Unit testing
-  * SimpleTest (d7), PHPUnit (d8, can use with D7)
-  * fast, great for testing functions with specific inputs/outputs
-  * Fixtures
-  * Dependency injection (mocks)
-  * Limitations: architecture, coverage
-* Integration testing
-  * simpletest
-  * behat
-  * selenium
-  * slow, brittle
-* SiteDiff
-* Upgrade path testing
-  * fixture: d6 db structure + data, resulting d7 upgraded data
-* Continuous Integration
+  * D7: SimpleTest (DrupalUnitTestCase)
+  * D8: PHPUnit
+  * Fast, good for standalone functions
+  * Use fixtures for testing
+  * Can't test integration
+* Not too useful for upgrades
+  * Contrib modules are already tested
+  * What's likely to break: integration
+* Useful for your custom modules during major upgrades
 
 --end--
 
-## UI testing
+## Testing basics
 
-SimpleTest in Drupal is limited:
+* Integration testing
+  * SimpleTest (DrupalWebTestCase)
+  * Powerful Drupal integration: Enable modules, create content, add users...
+  * By default, tests your module in isolation
+  * Much slower, needs to site-install for each test
+  * Can't test things like JavaScript, CSS
+  * Tight coupling, hard to maintain
 
-* Mostly tests units, not whole site
-* Database is only from fixtures
-* Tests Drupal API, not web pages: CSS, forms, scrolling...
-* Can't test JavaScript at all
+--end--
 
-<br />
-Many testing frameworks solve this using a real browser for testing: Selenium, PhantomJS, CasperJS...
+## Testing basics
+
+* UI testing
+  * Eg: Selenium, CasperJS, behat
+  * Tests your site by controlling a real browser
+  * Pretty slow, and very tight coupling
+  * Usually no Drupal integration
+  * Very powerful and thorough
+  * Great replacement for manual testing
 
 --end--
 
@@ -388,7 +393,7 @@ Requirements:
   * Easier to onboard developers, replicate bugs, works great with CI
 * Dockerfile build process:
   * Bash-like
-  * Starts with clean Ubuntu image 
+  * Starts with clean Ubuntu image
   * Installs all necessary packages: tomcat, solr, memcache, nginx, xhprof, xdebug, ...
   * Runs our deploy scripts
   * Caching
