@@ -367,7 +367,7 @@ Perform the upgrade:
 * content\_migrate (submodule of CCK) is slow (~2 days)
   * One field record (delta) at a time, one node at a time, one value at a time
   * Prune the database (10% of the nodes, focused on 1 faculty, try to keep consistency)
-  * [https://github.com/dergachev/content\_migrate\_tweaks](/https://github.com/dergachev/content_migrate_tweaks/)
+  * [github.com/dergachev/content\_migrate\_tweaks](/https://github.com/dergachev/content_migrate_tweaks/)
   * Replaced with INSERT ... SELECT ... queries as >100x optimization
   * Validated with unit tests, table checksums, SiteDiff
 * `drush php-script` vs `hook_update_N`
@@ -413,7 +413,7 @@ Course Calendar had specific requirements
 <br/>
 
 So we built a tool to compare web sites: SiteDiff
-[http://github.com/evolvingweb/sitediff](https://github.com/evolvingweb/sitediff)
+[github.com/evolvingweb/sitediff](https://github.com/evolvingweb/sitediff)
 
 --end--
 
@@ -527,7 +527,7 @@ test:
 
 ## UI testing
 
-We do UI testing using behat, a Behavior Driven Development tool: [https://behat-drupal-extension.readthedocs.org](https://behat-drupal-extension.readthedocs.org)
+We do UI testing using behat, a Behavior Driven Development tool: [behat-drupal-extension.readthedocs.org](https://behat-drupal-extension.readthedocs.org)
 
 * What is Test Driven Development?
   * Write tests first, then implement it in the site
@@ -580,7 +580,7 @@ Chrome
 --end--
 
 
-## Docker, behat, CircleCI demo<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
+## Docker, behat, CircleCI demo
 
 ![](img/pull-request-screenshot.png)
 
@@ -589,7 +589,6 @@ https://github.com/evolvingweb/drupal-docker-marriage
 --end--
 
 ## SiteDiff demo
-<a id="sitediff-demo" />
 
 ![](img/sitediff-screenshot.png)
 
@@ -599,7 +598,7 @@ https://github.com/vasi/sitediff-update-demo
 
 ## Any questions?
 
-* Evolving Web: [http://evolvingweb.ca](http://evolvingweb.ca)
-* SiteDiff: [https://github.com/evolvingweb/sitediff](https://github.com/evolvingweb/sitediff)
-* Demo of SiteDiff: [https://github.com/vasi/sitediff-update-demo](https://github.com/vasi/sitediff-update-demo)
-* Demo of docker, behat, CircleCI: [https://github.com/evolvingweb/drupal-docker-marriage](https://github.com/evolvingweb/drupal-docker-marriage)
+* Evolving Web: [evolvingweb.ca](http://evolvingweb.ca)
+* SiteDiff: [github.com/evolvingweb/sitediff](https://github.com/evolvingweb/sitediff)
+* Demo of SiteDiff: [github.com/vasi/sitediff-update-demo](https://github.com/vasi/sitediff-update-demo)
+* Demo of docker, behat, CircleCI: [github.com/evolvingweb/drupal-docker-marriage](https://github.com/evolvingweb/drupal-docker-marriage)
