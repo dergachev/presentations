@@ -10,13 +10,13 @@
 # * item1
 # * item2
 # --end------
-# to indicate syntax highlighting language for code blocks 
+# to indicate syntax highlighting language for code blocks
 # start them with #{language_name}
 # for example:
 # ##h2 title
 # some stuff
 # now a code block
-# 
+#
 #     #ruby
 #     :bob = "bob".to_sym
 #

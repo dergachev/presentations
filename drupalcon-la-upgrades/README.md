@@ -428,6 +428,20 @@ What it does:
 
 --end--
 
+## SiteDiff configuration
+
+<pre class="prettyprint lang-yaml">
+after_url: http://docker:9180
+sanitization:
+- pattern: http:\/\/[a-zA-Z0-9.:-]+
+  substitute: __domain__
+paths:
+- /
+- /node/1
+</pre>
+
+--end--
+
 ## SiteDiff output
 
 ![](https://dl.dropbox.com/u/29440342/screenshots/OTEHKZLG-2014.04.10-13-08-53.png)
@@ -485,7 +499,7 @@ We use [CircleCI](http://circleci.com) for our continuous integration:
 
 Simple configuration via circle.yml file:
 
-<pre>
+<pre class="prettyprint lang-yaml">
 machine:
   services:
     - docker
@@ -497,7 +511,7 @@ dependencies:
 
 test:
   override:
-    - ssh -p 9022 drupal@localhost 'cd /var/www && drush test-run'
+    - "ssh -p 9022 drupal@localhost 'cd /var/www && drush test-run'"
 </pre>
 
 --end--
