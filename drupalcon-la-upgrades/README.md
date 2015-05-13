@@ -26,15 +26,23 @@
 
 ## Outline
 
-* __About us__ (3m)
-* __Intro__ (9m)
-  * Minor Updates, Major Core Upgrades, Testing
-* __Tools__: behat, CircleCI, docker	(4m)
-* __drupal-docker-marriage demo__ (8m)
-* __Case study__: McGill Courses and Programs D7 (15m)
-  * Project description, Challenges, Solutions
-  * Tools: More docker, PHPUnit, SiteDiff
-* __SiteDiff demo__ (8m)
+* __About us__ [3m]
+* __Intro__ [2m]
+* __Basics__: [10m]
+  * Minor Updates (3m)
+  * Major Core Upgrades (4m)
+  * Testing (3m)
+* __Tools__: [6m]
+  * behat (3m)
+  * CircleCI (2m)
+  * docker	(1m)
+* __drupal-docker-marriage demo__ [8m]
+* __Case study__: McGill Courses and Programs D7 [18m]
+  * Description (7m)
+  * Solutions (4m)
+  * Docker (2m)
+  * SiteDiff (5m)
+* __SiteDiff demo__ [5m]
 
 --end--
 
@@ -200,6 +208,16 @@ Perform the upgrade:
 ## Testing basics
 
 * Unit testing
+* Integration testing
+* UI testing
+  * behat
+* Continuous integration
+
+--end--
+
+## Testing basics
+
+* Unit testing
   * D7: SimpleTest (DrupalUnitTestCase)
   * D8: PHPUnit
   * Fast, good for standalone functions
@@ -240,7 +258,7 @@ Perform the upgrade:
 
 [behat](http://docs.behat.org) and its [Drupal extension](https://behat-drupal-extension.readthedocs.org)
 
-* What are TDD and BDD?
+* What is BDD?
 * Why use behat?
   * Integration testing
   * UI testing
@@ -273,10 +291,9 @@ Here's how we implemented the "hover" rule above, in a custom behat context:
 ## behat stack
 
 <pre class="nocode" style="font-size: 30px;">
-Behat Gherkin language
-Behat PHP contexts -------
-Mink PHP contexts        | Drupal extension
-Mink drivers             | Drupal API driver (or others)
+Behat's Gherkin language
+Behat PHP contexts ---
+Mink                 | Drupal extension drivers
 Selenium
 Chrome
 </pre>
@@ -302,6 +319,7 @@ We use [CircleCI](http://circleci.com) for our continuous integration:
 * Integrates with GitHub branches and pull requests
 * Allows use of docker, so test environment is consistent with dev/prod
 * Email notifications when something breaks
+* Catches very unexpected bugs, eg: servers disappearing, unmaintained packages
 
 --end--
 
@@ -323,15 +341,6 @@ test:
   override:
     - "ssh -p 9022 drupal@localhost 'cd /var/www && drush test-run'"
 </pre>
-
---end--
-
-## CI tips
-
-* Make sure CI has access to a recent DB
-* If your content changes often, trigger builds via cron
-* Catches very unexpected bugs, eg: servers disappearing, unmaintained packages
-* Do upgrades on branches, CircleCI will test them for you
 
 --end--
 
@@ -577,7 +586,7 @@ SiteDiff turns out to be useful on many projects
 
 * Refactorings
 * Dev vs Prod
-* Non-Drupal to Drupal migrations
+* Content migration
 * Upgrades! Little should change
 
 --end--
