@@ -148,7 +148,7 @@
 * For real sites in production:
   * Perform manual update on dev/staging, test
   * Commit
-  * Test updated repo on staging (updb!)
+  * Deploy to staging and test
   * Deploy on prod
 * Update hooks
   * Keep database in sync with versions of code
@@ -159,7 +159,13 @@
 
 ## Major upgrade basics
 
-There are is no such thing as a basic major upgrade.
+...
+
+--end--
+
+## Major upgrade basics
+
+The first rule of major upgrades is there is no such thing as a basic major upgrade.
 
 --end--
 
@@ -418,7 +424,6 @@ test:
 * Deliverable = upgrade script, not code + db dump
   * Must be able to re-run on prod database
   * Must also be adaptable for 4 previous years (separate DBs)
-* Limited time and resources: 2 devs, 12 weeks
 
 --end--
 
@@ -445,19 +450,18 @@ test:
 
 ## Technical solutions
 
-* Test-driven refactoring first for sanity
+* Test-driven refactoring
 * Content migrate tweaks for speed
-* SiteDiff for correctness
 * Docker for build process automation
+* SiteDiff for correctness
 
 --end--
 
 ## Refactor + unit testing
 
 * PHPUnit tests for custom modules
-* Feasible to make it work with D7 (autoloading vs manual)
+  * Feasible to make it work with D7 (autoloading vs manual includes)
 * Use fixtures in your test (eg. for menu trees and nodes)
-* Sometimes had to bootstrap drupal (eg. for input filters)
 * Can't mock/swap drupal functions, need process isolation
 * Refactor custom code to allow dependency injection of mocks
 
@@ -502,10 +506,10 @@ test:
 ## Docker
 
 * Dockerfile build process:
-* Bash-like
 * Starts with clean Ubuntu image
-* Installs all necessary packages: tomcat, solr, nginx, xhprof, xdebug, ...
-* Runs our deploy scripts
+* Bash-like
+  * Installs all necessary packages: tomcat, solr, nginx, xhprof, xdebug, ...
+  * Runs our deploy scripts
 * Caching
 * Caveats (Makefiles, Linux, TIMTOWTDI)
 
@@ -538,13 +542,13 @@ test:
 <pre class="prettyprint lang-yaml">
 before_url: http://docker:9179
 after_url: http://docker:9180
-sanitization:
-- pattern: http:\/\/[a-zA-Z0-9.:-]+
-  substitute: __domain__
 paths:
 - /
 - /about-us
 - /user/3/track
+sanitization:
+- pattern: http:\/\/[a-zA-Z0-9.:-]+
+  substitute: __domain__
 </pre>
 
 --end--
