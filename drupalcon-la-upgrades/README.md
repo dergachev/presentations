@@ -568,24 +568,6 @@ https://github.com/evolvingweb/drupal-docker-marriage
 
 --end--
 
-## Version control<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
-
-TODO: git
-
---end--
-
-## Backups<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
-
-TODO
-
---end--
-
-## Upgrade path tests<a onclick="$.deck('go', $('#sitediff-demo')[0].closest('section')['id']);">&nbsp;</a>
-
-TODO
-
---end--
-
 ## SiteDiff demo
 <a id="sitediff-demo" />
 
