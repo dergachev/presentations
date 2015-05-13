@@ -336,7 +336,7 @@ Perform the upgrade:
 
 --end--
 
-## Refactoring and unit testing
+## Refactor + unit testing
 
 * PHPUnit tests for custom modules
 * Feasible to make it work with D7 (autoloading vs manual)
@@ -388,9 +388,9 @@ Requirements:
 
 ## Docker
 
-* Docker gives a dev friendly UI to automate building and running virtualized containers
-* Allows consistent dev, testing, and prod environments
-  * Easier to onboard developers, replicate bugs, works great with CI
+* Friendly UI to build and run virtualized containers
+* Allows consistent dev, test, and prod environments
+* Easy to onboard developers, replicate bugs, CI
 * Dockerfile build process:
   * Bash-like
   * Starts with clean Ubuntu image
@@ -405,10 +405,10 @@ Requirements:
 
 Course Calendar had specific requirements
 
-* Initial dev site should be similar to prod
-* Refactored site should be similar to dev site
-* Upgraded site must be similar to original
-* Most of the site is static
+* Ensure dev mirrors prod
+* Ensure D6 refactoring changed nothing
+* D7 should mostly mirror D6
+* Mostly static content
 
 <br/>
 
@@ -421,7 +421,7 @@ So we built a tool to compare web sites: SiteDiff
 
 What it does:
 
-* Fetches a set of pages from two similar sites
+* Downloads HTML pages from  a set of pages from two similar sites
 * Computes diff of HTML
 * Cleans up spurious changes, like absolute domains
 * Reports the changes, both on command-line and on web UI
@@ -527,12 +527,9 @@ test:
 
 ## UI testing
 
-We do UI testing using behat, a Behavior Driven Development tool: [behat-drupal-extension.readthedocs.org](https://behat-drupal-extension.readthedocs.org)
+[behat](http://docs.behat.org) and its [Drupal extension](https://behat-drupal-extension.readthedocs.org)
 
-* What is Test Driven Development?
-  * Write tests first, then implement it in the site
-* What is Behavior Driven Development?
-  * Word your tests using natural language, they'll be better
+* What are TDD and BDD?
 * Why use behat?
   * Integration testing
   * UI testing
@@ -550,10 +547,6 @@ Here's an example of a test for behat:
       | Lorem | bob@example.com | Ipsum |
       When I hover over the "author" region
       Then I should see the text "Bob"
-
---end--
-
-## behat syntax definitions
 
 Here's how we implemented the "hover" rule above, in a custom behat context:
 
