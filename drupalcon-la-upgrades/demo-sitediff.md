@@ -1,6 +1,13 @@
 * Demo of getting started with sitediff
 * Repo: https://github.com/vasi/sitediff-update-demo-deploy
 
+**Intro**
+
+* This is a demonstration of how to get started with SiteDiff!
+* We'll see how to use SiteDiff to look at changes on your site.
+* We'll also see how SiteDiff can catch a bug caused by an update.
+* We'll use a mode of SiteDiff that can compare a site against an earlier, cached version of itself
+
 **Show website**
 
 * Again, we already have a docker image. Just ```make run```
@@ -11,7 +18,7 @@
 * _Go to local terminal for sitediff! We don't want to mess around with Vagrant_
 * Run ```sitediff init http://docker2:9180```
 * It crawls the site up to a certain depth, and creates some files
-* Show ```ls sitediff```: There's a configuration file ```sitediff.yaml```, and a cache file ```cache.db.db```
+* Show ```ls sitediff```: There's a configuration file ```sitediff.yaml```, and a cache file ```cache.db```
 
 **Show an initial diff**
 
