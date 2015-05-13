@@ -140,10 +140,10 @@
   * ```drush pm-updatestatus``` to list available updates
   * ```drush pm-update``` to perform updates
 * For real sites in production:
-  * Run update on dev/staging
-  * Test that everything is working
-  * Check your code changes into version control
-  * On prod, pull changes and ```drush updb```
+  * Perform manual update on dev/staging, test
+  * Commit
+  * Test updated repo on staging (updb!)
+  * Deploy on prod
 * Update hooks
   * Keep database in sync with versions of code
   * Eg: new column in database; rename variable
@@ -572,6 +572,15 @@ Chrome
 
 --end--
 
+## Docker
+
+* Docker allows you to run lightweight containers
+* Easy to spin up an exact copy of your site
+* If something breaks, just spin it up again
+* Consistent environment in dev/staging/prod
+* This is very useful for minor updates!
+
+--end--
 
 ## Docker, behat, CircleCI demo
 
