@@ -403,53 +403,59 @@ Requirements:
 
 ## SiteDiff
 
-* [github.com/dergachev/sitediff](https://github.com/dergachev/sitediff)
-* show pretty diffs of HTML contents of whole sites
-* sanitization - easy to write! easy to maintain!
-* History: buyandsell
-* Compares sites HTML, one page at a time
-* Spurious diffs: needs sanitization rules
-** Several types
-** Some are common for Drupal, eg: form build IDs
-* Demo with 7.36 bug?
-* Limitations
-** JavaScript
-** Dynamic content
-** Admin UI
-* Case study: AllSeen DevDocs
-** Drupal vs non-Drupal, migration
-** Easy to generate the sitemap automatically
-** Needed heavy sanitization
-** Caught useful bugs: HTML entity issues, bad quoting
-** Good on updates to migration source, we could verify that changes to site matched changes to source
+Course Calendar had specific requirements
+
+* Initial dev site should be similar to prod
+* Refactored site should be similar to dev site
+* Upgraded site must be similar to original
+* Most of the site is static
+
+<br/>
+
+So we built a tool to compare web sites: SiteDiff
+[http://github.com/evolvingweb/sitediff](https://github.com/evolvingweb/sitediff)
 
 --end--
 
-## SiteDiff Input
+## SiteDiff
 
-        paths:
-         - /
-         - /user
+What it does:
 
-        selector: 'body'
-
-        sanitization:
-        - title: 'remove form build id'
-          pattern:    '<input type="hidden" name="form_build_id" value="form-[a-zA-Z0-9_-]+" *\/?>'
-          substitute: '<input type="hidden" name="form_build_id" value="__form_build_id__">'
-
-        before:
-          dom_transform:
-          - type: remove
-            selector: '#something'
+* Fetches a set of pages from two similar sites
+* Computes diff of HTML
+* Cleans up spurious changes, like absolute domains
+* Reports the changes, both on command-line and on web UI
 
 --end--
 
 ## SiteDiff output
 
-
 ![](https://dl.dropbox.com/u/29440342/screenshots/OTEHKZLG-2014.04.10-13-08-53.png)
 ![](https://dl.dropbox.com/u/29440342/screenshots/TZWTBTFV-2014.04.10-13-26-25.png)
+
+--end--
+
+## SiteDiff
+
+* Advantages:
+  * Thoroughness
+  * Black-box
+  * Speed
+* Limitations:
+  * JavaScript
+  * Dynamic content
+  * Admin UI
+
+--end--
+
+## SiteDiff
+
+SiteDiff turns out to be useful on many projects
+
+* Refactorings
+* Dev vs Prod
+* Non-Drupal to Drupal migrations
+* Upgrades! Little should change
 
 --end--
 
