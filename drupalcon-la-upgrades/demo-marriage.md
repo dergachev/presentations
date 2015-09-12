@@ -31,7 +31,7 @@
 
 **Try a broken upgrade**
 
-* Run ```drush up -y bootstrap```
+* Run ```drush up -y bootstrap-7.x-2.2```
 * Re-run the tests, notice one failed!
 * Visit the site, notice the nav menu is mussed up
 * Do ```docker destroy run``` and show that we reverted! No harm in trying updates, even if they don't work.
