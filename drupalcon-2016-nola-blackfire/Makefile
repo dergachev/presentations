@@ -1,7 +1,7 @@
 build:
 	rsync -a resources/ build/
 	rsync -a img/ build/img/
-	bash md2deckprettyprez.sh README.md > build/out.html
+	bash md2deckprettyprez.sh README.md 'Drupal + Blackfire = ❤️' > build/out.html
 
 clean:
 	rm build/out.html
