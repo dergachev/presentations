@@ -43,8 +43,13 @@
 
 <!-- Initialize the deck. You can put this in an external file if desired. -->
 <script>
-	$(function() {
-		$.deck('.slide');
-	});
+$(function() {
+	$.deck('.slide');
+
+  $('code .ungrey').each(function() {
+    $(this).closest('code').addClass('grey');
+  });
+});
 </script>
+
 <script src="google-code-prettify/src/run_prettify.js?lang=yaml"></script>

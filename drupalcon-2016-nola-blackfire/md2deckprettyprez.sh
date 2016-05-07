@@ -32,15 +32,12 @@ cat resources/head.html
 echo "</head><body class='deck-container'><section class='slide'>"
 LOGO_DIV="<div\ style='position:absolute;width:500px;bottom:0;right:1em;'><img\ src='resources\/img\/'\ width='200px'\ style='float:right;'\/><\/div>"
 test -f resources/img/ || LOGO_DIV=""
-# cat $1| sed 's/-\{2,\}end-\{2,\}/\n--end--\n/'\
-# see http://cafenate.wordpress.com/2010/12/05/newlines-in-sed-on-mac/
 cat $1 | sed 's/-\{2,\}end-\{2,\}/\'$'\n''--end--\'$'\n/' \
       | markdown \
+      | perl -pe 's,^HIGHLIGHT(.*)$,<span class="ungrey">$1</span>,' \
       | sed 's/<code>\s*#\+\([a-zA-Z]*\)/<code class="language-\1">/' \
       | sed 's/<pre>/<pre class="prettyprint">/' \
       | sed "s/<p>--end--<\/p>/$LOGO_DIV<\/section><section class='slide'>/" \
-# stop slide per bullet:
-#      | sed 's/<li>/<li class="slide">/'
 
 echo "</section>"
 cat resources/tail.html

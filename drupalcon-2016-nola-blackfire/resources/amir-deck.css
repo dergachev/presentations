@@ -13,7 +13,7 @@
 }
 
 .deck-container .slide h2 {
-  border-bottom-color: #d0dfe8; 
+  border-bottom-color: #d0dfe8;
 }
 .deck-container .slide pre {
   border-color: #ccc;
@@ -93,4 +93,12 @@
 
 .slide ul {
   margin-bottom: 0;
+}
+.deck-container .slide .grey > span:not(.ungrey) {
+  filter: contrast(70%) grayscale(100%);
+  -webkit-filter: contrast(70%) grayscale(100%);
+}
+.deck-container .slide .ungrey span {
+  font-size: larger;
+  color: #F0385D; /* dark red */
 }
