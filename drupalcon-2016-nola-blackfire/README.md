@@ -269,7 +269,7 @@ Iterate over some data, load nodes one at a time.
       return $return;
     }
 
-Load them all at once
+Load all the nodes at once.
 
 <div class="notes">
   * Grab all the node IDs
@@ -340,9 +340,7 @@ A reasonable improvement in under an hour of work!
 
 <img src="img/mystery.png" height="400" />
 
-Complex site… that we can't show you
-
-I wonder why they don't want you to know who they are…
+Complex site that we're not allowed to show you!
 
 <div class="notes">
   * Unfamiliar code base
@@ -361,10 +359,7 @@ Let's check it out in Chrome inspector's _Network_ tab:
 
 ![](img/timeline.png)
 
-<div class="notes">
-  * There's a redirect to the English language landing page
-  * The redirect is slow!
-</div>
+That's a pretty slow redirect!
 
 --end--
 
@@ -372,11 +367,9 @@ Let's check it out in Chrome inspector's _Network_ tab:
 
 Our browser is at the path _/en_, so that's what Blackfire would profile
 
-![](img/copy-curl.png)
+But we want to profile the redirect itself!
 
-<div class="notes">
-  But we want to profile the redirect itself!
-</div>
+![](img/copy-curl.png)
 
 --end--
 
@@ -500,9 +493,75 @@ Also:
 
 --end--
 
-## Case study: D8 evolvingweb.ca
+## Case study: evolvingweb.ca
 
-* Problem: Slow page
+We've already upgraded our site to Drupal 8! We learned a lot.
+TODO: link to midcamp presentation
+
+D8 is great, we love features like Views in core, CKEditor... TODO
+
+But D8 is slower than D7&nbsp;&nbsp;&nbsp;🏃 ➡ 🚶
+
+--end--
+
+<img src="img/blog.png" width="50%" style="float: right; margin: 5% 2%; border: 1px solid black;" />
+
+<h2 style="border: none;">Blog posts</h2>
+
+Really fast when cached!
+
+No so fast after any node is edited, definitely slower than D7.
+
+--end--
+
+## Profiling uncached pages
+
+If we edit a node and then profile, Blackfire will have one uncached requests, then nine cached ones.
+
+We could disable aggregation, but then our measurements will fluctuate too much.
+
+Maybe there's a better way?
+
+--end--
+
+## Profiling uncached pages
+
+Disable page cache: `drush pmu -y page_cache`
+
+But we still have the dynamic page cache and render cache!
+
+<div class="notes">
+  Don't want to disable render cache, because even after we edit one node, many rendered elements will still have valid caches.
+</div>
+
+Instead of turning off more caching layers, let's reproduce the situation we care about.
+
+--end--
+
+## Profiling uncached pages
+
+At the start of each request, invalidate cache:
+
+    class EwsiteSubscriber implements EventSubscriberInterface {
+      public static function getSubscribedEvents() {
+        $events[KernelEvents::REQUEST][] = ['onRequest'];
+        return $events;
+      }
+
+      public function killBlogCache(GetResponseEvent $event) {
+        $tags = ['node_list', 'node:239'];
+        \Drupal::service("cache_tags.invalidator")->invalidateTags($tags);
+      }
+    }
+
+<p class="nonono">Don't commit this! For profiling only</p>
+
+Registered our Event Subscriber in `ewsite.services.yml`.
+
+--end--
+
+
+* Problem:
 * Caching issues
   * Only when not in page_cache, dynamic_page_cache
   * This is a problem with aggregation!

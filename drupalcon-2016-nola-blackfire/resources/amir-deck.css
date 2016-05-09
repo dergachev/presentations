@@ -24,11 +24,11 @@
   padding:1em;
 }
 .deck-container .slide code{
-  font-family: "Source Code Pro";
+  font-family: "Source Code Pro" monospace;
 }
 .deck-container .slide a{
   font-size:0.8em;
-  font-family: "Source Code Pro";
+  font-family: "Source Code Pro" monospace;
 }
 .deck-container .slide blockquote {
   font-size: 2em;
