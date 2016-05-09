@@ -551,8 +551,6 @@ If we edit a node and then profile, Blackfire will have one uncached requests, t
 
 We could disable aggregation, but then our measurements will fluctuate too much.
 
-Maybe there's a better way?
-
 --end--
 
 ## Uncached requests
@@ -575,7 +573,7 @@ At the start of each request, invalidate cache:
 
     class EwsiteSubscriber implements EventSubscriberInterface {
       public static function getSubscribedEvents() {
-        $events[KernelEvents::REQUEST][] = ['onRequest'];
+        $events[KernelEvents::REQUEST][] = ['killBlogCache'];
         return $events;
       }
 
