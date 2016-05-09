@@ -238,18 +238,143 @@ Q & A
 
 ## Case study: Client X
 
-* Explain problem: slow homepage
-* Chrome network tab: redirect!
-* Copy as cURL!
-* Run profile
-* It's theming before redirect!?
-* Search for drupal_goto to find problem function
-* Replace with hook_init
-* This helped us learn new codebase
-	* Logic in with theme code
-	* Custom language detection
-* When you find one issue, you might find more!
-	* All users have cookie, this explains bad caching
+<img src="img/mystery.png" height="400" />
+
+Complex site… that we can't show you
+
+I wonder why they don't want you to know who they are…
+
+<div class="notes">
+  * Unfamiliar code base
+  * Originally built by people unfamiliar with Drupal
+</div>
+
+--end--
+
+## The problem
+
+#### Homepage is slow
+
+<span class="vspace"></div>
+
+Let's check it out in Chrome inspector's _Network_ tab:
+
+![](img/timeline.png)
+
+<div class="notes">
+  * There's a redirect to the English language landing page
+  * The redirect is slow!
+</div>
+
+--end--
+
+## Profiling
+
+Our browser is at the path _/en_, so that's what Blackfire would profile
+
+![](img/copy-curl.png)
+
+<div class="notes">
+  But we want to profile the redirect itself!
+</div>
+
+--end--
+
+## Profiling
+
+Give the results of _Copy as cURL_ to Blackfire:
+
+![](img/curl-paste.png)
+
+--end--
+
+## Profiling
+
+Give the results of _Copy as cURL_ to Blackfire:
+
+![](img/pasted.png)
+
+--end--
+
+## Profiling
+
+TODO
+
+* command output
+* profile
+* analysis
+* search for Drupal goto
+
+--end--
+
+## 😱
+
+    function tq_home_preprocess_page(&$variables) {
+    	$tq_init = array_key_exists('tq_lang_init', $_COOKIE) ? $_COOKIE['tq_lang_init'] : null;
+    	if ($tq_init === null) {
+    		setrawcookie('tq_lang_init', 1, REQUEST_TIME + 60*60*24*7, '/');
+    		$languages = language_list();
+    		$browser_lang = locale_language_from_browser($languages);
+    		if ($browser_lang !== $GLOBALS['language']->language && drupal_is_front_page()) {
+    			drupal_goto('<front>', array(
+    				'language' => $languages[$browser_lang],
+    			));
+    		}
+    	}
+    }
+
+<p class="nonono">Don't do this!</p>
+
+<div class="notes">
+  What this code tries to do:
+    * Homepage is in French only
+    * The first time a user visits, redirect to their language's translation
+    * Set a cookie to remember that they've been detected, so they can go to
+      homepage to get French again.
+
+  This code is what we call a "worst practice". Performance: It redirects the user AFTER rendering much of page, super slow.
+
+  But also:
+  * If user is detected as English, but then chooses French… one week later, redirected to English again!
+  * If you have cookies blocked/disabled, you just redirect forever!
+</div>
+
+--end--
+
+## A fix?
+
+    function tq_home_init() {
+      if (drupal_is_cli()) {
+        return;
+      }
+
+      $tq_init = array_key_exists('tq_lang_init', $_COOKIE) ? $_COOKIE['tq_lang_init'] : null;
+      // same as above
+    }
+
+
+Still not great, most of the problems from before remain.
+
+--end--
+
+## A fix?
+
+But at least performance is better:
+
+![](img/fixed.png)
+
+--end--
+
+## Case study: Client X
+
+We improved performance, that's nice.
+
+Also:
+
+* We know more about the crazy things the site is doing
+* Better understanding of future performance problems
+  * Eg: Cookies and varnish
+* We learned how to use _Copy as cURL_ with Blackfire!
 
 --end--
 

@@ -94,6 +94,8 @@
 .slide ul {
   margin-bottom: 0;
 }
+
+/* CUSTOM */
 .deck-container .slide .grey > span:not(.ungrey) {
   filter: contrast(70%) grayscale(100%);
   -webkit-filter: contrast(70%) grayscale(100%);
@@ -101,4 +103,14 @@
 .deck-container .slide .ungrey span {
   font-size: larger;
   color: #F0385D; /* dark red */
+}
+.deck-container .slide .notes {
+  display: none;
+}
+.deck-container .slide .vspace {
+  display: block;
+  height: 0.5em;
+}
+.deck-container .slide .nonono {
+  color: red;
 }
