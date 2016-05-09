@@ -34,7 +34,8 @@ LOGO_DIV="<div\ style='position:absolute;width:500px;bottom:0;right:1em;'><img\ 
 test -f resources/img/ || LOGO_DIV=""
 cat $1 | sed 's/-\{2,\}end-\{2,\}/\'$'\n''--end--\'$'\n/' \
       | markdown \
-      | perl -pe 's,^HIGHLIGHT(.*)$,<span class="ungrey">$1</span>,' \
+      | perl -pe 's,(^\s*|<code>)NOFADE:(.*)$,$1<span class="code-nofade">$2</span>,' \
+      | perl -pe 's,(^\s*|<code>)HIGHLIGHT:(.*)$,$1<span class="code-highlight">$2</span>,' \
       | sed 's/<code>\s*#\+\([a-zA-Z]*\)/<code class="language-\1">/' \
       | sed 's/<pre>/<pre class="prettyprint">/' \
       | sed "s/<p>--end--<\/p>/$LOGO_DIV<\/section><section class='slide'>/" \

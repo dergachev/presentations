@@ -185,9 +185,9 @@ Q & A
 
 Site for students at McGill university to browse available courses.
 
-* Search-driven UI, so caching can't help too much
 * Tens of thousands of students hit the site at the same time
-* So performance is critical!
+* Search-driven UI, so caching can't help too much
+* Performance becomes is critical!
 
 Let's profile <a class="presenterlink" href="http://docker4:4569/faculties/engineering/undergraduate/ug_eng_dept_of_bioengineering">a page</a> with Blackfire!
 
@@ -217,12 +217,12 @@ Let's profile <a class="presenterlink" href="http://docker4:4569/faculties/engin
 
 <h2 class="mini">The slow code</h2>
 
-    public function loadAcademicFacultyNodes($language = '', $key = 'name'){
+    NOFADE:public function loadAcademicFacultyNodes($language = '', $key = 'name'){
       $return = array();
-      foreach($this->faculties as $f){
+      HIGHLIGHT:foreach($this->faculties as $f){
         if ($f->nid && $f->code){
           if (!$language || $f->language === $language){
-            $node = node_load($f->nid);
+            HIGHLIGHT:$node = node_load($f->nid);
             if ($key && $f->$key){
               $return[$f->$key] = $node;
             } else {
@@ -234,7 +234,7 @@ Let's profile <a class="presenterlink" href="http://docker4:4569/faculties/engin
       return $return;
     }
 
-Iterate over some data, load nodes one at a time.
+Iterate over faculties, load nodes one at a time.
 
 <div class="notes">
   * Loading nodes one at a time is slow! Should load them all together, to
@@ -247,13 +247,13 @@ Iterate over some data, load nodes one at a time.
 
 <h2 class="mini">A fix</h2>
 
-    public function loadAcademicFacultyNodes($language = '', $key = 'name'){
+    NOFADE:public function loadAcademicFacultyNodes($language = '', $key = 'name'){
       $nids = array();
-      foreach($this->faculties as $f){
+      HIGHLIGHT:foreach($this->faculties as $f){
         if ($f->nid && $f->code){
           if (!$language || $f->language === $language){
             if ($key && $f->$key){
-              $nids[$f->$key] = $f->nid;
+              HIGHLIGHT:$nids[$f->$key] = $f->nid;
             } else {
               $nids[] = $f->nid;
             }
@@ -261,7 +261,7 @@ Iterate over some data, load nodes one at a time.
         }
       }
 
-      $nodes = node_load_multiple($nids);
+      HIGHLIGHT:$nodes = node_load_multiple($nids);
       $return = array();
       foreach ($nids as $k => $v) {
         $return[$k] = $nodes[$v];
@@ -269,7 +269,7 @@ Iterate over some data, load nodes one at a time.
       return $return;
     }
 
-Load all the nodes at once.
+Collect the nids, load all nodes at once.
 
 <div class="notes">
   * Grab all the node IDs
@@ -625,7 +625,7 @@ Why so long to figure out what blocks should be visible?
 To get a list of blocks, Drupal 8:
 
 * Loads every single block in the current theme just to check access
-* Checks complex access using visibility conditions
+* Does access check using visibility conditions—pretty complex!
 
 <div class="notes">
   * Iterates through lazy collections many times

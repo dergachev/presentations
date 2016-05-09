@@ -96,13 +96,16 @@
 }
 
 /* CUSTOM */
-.deck-container .slide .grey > span:not(.ungrey) {
+.deck-container .slide .code-fade > span:not(.code-highlight):not(.code-nofade) {
   filter: contrast(70%) grayscale(100%);
   -webkit-filter: contrast(70%) grayscale(100%);
 }
-.deck-container .slide .ungrey span {
+.deck-container .slide .code-highlight span {
   font-size: larger;
   color: #F0385D; /* dark red */
+}
+.deck-container .slide .code-nofade span {
+/*  color: white;*/
 }
 .deck-container .slide .notes {
   display: none;
