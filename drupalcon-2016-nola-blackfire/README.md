@@ -545,7 +545,7 @@ No so fast after any node is edited, definitely slower than D7.
 
 --end--
 
-## Uncached profiling
+## Uncached requests
 
 If we edit a node and then profile, Blackfire will have one uncached requests, then nine cached ones.
 
@@ -555,7 +555,7 @@ Maybe there's a better way?
 
 --end--
 
-## Uncached profiling
+## Uncached requests
 
 Disable page cache: `drush pmu -y page_cache`
 
@@ -569,7 +569,7 @@ Instead of turning off more caching layers, let's reproduce the situation we car
 
 --end--
 
-## Uncached profiling
+## Uncached requests
 
 At the start of each request, invalidate cache:
 
@@ -591,20 +591,92 @@ Registered our Event Subscriber in `ewsite.services.yml`.
 
 --end--
 
-* Problem:
-* Caching issues
-  * Only when not in page_cache, dynamic_page_cache
-  * This is a problem with aggregation!
-  * Cache invalidation of just one node (CODE)
-* Profile
-  * Find slow function
-* Diagnosis: block visibility
-  * Loads all the blocks to check access
-  * Complex condition checking, metadata merging
-* Explain the fix
-  * Like node access, one big query
-  * Module: [block\_access\_records](https://github.com/vasi/block_access_records)
-* Show comparison profile
+## Profiling
+
+Now let's see why it's so slow:
+
+![](img/getvisibleblocks.png)
+
+That's part of D8 core, and it's taking 117 ms!
+
+--end--
+
+## Analysis
+
+Why so long to figure out what blocks should be visible?
+
+![](img/all-the-blocks.png)
+
+<div class="notes">
+  * We do have a lot of blocks
+  * But that's normal for a D8 site, so many things are blocks now! Page titles, menus, footers, views...
+</div>
+
+--end--
+
+## Analysis
+
+    public function getVisibleBlocksPerRegion(array &$cacheable_metadata = []) {
+      // ...
+      foreach ($this->blockStorage->loadByProperties(array('theme' => $active_theme->getName())) as $block_id => $block) {
+        $access = $block->access('view', NULL, TRUE);
+        // ....
+      }
+    }
+
+To get a list of blocks, Drupal 8:
+
+* Loads every single block in the current theme just to check access
+* Checks complex access using visibility conditions
+
+<div class="notes">
+  * Iterates through lazy collections many times
+  * Merges metadata many times over
+</div>
+
+--end--
+
+## This sounds familiar…
+
+When Drupal wants to show one node, it loads the node and checks `$node->access()`.
+
+When Drupal wants a _list_ of nodes, that would be too slow! Instead, we use the node\_access system:
+
+* Modules assign a set of _node access records_ to each node when it's saved, which are stored in the database
+* Modules provide the current request with a set of _node grants_
+* To see if a node should be visible, the current grants are compared with the access records
+* A single database query does the comparison for all nodes at once!
+
+--end--
+
+## This sounds familiar…
+
+Let's implement the same thing for blocks!
+
+* Plugins will provide _block access records_ to each block when it's saved, to be stored in the database
+* Plugins will provide the current request with a set of _block context values_
+* To see if a block should be visible, the current context values will be compared with the access records
+* A single database query will do the comparison for all blocks
+
+--end--
+
+## This sounds familiar…
+
+I've implemented this in a module I've called _block\_access\_records_, which is available here:<br/>
+[github.com/vasi/block\_access\_records](http://github.com/vasi/block_access_records)
+
+* It already has plugins for all of Drupal's built-in block visibility conditions, so on most sites it will just work
+* Since D8 uses dependency injection, we can just replace the default _BlockRepository_ implementation with our new version
+* Sites with custom conditions or other unusual configuration should be wary about trying this
+
+
+--end--
+
+<h2 class="small">Case study: evolvingweb.ca</h2>
+
+TODO: image of comparison profile
+
+We saved over 80 ms on every uncached request!
 
 --end--
 
