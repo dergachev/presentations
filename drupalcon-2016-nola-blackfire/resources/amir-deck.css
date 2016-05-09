@@ -114,3 +114,15 @@
 .deck-container .slide .nonono {
   color: red;
 }
+.deck-container .slide a.presenterlink {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  text-decoration: underline;
+}
+.deck-container .slide h2.mini {
+  padding-top: 0.2em;
+  border: none;
+  margin-bottom: 0.2em;
+  font-size: 1.2em;
+}

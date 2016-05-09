@@ -108,28 +108,28 @@ Q & A
 
 * Blackfire.io is a great PHP profiling tool
 * Profiling gets DRAMATIC results, pretty fast:
-	1. McGill Course Calendar
-		* didn't use node_load_multiple
-		* 260ms -> 225ms, 13%
-		* took 1h to locate and fix a problem
-	1. Client X
-		* slow redirect (390ms -> 95ms), took an hour to diagnose and fix
-		* references\_dialog old buggy version
-			* 1s to 770ms (23%)
-			* took 30m to diagnose, instant fix
-		* uncached menu
-			* 770ms to 480ms
-			* took 2 hours to diagnose, several hours to fix
-		* Took a day to diagnose and fix these PARTIAL problems, on an unfamiliar codebase
-	1. D8 evolvingweb.ca site
-		* block visibility (80ms out of 450ms, 18%)
-		* metatag module patch (saves 30ms)
-		* took 2 hours to identify problems, + 2 days to fix
-	1. Linux Foundation / AllSeen Alliance CAWT
-		* Views handling of revisions inefficient; runs entity_load on each one
-		* used xdebug + reading code to figure out why
-		* Took 3 hours to diagnose + add revision cache
-		* 980ms -> 420ms
+  1. McGill Course Calendar
+    * didn't use node_load_multiple
+    * 260ms -> 225ms, 13%
+    * took 1h to locate and fix a problem
+  1. Client X
+    * slow redirect (390ms -> 95ms), took an hour to diagnose and fix
+    * references\_dialog old buggy version
+      * 1s to 770ms (23%)
+      * took 30m to diagnose, instant fix
+    * uncached menu
+      * 770ms to 480ms
+      * took 2 hours to diagnose, several hours to fix
+    * Took a day to diagnose and fix these PARTIAL problems, on an unfamiliar codebase
+  1. D8 evolvingweb.ca site
+    * block visibility (80ms out of 450ms, 18%)
+    * metatag module patch (saves 30ms)
+    * took 2 hours to identify problems, + 2 days to fix
+  1. Linux Foundation / AllSeen Alliance CAWT
+    * Views handling of revisions inefficient; runs entity_load on each one
+    * used xdebug + reading code to figure out why
+    * Took 3 hours to diagnose + add revision cache
+    * 980ms -> 420ms
 
 --end--
 
@@ -183,7 +183,107 @@ Q & A
 
 ## Case study: Coursecal
 
-* Live demo....
+Site for students at McGill university to browse available courses.
+
+* Search-driven UI, so caching can't help too much
+* Tens of thousands of students hit the site at the same time
+* So performance is critical!
+
+Let's profile <a class="presenterlink" href="http://docker4:4569/faculties/engineering/undergraduate/ug_eng_dept_of_bioengineering">a page</a> with Blackfire!
+
+<div class="notes">
+  * Visit page
+  * Make a profile
+  * Tour the profile: READ NUMBERS
+    * Metrics (overall, I/O, cpu, memory...)
+      * Are these numbers ok for you?
+    * Call graph
+      * Hot path
+      * Is this a reasonable amount of time for this function?
+    * Function list
+      * Calls, excl, incl
+      * Expand: metrics (hover)
+      * Expand: callees (time restricted to call)
+      * Search
+  * Let's find a problem function
+    * Hot path: theme()
+    * moriarty_preprocess_page is long for a preprocess hook!
+    * Follow down graph until the time changes significantly
+    * We get to loadAcademicFacultyNodes
+    * Calling node_load 36 times! Could be multiple
+</div>
+
+--end--
+
+<h2 class="mini">The slow code</h2>
+
+    public function loadAcademicFacultyNodes($language = '', $key = 'name'){
+      $return = array();
+      foreach($this->faculties as $f){
+        if ($f->nid && $f->code){
+          if (!$language || $f->language === $language){
+            $node = node_load($f->nid);
+            if ($key && $f->$key){
+              $return[$f->$key] = $node;
+            } else {
+              $return[] = $node;
+            }
+          }
+        }
+      }
+      return $return;
+    }
+
+Iterate over some data, load nodes one at a time.
+
+<div class="notes">
+  * Loading nodes one at a time is slow! Should load them all together, to
+    minimize the number of DB queries.
+  * This code was written for D6, where node\_load\_multiple didn't exist
+  * Now that it's in D7, let's fix it.
+</div>
+
+--end--
+
+<h2 class="mini">A fix</h2>
+
+    public function loadAcademicFacultyNodes($language = '', $key = 'name'){
+      $nids = array();
+      foreach($this->faculties as $f){
+        if ($f->nid && $f->code){
+          if (!$language || $f->language === $language){
+            if ($key && $f->$key){
+              $nids[$f->$key] = $f->nid;
+            } else {
+              $nids[] = $f->nid;
+            }
+          }
+        }
+      }
+
+      $nodes = node_load_multiple($nids);
+      $return = array();
+      foreach ($nids as $k => $v) {
+        $return[$k] = $nodes[$v];
+      }
+      return $return;
+    }
+
+Load them all at once
+
+<div class="notes">
+  * Grab all the node IDs
+  * Load the nodes all at once
+  * Return data in the expected structure
+</div>
+
+--end--
+
+## Case study: Coursecal
+
+TODO: show fixed results
+
+A reasonable improvement in under an hour of work!
 
 --end--
 
@@ -310,17 +410,17 @@ TODO
 ## 😱
 
     function tq_home_preprocess_page(&$variables) {
-    	$tq_init = array_key_exists('tq_lang_init', $_COOKIE) ? $_COOKIE['tq_lang_init'] : null;
-    	if ($tq_init === null) {
-    		setrawcookie('tq_lang_init', 1, REQUEST_TIME + 60*60*24*7, '/');
-    		$languages = language_list();
-    		$browser_lang = locale_language_from_browser($languages);
-    		if ($browser_lang !== $GLOBALS['language']->language && drupal_is_front_page()) {
-    			drupal_goto('<front>', array(
-    				'language' => $languages[$browser_lang],
-    			));
-    		}
-    	}
+      $tq_init = array_key_exists('tq_lang_init', $_COOKIE) ? $_COOKIE['tq_lang_init'] : null;
+      if ($tq_init === null) {
+        setrawcookie('tq_lang_init', 1, REQUEST_TIME + 60*60*24*7, '/');
+        $languages = language_list();
+        $browser_lang = locale_language_from_browser($languages);
+        if ($browser_lang !== $GLOBALS['language']->language && drupal_is_front_page()) {
+          drupal_goto('<front>', array(
+            'language' => $languages[$browser_lang],
+          ));
+        }
+      }
     }
 
 <p class="nonono">Don't do this!</p>
@@ -404,17 +504,17 @@ Also:
 
 * Problem: Slow page
 * Caching issues
-	* Only when not in page_cache, dynamic_page_cache
-	* This is a problem with aggregation!
-	* Cache invalidation of just one node (CODE)
+  * Only when not in page_cache, dynamic_page_cache
+  * This is a problem with aggregation!
+  * Cache invalidation of just one node (CODE)
 * Profile
-	* Find slow function
+  * Find slow function
 * Diagnosis: block visibility
-	* Loads all the blocks to check access
-	* Complex condition checking, metadata merging
+  * Loads all the blocks to check access
+  * Complex condition checking, metadata merging
 * Explain the fix
-	* Like node access, one big query
-	* Module: [block\_access\_records](https://github.com/vasi/block_access_records)
+  * Like node access, one big query
+  * Module: [block\_access\_records](https://github.com/vasi/block_access_records)
 * Show comparison profile
 
 --end--
