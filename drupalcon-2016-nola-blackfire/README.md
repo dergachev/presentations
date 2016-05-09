@@ -281,9 +281,11 @@ Load all the nodes at once.
 
 ## Case study: Coursecal
 
-TODO: show fixed results
+![](img/fixed-coursecal.png)
 
-A reasonable improvement in under an hour of work!
+Saved about 25ms!
+
+A real improvement in under an hour of total work, from profiling to committing a fix.
 
 --end--
 
@@ -391,12 +393,43 @@ Give the results of _Copy as cURL_ to Blackfire:
 
 ## Profiling
 
-TODO
+Blackfire does its magic:
 
-* command output
-* profile
-* analysis
-* search for Drupal goto
+![](img/cli-results.png)
+
+--end--
+
+## Profiling
+
+Well, that's unexpected:
+
+![](img/redirect-rendering.png)
+
+Why are we rendering a redirect‽‽‽
+
+--end--
+
+## Analysis
+
+Let's see what's triggering the redirect:
+
+![](img/redirect-search.png)
+
+--end--
+
+## Analysis
+
+Let's see what's triggering the redirect:
+
+![](img/goto-details.png)
+
+--end--
+
+## Analysis
+
+![](img/goto-caller.png)
+
+Whoa, it's a preprocess hook!
 
 --end--
 
@@ -442,9 +475,8 @@ TODO
       }
 
       $tq_init = array_key_exists('tq_lang_init', $_COOKIE) ? $_COOKIE['tq_lang_init'] : null;
-      // same as above
-    }
-
+      if ($tq_init === null) {
+        // ... continue as above
 
 Still not great, most of the problems from before remain.
 
@@ -480,7 +512,7 @@ Also:
 * sharing profiles with your team, persistence
 * use blackfire to learn new codebase (contrib)
 * xdebug conflict + necessity
-* Blackfire PHP SDK
+* Blackfire PHP
 * Tradeoff: memory vs time
 * Caching and dirty runs
   * D7 + D8 cache killing
@@ -493,18 +525,17 @@ Also:
 
 --end--
 
-## Case study: evolvingweb.ca
+<h2 class="small">Case study: evolvingweb.ca</h2>
 
-We've already upgraded our site to Drupal 8! We learned a lot.
-TODO: link to midcamp presentation
+We've already upgraded our site to Drupal 8! We learned a lot, and told people all about it: <br/>[http://tiny.cc/midcamp-d8-upgrade](http://tiny.cc/midcamp-d8-upgrade)
 
-D8 is great, we love features like Views in core, CKEditor... TODO
+D8 is great, we love features like Views in core, CKEditor, Twig…
 
-But D8 is slower than D7&nbsp;&nbsp;&nbsp;🏃 ➡ 🚶
+But it's slower than D7 😟
 
 --end--
 
-<img src="img/blog.png" width="50%" style="float: right; margin: 5% 2%; border: 1px solid black;" />
+<img src="img/blog.png" width="50%" class="right" />
 
 <h2 style="border: none;">Blog posts</h2>
 
@@ -514,7 +545,7 @@ No so fast after any node is edited, definitely slower than D7.
 
 --end--
 
-## Profiling uncached pages
+## Uncached profiling
 
 If we edit a node and then profile, Blackfire will have one uncached requests, then nine cached ones.
 
@@ -524,7 +555,7 @@ Maybe there's a better way?
 
 --end--
 
-## Profiling uncached pages
+## Uncached profiling
 
 Disable page cache: `drush pmu -y page_cache`
 
@@ -538,7 +569,7 @@ Instead of turning off more caching layers, let's reproduce the situation we car
 
 --end--
 
-## Profiling uncached pages
+## Uncached profiling
 
 At the start of each request, invalidate cache:
 
@@ -554,12 +585,11 @@ At the start of each request, invalidate cache:
       }
     }
 
-<p class="nonono">Don't commit this! For profiling only</p>
-
 Registered our Event Subscriber in `ewsite.services.yml`.
 
---end--
+<p class="nonono">Don't commit this! For profiling only</p>
 
+--end--
 
 * Problem:
 * Caching issues

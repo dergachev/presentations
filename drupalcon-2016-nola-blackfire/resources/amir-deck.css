@@ -120,9 +120,17 @@
   color: inherit;
   text-decoration: underline;
 }
+.deck-container .slide h2.small {
+  font-size: 1.5em;
+}
 .deck-container .slide h2.mini {
   padding-top: 0.2em;
   border: none;
   margin-bottom: 0.2em;
   font-size: 1.2em;
+}
+.deck-container .slide img.right {
+  float: right;
+  margin: 5% 2%;
+  border: 1px solid black;
 }
