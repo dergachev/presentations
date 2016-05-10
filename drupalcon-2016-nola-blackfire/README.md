@@ -53,9 +53,16 @@
 
 ## About the speakers
 
-* Alex co-founded Evolving Web straight out of undergrad
-* Dave was there to show us version control and Linux
-* Besides doing Drupal projects since 2008...
+
+<img src="img/speakers.jpg">
+
+--end--
+
+## Outline
+
+* Profiling methodology + philosophy
+* Blackfire demo and discussion
+* Case studies from our projects
 
 --end--
 
@@ -74,9 +81,7 @@
 
 --end--
 
-## Motivation
-
-Why are we all here?
+# Motivation
 
 --end--
 
@@ -92,16 +97,20 @@ Why are we all here?
 
 ## What profiling doesn't measure
 
-* Front-end / browser rendering time
-  * JS
-  * CSS / images
+* Browser rendering time (HTML, CSS)
 * Network issues
+* Javascript runtime
+* Asset fetching (imgs, fonts)
+
+--end--
+
+
+<img src="img/druplicon-xray.jpg" >
 
 --end--
 
 ## What profiling measures
 
-<img src="img/druplicon-xray.jpg" width="25%" style="float: right; margin-left: 40px; margin-right: 20px" />
 
 * page generation time, CPU + memory info
 * blocking operations: SQL + external requests
@@ -109,9 +118,10 @@ Why are we all here?
 
 --end--
 
-## Why it's important
+## Why it matters for Drupal
 
 * Drupal core is not exactly lightweight, contrib varies, custom + legacy code
+* Why Varnish isn't enough
 * We deal with many projects, working on slow ones makes us sad
   * Example scenario of Drupal slowness
 
@@ -119,59 +129,103 @@ Why are we all here?
 
 ## Profiling gets results, fast
 
-1. McGill Course Calendar
-  * 260ms -> 225ms, 13%
-  * took 1h to locate and fix a problem involve node\_load
-1. D8 evolvingweb.ca site
-  * block visibility (80ms out of 450ms, 18%)
-  * metatag module patch (saves 30ms)
-  * took 2 hours to identify problems, + 2 days to fix
-1. Linux Foundation: device certification workflow
-  * Views over revisions; used xdebug + code study
-  * Took 3 hours to diagnose + add revision cache
-  * 980ms -> 420ms
-1. Client X
-  * slow redirect (390ms -> 95ms), took an hour to diagnose and fix
-  * buggy version references\_dialog; 1s to 770ms (23%); 30m to diagnose + fix
-  * uncached megamenu: 770ms to 480ms, took 2 hours to diagnose, several hours to fix
-  * helped figure out an unfamiliar codebase
+McGill Course Calendar
+
+* 260ms -> 225ms, 13%
+* took 1h to locate and fix a problem involve node\_load
 
 --end--
 
-## Profiling Methodology
+## Profiling gets results, fast
 
-Let's discuss what we're setting out to do.
+D8 evolvingweb.ca site
+
+* block visibility (80ms out of 450ms, 18%)
+* metatag module patch (saves 30ms)
+* took 2 hours to identify problems, + 2 days to fix
+
+--end--
+
+## Profiling gets results, fast
+
+Linux Foundation: device certification workflow
+
+* Views over revisions; used xdebug + code study
+* Took 3 hours to diagnose + add revision cache
+* 980ms -> 420ms
+
+--end--
+
+## Profiling gets results, fast
+
+Client X
+
+* slow redirect (390ms -> 95ms), took an hour to diagnose and fix
+* buggy version references\_dialog; 1s to 770ms (23%); 30m to diagnose + fix
+* uncached megamenu: 770ms to 480ms, took 2 hours to diagnose, several hours to fix
+* helped figure out an unfamiliar codebase
+
+--end--
+
+# Profiling Methodology
 
 --end--
 
 ## Define what is "fast enough"
 
 * Identify performance goals: what does it mean to be fast?
-* VS other sites
-* VS user expectations
-* Isolate front-end from back-end
-* Understand cached vs uncached behavior
-  * why varnish isn't enough
+* vs. other sites
+* vs. user expectations
+* front-end vs. back-end
+* cached vs. uncached
 
 --end--
 
-## How to profile
+# How to profile: M.A.F.I.A.
+
+--end--
+
+## How to profile: Measure
 
 * Define behavior externally (path, logged in, environment, isolation, caching...)
 * Use a profiler to analyze internal behavior
   * Figure out what the code is doing
+* Variations: pages, site, server env, enable/disable modules, comment out code
+
+--end--
+
+## How to profile: Analyze
+
 * Look for any low hanging fruit, bottlenecks
-  * (easily cachable requests, bad SQL, blocking requests, unecessary entity loads, watchdog,...)
-* Look for signs of overall sluggishness (eg swapping, hard-drive contention, network issues, slow/shared server, lack of APC)
+  * easily cachable requests, bad SQL, blocking requests, unecessary entity loads, watchdog, ...
+* Look for signs of overall sluggishness
+  * eg swapping, hard-drive contention, network issues, slow/shared server, lack of opcache
 * Build a hypothesis on the bottleneck
 * Document the scenario, mark it as a reference (baseline)
-* Make a change, do a comparison
+
+--end--
+
+
+## How to profile: Fix
+
+* Make a change
+* Compare to baseline
   * In drupal, static caching means removing "slow" code just pushes it to later in request
-* Iteration
-  * Log your runs, later it will be hard to remember all you've changed
+
+--end--
+
+## How to profile: Iterate
+
+* Measure again, see if it's fast enough
+* If not, keep going!
+* Log your runs, later it will be hard to remember all you've changed
 * Know when to stop profiling
-* Divide and conquer / compare variations
-  * variations: pages, site, server env, enable/disable modules, comment out code
+
+--end--
+
+## How to profile: Applause
+
+* I couldn't come up with a better "A"
 
 --end--
 
@@ -185,12 +239,17 @@ Let's discuss what we're setting out to do.
 
 --end--
 
-## Introducing blackfire PHP profiler
+## Blackfire.io
 
-* free for basic use case
-* easy to install
-* intuitive GUI and process (comparisions, collaboration)
-* gets does the job
+* By Sensio Labs, creators of Symphony
+* Not open-source, but free for most uses
+* Started as a fork of xhprof...
+  * SAAS, easier to manage (but perhaps data risk)
+  * Interactive callgraph, better user experience
+  * Better UX Supports comparisons
+  * Actively maintained, support for PHP 7
+  * Great docs, simpler installation
+    * Packages (docker / chef / ansible), embedded (magento cloud, heroku, platform.sh)
 
 --end--
 
@@ -304,33 +363,15 @@ A real improvement in under an hour of total work, from profiling to committing 
 
 --end--
 
-## Understanding Blackfire.io
-
-About how it works...
-
---end--
-
-## Understanding Blackfire.io
-
-* By Sensio Labs, creators of Symphony
-* Started as a fork of xhprof...
-  * SAAS, easier to manage (but perhaps data risk)
-  * Interactive callgraph, better user experience
-  * Better UX Supports comparisons
-  * Actively maintained, support for PHP 7
-  * Great docs, simpler installation
-    * packages (docker / chef / ansible), embedded (magento cloud, heroku, platform.sh)
-
---end--
-
 ## Installing Blackfire
 
 Components:
 
-* probe, a minimalistic PHP extension
-* blackfire-agent, a daemon that connects probe to blackfire servers
-* Companion, a Chrome extension
-* blackfire command-line client
+* `Probe`, a minimalistic PHP extension
+* `Agent`, a daemon that connects probe to blackfire servers
+* `Companion`, a Chrome extension
+* `Client`, command-line client
+* `SDK`
 
 --end--
 
@@ -358,9 +399,8 @@ View [Blackfire Install Docs](https://blackfire.io/docs/24-days/06-installation)
 * Comparison with baseline profile
 * Copy as curl (for ajax, cookies, POST requests)
 * profiling command-line / drush commands
-  * drush.launcher
+  * `blackfire run drush.launcher cc all`
 * Sharing profiles publicly
-* Use blackfire to learn new codebase (or contrib modules)
 
 --end--
 
@@ -534,30 +574,32 @@ At least performance is better:
 * We learned more about an unfamiliar codebase
 * Better understanding of future performance problems
   * Eg: Cookies and varnish
+--end--
+
+# Blackfire tips
 
 --end--
 
-## Advanced Blackfire features
+## Blackfire tips
 
 * Aggregation (10 requests, averaged)
-  * Turn aggregation to control for caching and side effects
-* Blackfire doesn't keep arguments (or 1 at most)
+  * Disable aggregation to control for caching and side effects
+* Blackfire doesn't keep function arguments (or 1 at most)
 * Sampling, not tracing!
-* Blackfire PHP SDK
 
 --end--
 
-## Other considerations
+## Blackfire tips
 
 * xdebug conflict
-* profiling overhead (PHP 7)
+* profiling overhead
+  * can't use blackfire to compare PHP 5.5 and 7
 * Tradeoff: memory vs time
-* Caching and dirty runs
-  * D7 + D8 cache killing
+* Caching and dirty comparisons
 
 --end--
 
-## Diagnostic tricks
+## Diagnostic tips
 
 * References / comparison
 * xdebug + read the code
