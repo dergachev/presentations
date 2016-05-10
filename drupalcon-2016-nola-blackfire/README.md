@@ -196,10 +196,10 @@ Let's discuss what we're setting out to do.
 
 ## Case study: Coursecal
 
-Site for students at McGill university to browse available courses.
+Site for students at McGill university to browse academic courses.
 
 * Tens of thousands of students hit the site at the same time
-* Search-driven UI, so caching can't help too much
+* Search-driven UI, so can't depend on caching
 * Performance is critical!
 
 Let's profile <a class="presenterlink" href="http://docker4:4569/faculties/engineering/undergraduate/ug_eng_dept_of_bioengineering">a page</a> with Blackfire!
@@ -225,6 +225,8 @@ Let's profile <a class="presenterlink" href="http://docker4:4569/faculties/engin
     * We get to loadAcademicFacultyNodes
     * Calling node_load 36 times! Could be multiple
 </div>
+
+[Our profile](https://blackfire.io/profiles/131f6f0c-0a90-4ac8-8d7e-7d3e773377ec/graph)
 
 --end--
 
@@ -393,7 +395,7 @@ Let's check it out in Chrome inspector's _Network_ tab:
 
 ## Profiling
 
-Our browser is at the path _/en_, so that's what Blackfire would profile
+Our browser is at the path `/en`, so that's what Blackfire would profile
 
 <div class="notes">
   But we want to profile the redirect itself!
@@ -516,7 +518,7 @@ At least performance is better:
 ## Case study: Client X
 
 * We improved performance, that's nice
-* We know more about the crazy things the site is doing
+* We learned more about an unfamiliar codebase
 * Better understanding of future performance problems
   * Eg: Cookies and varnish
 
