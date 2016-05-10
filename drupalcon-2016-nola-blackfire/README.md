@@ -64,10 +64,7 @@
 * Blackfire demo and discussion
 * Case studies from our projects
 
---end--
-
-## Outline
-
+<div class="notes">
 * Intro + motivation
 * Profiling methodology + philosophy
 * Demo 1: Blackfire UI Tour
@@ -78,6 +75,7 @@
 * Demo 3: Block visibility
 * Drupal performance considerations
 * Q & A
+</div>
 
 --end--
 
