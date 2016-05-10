@@ -265,7 +265,7 @@ Site for students at McGill university to browse academic courses.
 * Search-driven UI, so can't depend on caching
 * Performance is critical!
 
-Let's profile <a class="presenterlink" href="http://docker4:4569/faculties/engineering/undergraduate/ug_eng_dept_of_bioengineering">a page</a> with Blackfire!
+Let's <a class="presenterlink" href="https://blackfire.io/profiles/131f6f0c-0a90-4ac8-8d7e-7d3e773377ec/graph">profile</a> <a class="presenterlink" href="http://docker4:4569/faculties/engineering/undergraduate/ug_eng_dept_of_bioengineering">a page</a> with Blackfire!
 
 <div class="notes">
   * Visit page
@@ -288,8 +288,6 @@ Let's profile <a class="presenterlink" href="http://docker4:4569/faculties/engin
     * We get to loadAcademicFacultyNodes
     * Calling node_load 36 times! Could be multiple
 </div>
-
-[Our profile](https://blackfire.io/profiles/131f6f0c-0a90-4ac8-8d7e-7d3e773377ec/graph)
 
 --end--
 
@@ -785,7 +783,7 @@ Saves another 30 ms.
 
 --end--
 
-## Blackfire Premium 
+## Blackfire Premium
 
 * Environments (team)
 * Data retention
