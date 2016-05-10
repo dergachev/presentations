@@ -200,7 +200,7 @@ Site for students at McGill university to browse available courses.
 
 * Tens of thousands of students hit the site at the same time
 * Search-driven UI, so caching can't help too much
-* Performance becomes is critical!
+* Performance is critical!
 
 Let's profile <a class="presenterlink" href="http://docker4:4569/faculties/engineering/undergraduate/ug_eng_dept_of_bioengineering">a page</a> with Blackfire!
 
@@ -385,7 +385,9 @@ Let's check it out in Chrome inspector's _Network_ tab:
 
 ![](img/timeline.png)
 
-That's a pretty slow redirect!
+<div class="notes">
+  That's a pretty slow redirect!
+</div>
 
 --end--
 
@@ -393,7 +395,9 @@ That's a pretty slow redirect!
 
 Our browser is at the path _/en_, so that's what Blackfire would profile
 
-But we want to profile the redirect itself!
+<div class="notes">
+  But we want to profile the redirect itself!
+</div>
 
 ![](img/copy-curl.png)
 
@@ -425,8 +429,6 @@ Blackfire does its magic:
 
 ## Profiling
 
-Well, that's unexpected:
-
 ![](img/redirect-rendering.png)
 
 Why are we rendering a redirect‽‽‽
@@ -453,7 +455,9 @@ Let's see what's triggering the redirect:
 
 ![](img/goto-caller.png)
 
-Whoa, it's a preprocess hook!
+<div class="notes">
+  Whoa, it's a preprocess hook!
+</div>
 
 --end--
 
@@ -473,20 +477,13 @@ Whoa, it's a preprocess hook!
       }
     }
 
-<p class="nonono">Don't do this!</p>
-
 <div class="notes">
-  What this code tries to do:
-    * Homepage is in French only
-    * The first time a user visits, redirect to their language's translation
-    * Set a cookie to remember that they've been detected, so they can go to
-      homepage to get French again.
+  This code tries to check if the user has been here before, and if not sends the user to their language's landing page.
 
-  This code is what we call a "worst practice". Performance: It redirects the user AFTER rendering much of page, super slow.
-
-  But also:
-  * If user is detected as English, but then chooses French… one week later, redirected to English again!
+  It has a lot of problems!
   * If you have cookies blocked/disabled, you just redirect forever!
+  * When cookie expires, we try to redirect user even if they've been here before.
+  * What we care about now: performance!
 </div>
 
 --end--
@@ -502,13 +499,15 @@ Whoa, it's a preprocess hook!
       if ($tq_init === null) {
         // ... continue as above
 
-Still not great, most of the problems from before remain.
+<div class="notes">
+  All the other problems with this code remain.
+</div>
 
 --end--
 
 ## A fix?
 
-But at least performance is better:
+At least performance is better:
 
 ![](img/fixed.png)
 
@@ -516,14 +515,10 @@ But at least performance is better:
 
 ## Case study: Client X
 
-We improved performance, that's nice.
-
-Also:
-
+* We improved performance, that's nice
 * We know more about the crazy things the site is doing
 * Better understanding of future performance problems
   * Eg: Cookies and varnish
-* We learned how to use _Copy as cURL_ with Blackfire!
 
 --end--
 
@@ -558,11 +553,21 @@ Also:
 
 <h2 class="small">Case study: evolvingweb.ca</h2>
 
-We've already upgraded our site to Drupal 8! We learned a lot, and told people all about it: <br/>[http://tiny.cc/midcamp-d8-upgrade](http://tiny.cc/midcamp-d8-upgrade)
+We already upgraded our site to Drupal 8!<br/>[http://tiny.cc/midcamp-d8-upgrade](http://tiny.cc/midcamp-d8-upgrade)
 
 D8 is great, we love features like Views in core, CKEditor, Twig…
 
-But it's slower than D7 😟
+<div class="notes">
+  We learned a lot about D8, told people all about it.
+</div>
+
+--end--
+
+<h2 class="small">Case study: evolvingweb.ca</h2>
+
+But it's slower than D7
+
+![](img/sad-kitty.jpg)
 
 --end--
 
@@ -572,29 +577,25 @@ But it's slower than D7 😟
 
 Really fast when cached!
 
-No so fast after any node is edited, definitely slower than D7.
+No so fast after any node is edited
 
 --end--
 
 ## Uncached requests
 
-If we edit a node and then profile, Blackfire will have one uncached requests, then nine cached ones.
-
-We could disable aggregation, but then our measurements will fluctuate too much.
-
---end--
-
-## Uncached requests
+Aggregation makes it hard to profile uncached behavior.
 
 Disable page cache: `drush pmu -y page_cache`
 
-But we still have the dynamic page cache and render cache!
+Not enough! Let's just reproduce the situation we care about.
 
 <div class="notes">
-  Don't want to disable render cache, because even after we edit one node, many rendered elements will still have valid caches.
-</div>
+  If we edit a node and then profile, Blackfire will have one uncached requests, then nine cached ones.
 
-Instead of turning off more caching layers, let's reproduce the situation we care about.
+  We could disable aggregation, but then our measurements will fluctuate too much.
+
+  When we disable the page cache, we still have the dynamic page cache and render cache. And we don't want to invalidate render cache, some elements are still valid.
+</div>
 
 --end--
 
@@ -656,7 +657,7 @@ Why so long to figure out what blocks should be visible?
 To get a list of blocks, Drupal 8:
 
 * Loads every single block in the current theme just to check access
-* Does access check using visibility conditions—pretty complex!
+* Checks access using visibility conditions—pretty complex!
 
 <div class="notes">
   * Iterates through lazy collections many times
@@ -676,16 +677,12 @@ When Drupal wants a _list_ of nodes, that would be too slow! Instead, we use the
 * To see if a node should be visible, the current grants are compared with the access records
 * A single database query does the comparison for all nodes at once!
 
---end--
-
-## This sounds familiar…
-
-Let's implement the same thing for blocks!
-
-* Plugins will provide _block access records_ to each block when it's saved, to be stored in the database
-* Plugins will provide the current request with a set of _block context values_
-* To see if a block should be visible, the current context values will be compared with the access records
-* A single database query will do the comparison for all blocks
+<div class="notes">
+  We can do the same thing with blocks!
+    * Plugins can provide block access records
+    * Plugins can provide block context values
+    * Single request to find all the visible blocks!
+</div>
 
 --end--
 
@@ -694,9 +691,14 @@ Let's implement the same thing for blocks!
 I've implemented this in a module I've called _block\_access\_records_, which is available here:<br/>
 [github.com/vasi/block\_access\_records](http://github.com/vasi/block_access_records)
 
-* It already has plugins for all of Drupal's built-in block visibility conditions, so on most sites it will just work
-* Since D8 uses dependency injection, we can just replace the default _BlockRepository_ implementation with our new version
-* Sites with custom conditions or other unusual configuration should be wary about trying this
+* Already has plugins for Drupal's built-in block visibility conditions
+* D8 uses dependency injection ➡ replace the default _BlockRepository_
+
+<div class="notes">
+  Caveats:
+    * Sites with custom block conditions may need to implement them
+    * Not super well tested
+</div>
 
 --end--
 
