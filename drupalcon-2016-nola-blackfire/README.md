@@ -787,17 +787,11 @@ Saves another 30 ms.
 
 --end--
 
-## Premium Blackfire features
+## Blackfire Premium 
 
-* Environments
-  * Groups of profiles and team members
-  * One for dev / stage / prod, per project
-* Longer data retention
-* Argument capturing
-* CI + scenarios + notifications
-  * trigger via web service
-  * slack integration
-* Assertions
+* Environments (team)
+* Data retention
+* Assertions + Scenarios + CI + notifications
 * Custom metrics
 * Recommendations
 * Self-hosted version
@@ -818,11 +812,11 @@ Saves another 30 ms.
 * cookies + page cache
 * devel web profiler
 * entity\_load\_multiple()
- * devel module's sql query log
+* devel module's sql query log
 
 --end--
 
-## Following Up
+## Calls to Action!
 
 * Please fill in the [feedback form](https://events.drupal.org/neworleans2016/sessions/using-blackfireio-profile-your-loading-time) for this session!
 * Join us for Code Sprints
@@ -830,10 +824,14 @@ Saves another 30 ms.
   * First-Time Sprinter Workshop - 9am-12pm in Room 271-273
   * Mentored Core Sprint - 9am-6pm in Room 275-277
   * General Sprints - 9am-6pm in Room 278-282
+
+--end--
+
+## Calls to Action!
+
 * Evolving Web: [evolvingweb.ca](http://evolvingweb.ca)
-* Follow @dergachev and @djvasi on twitter
-  * write us for help
+* Follow <a href="https://twitter.com/dergachev">@dergachev</a> and <a href="https://twitter.com/djvasi">@djvasi</a> on twitter!
 * block\_access\_records: [github.com/vasi/block\_access\_records](https://github.com/vasi/block_access_records)
-* Go to Blackfire booth
-  * Blackfire.io coupon - DRUPALNOLA2016
-  * Pick up "24 days of Blackfire", a great short book to read on the plane ride back!
+* Go to Blackfire booth #117
+  * Pick up free "24 days of Blackfire" book!
+
