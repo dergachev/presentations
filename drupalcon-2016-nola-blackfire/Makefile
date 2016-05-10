@@ -12,4 +12,8 @@ serve:
 	@echo Serving on http://localhost:7777/out.html
 	cd build/; python -m SimpleHTTPServer 7777
 
+WATCH = README.md
+watch:
+	fswatch $(WATCH) | while read; do make serve >& /dev/null; done &
+
 .PHONY: build
