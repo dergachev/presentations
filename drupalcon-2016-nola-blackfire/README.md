@@ -241,6 +241,8 @@ Client X
 
 ## Blackfire.io
 
+<img src="img/blackfire-logo.png" width="55%" style="float: right; margin-left: 40px; margin-right: 20px" />
+
 * By Sensio Labs, creators of Symphony
 * Not open-source, but free for most uses
 * Started as a fork of xhprof...
@@ -607,7 +609,6 @@ At least performance is better:
 
 * References / comparison
 * xdebug + read the code
-* Argument capturing
 * SDK: enableProbe / disableProbe
 
 --end--
@@ -792,6 +793,7 @@ Saves another 30 ms.
   * Groups of profiles and team members
   * One for dev / stage / prod, per project
 * Longer data retention
+* Argument capturing
 * CI + scenarios + notifications
   * trigger via web service
   * slack integration
