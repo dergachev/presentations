@@ -702,7 +702,7 @@ I've implemented this in a module I've called _block\_access\_records_, which is
 
 <h2 class="small">Case study: evolvingweb.ca</h2>
 
-TODO: image of comparison profile
+![](img/comparison.png)
 
 We saved over 80 ms on every uncached request!
 

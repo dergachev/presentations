@@ -14,6 +14,6 @@ serve:
 
 WATCH = README.md
 watch:
-	fswatch $(WATCH) | while read; do make serve >& /dev/null; done &
+	fswatch $(WATCH) | while read; do make build >& /dev/null; done &
 
 .PHONY: build
