@@ -49,6 +49,12 @@ $(function() {
   $('code .code-highlight').each(function() {
     $(this).closest('code').addClass('code-fade');
   });
+
+  window.gotoSlide = function(sel) {
+    var slide = $(sel).closest('.slide');
+    var idx = +slide.attr('id').replace(/slide-/, '');
+    $.deck('go', idx);
+  };
 });
 </script>
 

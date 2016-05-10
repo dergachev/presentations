@@ -427,13 +427,24 @@ Blackfire does its magic:
 
 ![](img/cli-results.png)
 
+[And here's our profile](https://blackfire.io/profiles/9b5c779d-f1f9-4bbf-8e6b-bdf3132f7e78/graph)
+
+<div class="notes">
+  We see drupal_render_page taking up time. Why are we rendering a redirect?
+
+  Let's see what's triggering it, search for "goto".
+  Find caller, and it's tq_home_preprocess_page.
+</div>
+
+<a onclick="gotoSlide('#clientx-code');">Next</a>
+
 --end--
 
 ## Profiling
 
 ![](img/redirect-rendering.png)
 
-Why are we rendering a redirect‽‽‽
+Why are we rendering a redirect??
 
 --end--
 
@@ -464,6 +475,8 @@ Let's see what's triggering the redirect:
 --end--
 
 ## 😱
+
+<a id="clientx-code"></a>
 
     function tq_home_preprocess_page(&$variables) {
       $tq_init = array_key_exists('tq_lang_init', $_COOKIE) ? $_COOKIE['tq_lang_init'] : null;
