@@ -253,6 +253,10 @@ Client X
 
 --end--
 
+# Case study: Coursecal
+
+--end--
+
 ## Case study: Coursecal
 
 Site for students at McGill university to browse academic courses.
@@ -408,7 +412,7 @@ View [Blackfire Install Docs](https://blackfire.io/docs/24-days/06-installation)
 
 <img src="img/mystery.png" height="400" />
 
-Complex site that we're not allowed to show you!
+Complex site. We were asked not to mention the client name.
 
 <div class="notes">
   * Unfamiliar code base
@@ -608,6 +612,10 @@ At least performance is better:
 
 --end--
 
+## Case study: evolvingweb.ca
+
+--end--
+
 <h2 class="small">Case study: evolvingweb.ca</h2>
 
 We already upgraded our site to Drupal 8!<br/>[http://tiny.cc/midcamp-d8-upgrade](http://tiny.cc/midcamp-d8-upgrade)
@@ -634,7 +642,7 @@ But it's slower than D7
 
 Really fast when cached!
 
-No so fast after any node is edited
+No so fast after any node is edited, and D8 invalidates cache tags
 
 --end--
 
@@ -658,7 +666,7 @@ Not enough! Let's just reproduce the situation we care about.
 
 ## Uncached requests
 
-At the start of each request, invalidate cache:
+At the start of each request, pretend a node was edited:
 
     class EwsiteSubscriber implements EventSubscriberInterface {
       public static function getSubscribedEvents() {
@@ -671,8 +679,6 @@ At the start of each request, invalidate cache:
         \Drupal::service("cache_tags.invalidator")->invalidateTags($tags);
       }
     }
-
-Registered our Event Subscriber in `ewsite.services.yml`.
 
 <p class="nonono">Don't commit this! For profiling only</p>
 
@@ -727,31 +733,34 @@ To get a list of blocks, Drupal 8:
 
 When Drupal wants to show one node, it loads the node and checks `$node->access()`.
 
-When Drupal wants a _list_ of nodes, that would be too slow! Instead, we use the node\_access system:
+When Drupal wants a _list_ of nodes, that would be too slow! Instead, we use the node\_access system.
 
-* Modules assign a set of _node access records_ to each node when it's saved, which are stored in the database
-* Modules provide the current request with a set of _node grants_
-* To see if a node should be visible, the current grants are compared with the access records
-* A single database query does the comparison for all nodes at once!
+--end--
+
+## node\_access system
+
+![](img/node_access.png)
 
 <div class="notes">
-  We can do the same thing with blocks!
-    * Plugins can provide block access records
-    * Plugins can provide block context values
-    * Single request to find all the visible blocks!
+* Each node gets _node access records_ when it's saved, stored in DB
+* Current request has a set of _node grants_
+* To see if a node should be visible, the current grants are compared with the access records
+* A single database query does the comparison for all nodes at once!
 </div>
 
 --end--
 
-## This sounds familiar…
+## A fix
 
-I've implemented this in a module I've called _block\_access\_records_, which is available here:<br/>
+I've implemented this in a module:<br/>
 [github.com/vasi/block\_access\_records](http://github.com/vasi/block_access_records)
 
-* Already has plugins for Drupal's built-in block visibility conditions
-* D8 uses dependency injection ➡ replace the default _BlockRepository_
+![](img/block_access.png)
 
 <div class="notes">
+* Already supports Drupal's built-in block visibility conditions
+* D8 uses dependency injection ➡ replace the default _BlockRepository_
+
   Caveats:
     * Sites with custom block conditions may need to implement them
     * Not super well tested
@@ -764,6 +773,16 @@ I've implemented this in a module I've called _block\_access\_records_, which is
 ![](img/comparison.png)
 
 We saved over 80 ms on every uncached request!
+
+--end--
+
+<h2 class="small">Case study: evolvingweb.ca</h2>
+
+We also found a place where the metatag module is slower than it has to be:
+
+[drupal.org/node/2705851](https://www.drupal.org/node/2705851)
+
+Saves another 30 ms.
 
 --end--
 
