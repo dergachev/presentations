@@ -431,17 +431,16 @@ Let's check it out in Chrome inspector's _Network_ tab:
 
 <div class="notes">
   That's a pretty slow redirect!
+
+  Our browser is at the path `/en`, so that's what Blackfire would profile
+  But we want to profile the redirect itself!
 </div>
 
 --end--
 
 ## Profiling
 
-Our browser is at the path `/en`, so that's what Blackfire would profile
-
-<div class="notes">
-  But we want to profile the redirect itself!
-</div>
+Use Chrome's _Copy as cURL_:
 
 ![](img/copy-curl.png)
 
