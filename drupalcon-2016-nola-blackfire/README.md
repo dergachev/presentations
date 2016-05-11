@@ -221,33 +221,38 @@
 
 --end--
 
-# Case study: McGill academic calendar
+# Case study: McGill U
 
 --end--
 
-## Case study: McGill academic calendar
+## Case study: McGill U
 
-Site for students at McGill university to browse academic courses.
+McGill University listing of courses and programs.
 
 * Tens of thousands of students hit the site at the same time
-* Search-driven UI, so can't depend on caching
+* Search-driven UI, can't depend on caching
 * Performance is critical!
+
+--end--
+
+## Case study: McGill U
 
 Let's <a class="presenterlink" href="https://blackfire.io/profiles/131f6f0c-0a90-4ac8-8d7e-7d3e773377ec/graph">profile</a> <a class="presenterlink" href="http://docker4:4569/faculties/engineering/undergraduate/ug_eng_dept_of_bioengineering">a page</a> with Blackfire!
 
 <div class="notes">
   * Visit page
   * Make a profile
-  * Tour the profile: READ NUMBERS
+  * Tour the profile: read numbers?
     * Metrics (overall, I/O, cpu, memory...)
       * Are these numbers ok for you?
     * Call graph
       * Hot path -> resources
       * Is this a reasonable amount of time for this function?
     * Function list
-      * Calls
+      * Number of calls
       * Expand: metrics
       * Expand: callees (time restricted to call)
+
   * Let's find a problem function
     * Hot path: theme()
     * moriarty_preprocess_page is long for a preprocess hook!
@@ -260,8 +265,7 @@ Let's <a class="presenterlink" href="https://blackfire.io/profiles/131f6f0c-0a90
 
 <h2 class="mini">The slow code</h2>
 
-    NOFADE:public function loadAcademicFacultyNodes($language = '', $key = 'name'){
-      $return = array();
+    NOFADE:public function loadAcademicFacultyNodes($language, $key){
       HIGHLIGHT:foreach($this->faculties as $f){
         if ($f->nid && $f->code){
           if (!$language || $f->language === $language){
@@ -274,7 +278,7 @@ Let's <a class="presenterlink" href="https://blackfire.io/profiles/131f6f0c-0a90
           }
         }
       }
-      return $return;
+      // ...
     }
 
 Iterate over faculties, load nodes one at a time.
@@ -290,8 +294,7 @@ Iterate over faculties, load nodes one at a time.
 
 <h2 class="mini">A fix</h2>
 
-    NOFADE:public function loadAcademicFacultyNodes($language = '', $key = 'name'){
-      $nids = array();
+    NOFADE:public function loadAcademicFacultyNodes($language, $key){
       HIGHLIGHT:foreach($this->faculties as $f){
         if ($f->nid && $f->code){
           if (!$language || $f->language === $language){
@@ -305,11 +308,7 @@ Iterate over faculties, load nodes one at a time.
       }
 
       HIGHLIGHT:$nodes = node_load_multiple($nids);
-      $return = array();
-      foreach ($nids as $k => $v) {
-        $return[$k] = $nodes[$v];
-      }
-      return $return;
+      // ...
     }
 
 Collect the nids, load all nodes at once.
@@ -321,7 +320,7 @@ Collect the nids, load all nodes at once.
 
 --end--
 
-## Case study: McGill academic calendar
+## Case study: McGill U
 
 ![](img/fixed-coursecal.png)
 
@@ -333,12 +332,7 @@ A real improvement in under an hour of total work, from profiling to committing 
 
 ## Installing Blackfire
 
-* `Probe`, a minimalistic PHP extension
-* `Agent`, a daemon that connects probe to blackfire servers
-* `Companion`, a Chrome extension
-* `Client`, command-line client
-
-View [Blackfire Install Docs](https://blackfire.io/docs/24-days/06-installation), which has your API keys, and also instructions for RedHat, OSX, Windows, docker, chef, and more. Install steps on ubuntu:
+View [Blackfire Install Docs](https://blackfire.io/docs/24-days/06-installation), which has your API keys, and also instructions for Red Hat, OS X, Windows, docker, chef, and more. Install steps on Ubuntu:
 
           wget -O - https://packagecloud.io/gpg.key | sudo apt-key add -
           echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list
@@ -353,12 +347,20 @@ View [Blackfire Install Docs](https://blackfire.io/docs/24-days/06-installation)
 
           # disable xhprof and xdebug php extensions
           # restart apache or php-fpm
+
+This installs:
+
+* `Probe`, a minimalistic PHP extension
+* `Agent`, a daemon that connects probe to blackfire servers
+* `Companion`, a Chrome extension
+* `Client`, command-line client
+
 --end--
 
 ## Blackfire features
 
 * Comparison with baseline profile
-* Command line profile trigger (for ajax, cookies, POST requests, web services)
+* Command line profile trigger (for AJAX, cookies, POST requests, web services)
 * Profiling command-line / drush commands
   * `blackfire run drush.launcher cc all`
 * Sharing profiles publicly
@@ -369,11 +371,11 @@ View [Blackfire Install Docs](https://blackfire.io/docs/24-days/06-installation)
 
 <img src="img/mystery.png" height="400" />
 
-Complex site. We were asked not to mention the client name.
+A _very_ complex site.
 
 <div class="notes">
-  * Unfamiliar code base
-  * Originally built by people unfamiliar with Drupal
+  * So complex the client would prefer to stay anonymous
+  * Unfamiliar code base, really hard for me to understand
 </div>
 
 --end--
@@ -493,9 +495,8 @@ Let's see what's triggering the redirect:
 <div class="notes">
   This code tries to check if the user has been here before, and if not sends the user to their language's landing page.
 
-  It has a lot of problems!
-  Eg: If you have cookies blocked/disabled, you just redirect forever!
-  And what we care about now, performance.
+  It has other issues!
+  But what we care about now is performance.
 </div>
 
 --end--
@@ -503,13 +504,12 @@ Let's see what's triggering the redirect:
 ## A fix?
 
     function tq_home_init() {
-      if (drupal_is_cli()) {
-        return;
-      }
+      // ...
+      drupal_goto('<front>', $lang);
+      // ...
+    }
 
-      $tq_init = array_key_exists('tq_lang_init', $_COOKIE) ? $_COOKIE['tq_lang_init'] : null;
-      if ($tq_init === null) {
-        // ... continue as above
+Move the redirection logic to an init hook!
 
 --end--
 
@@ -522,9 +522,13 @@ Let's see what's triggering the redirect:
 </div>
 
 * Much better performance!
-* We learned more about an unfamiliar codebase
-* Better understanding of future performance problems
-  * Eg: Cookies and varnish
+* We learned a lot about an unfamiliar codebase
+* After a few more hours, implemented other dramatic improvements
+
+<div class="notes">
+  Took just an hour or two.
+</div>
+
 --end--
 
 # Blackfire tips
@@ -535,7 +539,7 @@ Let's see what's triggering the redirect:
 
 * Aggregation (10 requests, averaged)
   * Disable aggregation to control for caching and side effects
-* Blackfire doesn't keep function arguments (or 1 at most)
+* Blackfire doesn't keep function arguments
 * It only keeps significant function calls
 
 --end--
@@ -553,7 +557,7 @@ Let's see what's triggering the redirect:
 ## Diagnostic tips
 
 * References / comparison
-* xdebug + read the code
+* Read the code, step through it
 * SDK: enableProbe / disableProbe
 
 --end--
@@ -635,17 +639,9 @@ Now let's see why it's so slow:
 
 That's part of D8 core, and it's taking 117 ms!
 
---end--
-
-## Analysis
-
-Why so long to figure out what blocks should be visible?
-
-![](img/all-the-blocks.png)
-
 <div class="notes">
   * We do have a lot of blocks
-  * But that's normal for a D8 site, so many things are blocks now! Page titles, menus, footers, views...
+  * But that's normal for a D8 site, so many things are blocks now
 </div>
 
 --end--
@@ -668,6 +664,17 @@ To get a list of blocks, Drupal 8:
 <div class="notes">
   * Iterates through lazy collections many times
   * Merges metadata many times over
+</div>
+
+--end--
+
+## Does this sound familiar?
+
+### node\_access!
+
+<div class="notes">
+  Drupal Core already has a similar problem with listing nodes.
+  It maintains a DB table so that it can do a single query to figure out what nodes should be visible.
 </div>
 
 --end--
