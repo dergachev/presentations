@@ -366,13 +366,6 @@ It has has your API keys, and also instructions for Red Hat, OS X, Windows, dock
 
 <img src="img/mystery.png" height="400" />
 
-A _very_ complex site.
-
-<div class="notes">
-  * So complex the client would prefer to stay anonymous
-  * Unfamiliar code base, really hard for me to understand
-</div>
-
 --end--
 
 ## The problem
@@ -416,54 +409,9 @@ Blackfire does its magic:
 
 ![](img/cli-results.png)
 
-[And here's our profile](https://blackfire.io/profiles/9b5c779d-f1f9-4bbf-8e6b-bdf3132f7e78/graph) <a onclick="gotoSlide('#clientx-code');">⏎</a>
-
-<div class="notes">
-  We see drupal_render_page taking up time. Why are we rendering a redirect?
-
-  Let's see what's triggering it, search for "goto".
-  Find caller, and it's tq_home_preprocess_page.
-</div>
-
---end--
-
-## Profiling
-
-Why are we rendering a redirect??
-
-![](img/redirect-rendering.png)
-
 --end--
 
 ## Analysis
-
-Let's see what's triggering the redirect:
-
-![](img/redirect-search.png)
-
---end--
-
-## Analysis
-
-Let's see what's triggering the redirect:
-
-![](img/goto-details.png)
-
---end--
-
-## Analysis
-
-![](img/goto-caller.png)
-
-<div class="notes">
-  Whoa, it's a preprocess hook!
-</div>
-
---end--
-
-## Analysis
-
-<a id="clientx-code"></a>
 
     function tq_home_preprocess_page(&$variables) {
       // ...
@@ -471,22 +419,7 @@ Let's see what's triggering the redirect:
       drupal_goto('<front>', $lang);
     }
 
-<div class="notes">
-  This code tries to check if the user has been here before, and if not sends the user to their language's landing page.
-
-  But what we care about now is performance.
-</div>
-
---end--
-
-## A fix?
-
-    function tq_home_init() {
-      // ...
-      drupal_goto('<front>', $lang);
-    }
-
-Move the redirection logic to an init hook!
+Moved it to a hook\_init!
 
 --end--
 
@@ -717,6 +650,6 @@ We saved over 80 ms on every uncached request!
 
 --end--
 
-## Visit us in Canada! 
+## Visit us in Canada!
 
 <img src="img/drupal-north-twitter.jpg">
