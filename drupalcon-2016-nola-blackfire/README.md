@@ -724,50 +724,23 @@ To get a list of blocks, Drupal 8:
 
 --end--
 
-## This sounds familiar…
-
-When Drupal wants to show one node, it loads the node and checks `$node->access()`.
-
-When Drupal wants a _list_ of nodes, that would be too slow! Instead, we use the node\_access system.
-
---end--
-
-## node\_access system
-
-![](img/node_access.png)
-
-<div class="notes">
-* Each node gets _node access records_ when it's saved, stored in DB
-* Current request has a set of _node grants_
-* To see if a node should be visible, the current grants are compared with the access records
-* A single database query does the comparison for all nodes at once!
-</div>
-
---end--
-
 ## A fix
 
-I've implemented this in a module:<br/>
+Built a module that determines block visibility in one DB query:
 [github.com/vasi/block\_access\_records](http://github.com/vasi/block_access_records)
 
-![](img/block_access.png)
+![](img/comparison.png)
+
+We saved over 80 ms on every uncached request!
 
 <div class="notes">
-* Already supports Drupal's built-in block visibility conditions
-* D8 uses dependency injection ➡ replace the default _BlockRepository_
+* Similar to how `node_access` works, read more about it on our blog.
+* Supports Drupal's built-in block visibility conditions
 
   Caveats:
     * Sites with custom block conditions may need to implement them
     * Not super well tested
 </div>
-
---end--
-
-<h2 class="small">Case study: evolvingweb.ca</h2>
-
-![](img/comparison.png)
-
-We saved over 80 ms on every uncached request!
 
 --end--
 
