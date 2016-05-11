@@ -241,15 +241,15 @@ Client X
 
 <img src="img/blackfire-logo.png" width="55%" style="float: right; margin-left: 40px; margin-right: 20px" />
 
-* By Sensio Labs, creators of Symphony
+* By SensioLabs, creators of Symfony and Twig
 * Not open-source, but free for most uses
 * Started as a fork of xhprof...
-  * SAAS, easier to manage (but perhaps data risk)
-  * Interactive callgraph, better user experience
-  * Better UX Supports comparisons
+  * SaaS, easier to manage (but perhaps data risk)
+  * Interactive callgraph, better UX
+  * Supports comparisons
   * Actively maintained, support for PHP 7
   * Great docs, simpler installation
-    * Packages (docker / chef / ansible), embedded (magento cloud, heroku, platform.sh)
+  * No overhead, you can leave it on all the time
 
 --end--
 
@@ -274,7 +274,7 @@ Let's <a class="presenterlink" href="https://blackfire.io/profiles/131f6f0c-0a90
     * Metrics (overall, I/O, cpu, memory...)
       * Are these numbers ok for you?
     * Call graph
-      * Hot path
+      * Hot path -> resources
       * Is this a reasonable amount of time for this function?
     * Function list
       * Calls, excl, incl
@@ -399,8 +399,8 @@ View [Blackfire Install Docs](https://blackfire.io/docs/24-days/06-installation)
 ## Blackfire features
 
 * Comparison with baseline profile
-* Copy as curl (for ajax, cookies, POST requests)
-* profiling command-line / drush commands
+* Command line profile trigger (for ajax, cookies, POST requests, web services)
+* Profiling command-line / drush commands
   * `blackfire run drush.launcher cc all`
 * Sharing profiles publicly
 
@@ -516,8 +516,6 @@ Let's see what's triggering the redirect:
 
 --end--
 
-## 😱
-
 <a id="clientx-code"></a>
 
     function tq_home_preprocess_page(&$variables) {
@@ -587,7 +585,7 @@ At least performance is better:
 * Aggregation (10 requests, averaged)
   * Disable aggregation to control for caching and side effects
 * Blackfire doesn't keep function arguments (or 1 at most)
-* Sampling, not tracing!
+* It only keeps significant function calls
 
 --end--
 
@@ -773,16 +771,6 @@ We saved over 80 ms on every uncached request!
 
 --end--
 
-<h2 class="small">Case study: evolvingweb.ca</h2>
-
-We also found a place where the metatag module is slower than it has to be:
-
-[drupal.org/node/2705851](https://www.drupal.org/node/2705851)
-
-Saves another 30 ms.
-
---end--
-
 ## Blackfire Premium
 
 * Environments (team)
@@ -792,23 +780,6 @@ Saves another 30 ms.
 * Recommendations
 * Self-hosted version
 * Talk to the guys in the Blackfire booth!
-
---end--
-
-## Generic Drupal Backend Tips
-
-* Use these: varnish/memcache/APCu/Opcache
-  * But memcache only helps speed up cache\_set/ cache\_get and overall load on DB
-* D8 render cache with tags + context
-* D7 vs D8 (complexity Vs caching)
-* Control number of contrib modules
-  * Do less stuff, or write it custom
-* Mysql tuning http://www.jeffgeerling.com/articles/web-design/2010/drupal-performance-white-paper
-* Cron job, search, watchdog, SSD, multiple app heads, CDN, php7, fpm, nginx for files
-* cookies + page cache
-* devel web profiler
-* entity\_load\_multiple()
-* devel module's sql query log
 
 --end--
 
@@ -825,9 +796,7 @@ Saves another 30 ms.
 
 ## Calls to Action!
 
-* Evolving Web: [evolvingweb.ca](http://evolvingweb.ca)
+* Our blog: [evolvingweb.ca](http://evolvingweb.ca/blog)
 * Follow <a href="https://twitter.com/dergachev">@dergachev</a> and <a href="https://twitter.com/djvasi">@djvasi</a> on twitter!
 * block\_access\_records: [github.com/vasi/block\_access\_records](https://github.com/vasi/block_access_records)
-* Go to Blackfire booth #117
-  * Pick up free "24 days of Blackfire" book!
-
+* Go to the Blackfire booth
