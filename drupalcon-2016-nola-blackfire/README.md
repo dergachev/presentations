@@ -21,7 +21,13 @@
 
 --end--
 
-## About Evolving Web
+## About the speakers
+
+<img src="img/speakers.jpg">
+
+--end--
+
+## Evolving Web
 
 * Drupal development, consulting and training since 2007
 * Very involved with the Drupal community
@@ -48,13 +54,6 @@
 * Public: Montreal, Ottawa, Toronto, DC Munich, NJ, NYC, Boston, Chiacgo
 * Private: Health Canada, Parks Canada, Tourism Quebec, Trent U, McGill U, remote
 * Enterprise teams, dev shops, remote
-
---end--
-
-## About the speakers
-
-
-<img src="img/speakers.jpg">
 
 --end--
 
@@ -110,15 +109,16 @@
 ## What profiling measures
 
 
-* page generation time, CPU + memory info
-* blocking operations: SQL + external requests
-* what part of your PHP code is slowing things down
+* Time spent
+* Resource usage: CPU, memory, DB, network, I/O
+* Hooks into PHP engine, instruments each function call
+  * Finds what parts of your PHP code are slowing things down
 
 --end--
 
 ## Why it matters for Drupal
 
-* Drupal core is not exactly lightweight, contrib varies, custom + legacy code
+* Even if core is usually fast, contrib varies, custom + legacy code
 * Why Varnish isn't enough
 * We deal with many projects, working on slow ones makes us sad
   * Example scenario of Drupal slowness
@@ -127,41 +127,13 @@
 
 ## Profiling gets results, fast
 
-McGill Course Calendar
-
-* 260ms -> 225ms, 13%
-* took 1h to locate and fix a problem involve node\_load
-
---end--
-
-## Profiling gets results, fast
-
-D8 evolvingweb.ca site
-
-* block visibility (80ms out of 450ms, 18%)
-* metatag module patch (saves 30ms)
-* took 2 hours to identify problems, + 2 days to fix
-
---end--
-
-## Profiling gets results, fast
-
-Linux Foundation: device certification workflow
-
-* Views over revisions; used xdebug + code study
-* Took 3 hours to diagnose + add revision cache
-* 980ms -> 420ms
-
---end--
-
-## Profiling gets results, fast
-
-Client X
-
-* slow redirect (390ms -> 95ms), took an hour to diagnose and fix
-* buggy version references\_dialog; 1s to 770ms (23%); 30m to diagnose + fix
-* uncached megamenu: 770ms to 480ms, took 2 hours to diagnose, several hours to fix
-* helped figure out an unfamiliar codebase
+<table>
+  <tr><th>Project</th><th>Improvement</th><th>Time spent</th></tr>
+  <tr><td>McGill academic calendar</td><td>13%</td><td>1 hour</td></tr>
+  <tr><td>Client X</td><td>52%</td><td>6 hours</td></tr>
+  <tr><td>Evolving Web D8</td><td>21%</td><td>2 days</td></tr>
+  <tr><td>AllJoyn Certification</td><td>57%</td><td>3 hours</td></tr>
+</table>
 
 --end--
 
@@ -173,9 +145,7 @@ Client X
 
 * Identify performance goals: what does it mean to be fast?
 * vs. other sites
-* vs. user expectations
 * front-end vs. back-end
-* cached vs. uncached
 
 --end--
 
@@ -185,20 +155,20 @@ Client X
 
 ## How to profile: Measure
 
-* Define behavior externally (path, logged in, environment, isolation, caching...)
+* Define behavior (path, logged in, server environment, caching...)
+* Benchmark blackbox performance
 * Use a profiler to analyze internal behavior
-  * Figure out what the code is doing
-* Variations: pages, site, server env, enable/disable modules, comment out code
+* Variations, eg: pages, server env, disable modules…
 
 --end--
 
 ## How to profile: Analyze
 
 * Look for any low hanging fruit, bottlenecks
-  * easily cachable requests, bad SQL, blocking requests, unecessary entity loads, watchdog, ...
+  * cachable calculations, bad SQL, blocking requests, unecessary loads…
 * Look for signs of overall sluggishness
-  * eg swapping, hard-drive contention, network issues, slow/shared server, lack of opcache
-* Build a hypothesis on the bottleneck
+  * eg: swapping, Vagrant shared folders, server contention, missing opcache
+* Build a hypothesis
 * Document the scenario, mark it as a reference (baseline)
 
 --end--
@@ -208,16 +178,15 @@ Client X
 
 * Make a change
 * Compare to baseline
-  * In drupal, static caching means removing "slow" code just pushes it to later in request
+  * In Drupal, static caching means removing "slow" code just pushes it to later in request
 
 --end--
 
 ## How to profile: Iterate
 
-* Measure again, see if it's fast enough
-* If not, keep going!
-* Log your runs, later it will be hard to remember all you've changed
+* Measure again
 * Know when to stop profiling
+* Log your runs, later it will be hard to remember all you've changed
 
 --end--
 
@@ -229,35 +198,34 @@ Client X
 
 ## Measurement tools
 
-* Front-end: Chrome dev tools
-  * YSlow, GTMetrix, WebPageTest.org, Google PageSpeed
-* Benchmark: ab (Apache bench), jmeter, siege
-* Application Performance Monitoring: newrelic
-* PHP Profiling: xhprof / blackfire
+* Front-end: Chrome Developer Tools
+* Benchmark: ApacheBench, JMeter
+* Application Performance Monitoring: New Relic
+* PHP Profiling: xhprof, Blackfire
 
 --end--
 
 ## Blackfire.io
 
-<img src="img/blackfire-logo.png" width="55%" style="float: right; margin-left: 40px; margin-right: 20px" />
+<img src="img/blackfire-logo.png" width="40%" style="float: right; margin-left: 40px; margin-right: 20px" />
 
 * By SensioLabs, creators of Symfony and Twig
-* Not open-source, but free for most uses
-* Started as a fork of xhprof...
-  * SaaS, easier to manage (but perhaps data risk)
+* Freemium, SaaS
+* Great docs
+* Started as a fork of xhprof
+  * Simpler installation
   * Interactive callgraph, better UX
   * Supports comparisons
   * Actively maintained, support for PHP 7
-  * Great docs, simpler installation
   * No overhead, you can leave it on all the time
 
 --end--
 
-# Case study: Coursecal
+# Case study: McGill academic calendar
 
 --end--
 
-## Case study: Coursecal
+## Case study: McGill academic calendar
 
 Site for students at McGill university to browse academic courses.
 
@@ -353,7 +321,7 @@ Collect the nids, load all nodes at once.
 
 --end--
 
-## Case study: Coursecal
+## Case study: McGill academic calendar
 
 ![](img/fixed-coursecal.png)
 
@@ -365,17 +333,10 @@ A real improvement in under an hour of total work, from profiling to committing 
 
 ## Installing Blackfire
 
-Components:
-
 * `Probe`, a minimalistic PHP extension
 * `Agent`, a daemon that connects probe to blackfire servers
 * `Companion`, a Chrome extension
 * `Client`, command-line client
-* `SDK`
-
---end--
-
-## Installing Blackfire
 
 View [Blackfire Install Docs](https://blackfire.io/docs/24-days/06-installation), which has your API keys, and also instructions for RedHat, OSX, Windows, docker, chef, and more. Install steps on ubuntu:
 
