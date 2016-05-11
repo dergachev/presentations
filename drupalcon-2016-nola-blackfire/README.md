@@ -76,7 +76,7 @@
 * Concurrency + scalability
   * "Throw more hardware at it"
 * Financial implications
-* Google
+* Google's history
 
 --end--
 
@@ -84,7 +84,7 @@
 
 * Browser rendering time (HTML, CSS)
 * Network issues
-* Javascript runtime
+* JavaScript run-time
 * Asset fetching (imgs, fonts)
 
 --end--
@@ -109,7 +109,6 @@
 * Even if core is usually fast, contrib varies, custom + legacy code
 * Why Varnish isn't enough
 * We deal with many projects, working on slow ones makes us sad
-  * Example scenario of Drupal slowness
 
 --end--
 
@@ -125,28 +124,15 @@
 
 --end--
 
-# Profiling Methodology
-
---end--
-
-## Define what is "fast enough"
-
-* Identify performance goals: what does it mean to be fast?
-* vs. other sites
-* front-end vs. back-end
-
---end--
-
 # How to profile: M.A.F.I.A.
 
 --end--
 
 <h2 class="small">How to profile: Measure</h2>
 
-* Define behavior (path, logged in, server environment, caching...)
-* Benchmark blackbox performance
-* Use a profiler to analyze internal behavior
+* Figure out exactly what you're profiling (request, cookies)
 * Variations, eg: pages, server env, disable modules…
+* Use a profiler to analyze code
 
 --end--
 
@@ -156,8 +142,6 @@
   * cachable calculations, bad SQL, blocking requests, unecessary loads…
 * Look for signs of overall sluggishness
   * eg: swapping, Vagrant shared folders, server contention, missing opcache
-* Build a hypothesis
-* Document the scenario, mark it as a reference (baseline)
 
 --end--
 
@@ -174,6 +158,7 @@
 
 * Measure again
 * Know when to stop profiling
+  * Decide what's "fast enough"
 * Log your runs, later it will be hard to remember all you've changed
 
 --end--
@@ -209,17 +194,9 @@
 
 --end--
 
-# Case study: McGill U
-
---end--
-
 ## Case study: McGill U
 
 McGill University listing of courses and programs.
-
-* Thousands of students hit the site at the same time
-* Search-driven UI, can't depend on caching
-* Performance is critical!
 
 --end--
 
@@ -232,13 +209,10 @@ Let's <a class="presenterlink" href="https://blackfire.io/profiles/131f6f0c-0a90
   * Make a profile
   * Tour the profile: read numbers?
     * Metrics (overall, I/O, cpu, memory...)
-      * Are these numbers ok for you?
     * Call graph
       * Hot path -> resources
-      * Is this a reasonable amount of time for this function?
     * Function list
       * Number of calls
-      * Expand: metrics
       * Expand: callees (time restricted to call)
 
   * Let's find a problem function
@@ -274,8 +248,6 @@ Iterate over faculties, load nodes one at a time.
 <div class="notes">
   * Loading nodes one at a time is slow! Should load them all together, to
     minimize the number of DB queries.
-  * This code was written for D6, where node\_load\_multiple didn't exist
-  * Now that it's in D7, let's fix it.
 </div>
 
 --end--
@@ -301,11 +273,6 @@ Iterate over faculties, load nodes one at a time.
 
 Collect the nids, load all nodes at once.
 
-<div class="notes">
-  * Grab all the node IDs
-  * Load the nodes all at once
-</div>
-
 --end--
 
 ## Case study: McGill U
@@ -324,8 +291,7 @@ Sign in with GitHub, then view the super-easy [Blackfire Install Docs](https://b
 
 <img src="img/blackfire_installation.png" />
 
-
-<div class="notes"
+<div class="notes">
 This installs:
 
 * `Probe`, a minimalistic PHP extension
@@ -446,7 +412,6 @@ Moved it to a hook\_init!
 * Aggregation (10 requests, averaged)
   * Disable aggregation to control for caching and side effects
 * Blackfire doesn't keep function arguments
-* It only keeps significant function calls
 
 --end--
 
@@ -455,7 +420,6 @@ Moved it to a hook\_init!
 * xdebug conflict
 * profiling overhead
 * Tradeoff: memory vs time
-* Caching and dirty comparisons
 
 <div class="notes">
   Can't use blackfire to compare different PHP versions
@@ -506,23 +470,7 @@ No so fast after any node is edited, and D8 invalidates cache tags
 
 Aggregation makes it hard to profile uncached behavior.
 
-Disable page cache: `drush pmu -y page_cache`
-
-Not enough! Let's just reproduce the situation we care about.
-
-<div class="notes">
-  If we edit a node and then profile, Blackfire will have one uncached requests, then nine cached ones.
-
-  We could disable aggregation, but then our measurements will fluctuate too much.
-
-  When we disable the page cache, we still have the dynamic page cache and render cache. And we don't want to invalidate render cache, some elements are still valid.
-</div>
-
---end--
-
-## Uncached requests
-
-At the start of each request, pretend a node was edited:
+So at the start of each request, pretend a node was edited:
 
     class EwsiteSubscriber implements EventSubscriberInterface {
       public static function getSubscribedEvents() {
@@ -536,7 +484,11 @@ At the start of each request, pretend a node was edited:
       }
     }
 
-<p class="nonono">Don't commit this! For profiling only</p>
+<div class="notes">
+  If we edit a node and then profile, Blackfire will have one uncached requests, then nine cached ones.
+
+  We still want reliable numbers.
+</div>
 
 --end--
 
@@ -582,8 +534,7 @@ To get a list of blocks, Drupal 8:
 ### node\_access!
 
 <div class="notes">
-  Drupal Core already has a similar problem with listing nodes.
-  It maintains a DB table so that it can do a single query to figure out what nodes should be visible.
+  Instead of loading and checking each node, uses a single DB query.
 </div>
 
 --end--
