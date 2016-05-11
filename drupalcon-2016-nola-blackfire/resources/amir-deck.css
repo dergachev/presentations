@@ -148,3 +148,12 @@
   padding: 5px 15px;
   font-size: larger;
 }
+.deck-container .slide {
+  background-image: url(img/ew-good.png);
+  background-position: 2% 98%;
+  background-repeat: no-repeat;
+  background-size: 7em;
+}
+.deck-container .slide:first-child {
+  background-image: none;
+}

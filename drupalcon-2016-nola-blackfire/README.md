@@ -153,7 +153,7 @@
 
 --end--
 
-## How to profile: Measure
+<h2 class="small">How to profile: Measure</h2>
 
 * Define behavior (path, logged in, server environment, caching...)
 * Benchmark blackbox performance
@@ -229,7 +229,7 @@
 
 McGill University listing of courses and programs.
 
-* Tens of thousands of students hit the site at the same time
+* Thousands of students hit the site at the same time
 * Search-driven UI, can't depend on caching
 * Performance is critical!
 
@@ -442,9 +442,9 @@ Blackfire does its magic:
 
 ## Profiling
 
-![](img/redirect-rendering.png)
-
 Why are we rendering a redirect??
+
+![](img/redirect-rendering.png)
 
 --end--
 
@@ -515,8 +515,6 @@ Move the redirection logic to an init hook!
 
 ## Case study: Client X
 
-![](img/fixed.png)
-
 <div class="notes">
   All the other problems with this code remain.
 </div>
@@ -524,6 +522,8 @@ Move the redirection logic to an init hook!
 * Much better performance!
 * We learned a lot about an unfamiliar codebase
 * After a few more hours, implemented other dramatic improvements
+
+![](img/fixed.png)
 
 <div class="notes">
   Took just an hour or two.
@@ -548,9 +548,12 @@ Move the redirection logic to an init hook!
 
 * xdebug conflict
 * profiling overhead
-  * can't use blackfire to compare PHP 5.5 and 7
 * Tradeoff: memory vs time
 * Caching and dirty comparisons
+
+<div class="notes">
+  Can't use blackfire to compare different PHP versions
+</div>
 
 --end--
 
