@@ -320,7 +320,20 @@ A real improvement in under an hour of total work, from profiling to committing 
 
 ## Installing Blackfire
 
-View [Blackfire Install Docs](https://blackfire.io/docs/24-days/06-installation), which has your API keys, and also instructions for Red Hat, OS X, Windows, docker, chef, and more. Install steps on Ubuntu:
+Sign in with GitHub, then view the super-easy [Blackfire Install Docs](https://blackfire.io/docs/24-days/06-installation).
+
+<img src="img/blackfire_installation.png" />
+
+
+<div class="notes"
+This installs:
+
+* `Probe`, a minimalistic PHP extension
+* `Agent`, a daemon that connects probe to blackfire servers
+* `Companion`, a Chrome extension
+* `Client`, command-line client
+
+It has has your API keys, and also instructions for Red Hat, OS X, Windows, docker, chef, and more. Install steps on Ubuntu:
 
           wget -O - https://packagecloud.io/gpg.key | sudo apt-key add -
           echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list
@@ -335,13 +348,7 @@ View [Blackfire Install Docs](https://blackfire.io/docs/24-days/06-installation)
 
           # disable xhprof and xdebug php extensions
           # restart apache or php-fpm
-
-This installs:
-
-* `Probe`, a minimalistic PHP extension
-* `Agent`, a daemon that connects probe to blackfire servers
-* `Companion`, a Chrome extension
-* `Client`, command-line client
+</div>
 
 --end--
 
