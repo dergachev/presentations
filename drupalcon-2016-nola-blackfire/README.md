@@ -27,33 +27,21 @@
 
 --end--
 
-## Evolving Web
+<img src="img/ew-good.png"/>
 
 * Drupal development, consulting and training since 2007
+* Based in Montreal, clients in Canada and USA
 * Very involved with the Drupal community
 * Specialties
-  * Infrastructure
-  * Multilingual content
-  * Solr search UI
   * Content migration
   * Design and responsive themes
   * Module dev: custom applications built on Drupal
-  * Expert Drupal training
-* Based in Montreal, clients in Canada and USA
+  * Infrastructure, Multilingual content, Solr search UI
+* Extensive Drupal training program
 
 --end--
 
 ![](img/ew-projects.png)
-
---end--
-
-## Drupal training program
-
-<img src="img/suzanne-presenting.jpg" width="25%" style="float: right; margin-left: 40px; margin-right: 20px" />
-
-* Public: Montreal, Ottawa, Toronto, DC Munich, NJ, NYC, Boston, Chiacgo
-* Private: Health Canada, Parks Canada, Tourism Quebec, Trent U, McGill U, remote
-* Enterprise teams, dev shops, remote
 
 --end--
 
@@ -709,3 +697,19 @@ We saved over 80 ms on every uncached request!
 * Follow <a href="https://twitter.com/dergachev">@dergachev</a> and <a href="https://twitter.com/djvasi">@djvasi</a> on twitter!
 * block\_access\_records: [github.com/vasi/block\_access\_records](https://github.com/vasi/block_access_records)
 * Go to the Blackfire booth
+
+--end--
+
+## Drupal training program
+
+<img src="img/suzanne-presenting.jpg" width="25%" style="float: right; margin-left: 40px; margin-right: 20px" />
+
+* Public: Montreal, Ottawa, Toronto, DC Munich, NJ, NYC, Boston, Chiacgo
+* Private: Health Canada, Parks Canada, Tourism Quebec, Trent U, McGill U, remote
+* Enterprise teams, dev shops, remote
+
+--end--
+
+## Visit us in Canada! 
+
+<img src="img/drupal-north-twitter.jpg">
