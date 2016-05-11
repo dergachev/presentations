@@ -277,10 +277,9 @@ Let's <a class="presenterlink" href="https://blackfire.io/profiles/131f6f0c-0a90
       * Hot path -> resources
       * Is this a reasonable amount of time for this function?
     * Function list
-      * Calls, excl, incl
-      * Expand: metrics (hover)
+      * Calls
+      * Expand: metrics
       * Expand: callees (time restricted to call)
-      * Search
   * Let's find a problem function
     * Hot path: theme()
     * moriarty_preprocess_page is long for a preprocess hook!
@@ -350,7 +349,6 @@ Collect the nids, load all nodes at once.
 <div class="notes">
   * Grab all the node IDs
   * Load the nodes all at once
-  * Return data in the expected structure
 </div>
 
 --end--
@@ -468,7 +466,7 @@ Blackfire does its magic:
 
 ![](img/cli-results.png)
 
-[And here's our profile](https://blackfire.io/profiles/9b5c779d-f1f9-4bbf-8e6b-bdf3132f7e78/graph)
+[And here's our profile](https://blackfire.io/profiles/9b5c779d-f1f9-4bbf-8e6b-bdf3132f7e78/graph) <a onclick="gotoSlide('#clientx-code');">⏎</a>
 
 <div class="notes">
   We see drupal_render_page taking up time. Why are we rendering a redirect?
@@ -476,8 +474,6 @@ Blackfire does its magic:
   Let's see what's triggering it, search for "goto".
   Find caller, and it's tq_home_preprocess_page.
 </div>
-
-<a onclick="gotoSlide('#clientx-code');">Next</a>
 
 --end--
 
@@ -515,6 +511,8 @@ Let's see what's triggering the redirect:
 
 --end--
 
+## Analysis
+
 <a id="clientx-code"></a>
 
     function tq_home_preprocess_page(&$variables) {
@@ -535,9 +533,8 @@ Let's see what's triggering the redirect:
   This code tries to check if the user has been here before, and if not sends the user to their language's landing page.
 
   It has a lot of problems!
-  * If you have cookies blocked/disabled, you just redirect forever!
-  * When cookie expires, we try to redirect user even if they've been here before.
-  * What we care about now: performance!
+  Eg: If you have cookies blocked/disabled, you just redirect forever!
+  And what we care about now, performance.
 </div>
 
 --end--
@@ -553,23 +550,17 @@ Let's see what's triggering the redirect:
       if ($tq_init === null) {
         // ... continue as above
 
-<div class="notes">
-  All the other problems with this code remain.
-</div>
-
---end--
-
-## A fix?
-
-At least performance is better:
-
-![](img/fixed.png)
-
 --end--
 
 ## Case study: Client X
 
-* We improved performance, that's nice
+![](img/fixed.png)
+
+<div class="notes">
+  All the other problems with this code remain.
+</div>
+
+* Much better performance!
 * We learned more about an unfamiliar codebase
 * Better understanding of future performance problems
   * Eg: Cookies and varnish
@@ -616,17 +607,14 @@ We already upgraded our site to Drupal 8!<br/>[http://tiny.cc/midcamp-d8-upgrade
 
 D8 is great, we love features like Views in core, CKEditor, Twig…
 
+<div class="slide">
+  <p style="float: left;">But it's slower than D7</p>
+  <img src="img/sad-kitty.jpg" style="float: left; padding-left: 2em; position: relative; top: -1em;"/>
+</div>
+
 <div class="notes">
   We learned a lot about D8, told people all about it.
 </div>
-
---end--
-
-<h2 class="small">Case study: evolvingweb.ca</h2>
-
-But it's slower than D7
-
-![](img/sad-kitty.jpg)
 
 --end--
 
