@@ -411,14 +411,6 @@ Use Chrome's _Copy as cURL_:
 
 Give the results of _Copy as cURL_ to Blackfire:
 
-![](img/curl-paste.png)
-
---end--
-
-## Profiling
-
-Give the results of _Copy as cURL_ to Blackfire:
-
 ![](img/pasted.png)
 
 --end--
@@ -479,23 +471,14 @@ Let's see what's triggering the redirect:
 <a id="clientx-code"></a>
 
     function tq_home_preprocess_page(&$variables) {
-      $tq_init = array_key_exists('tq_lang_init', $_COOKIE) ? $_COOKIE['tq_lang_init'] : null;
-      if ($tq_init === null) {
-        setrawcookie('tq_lang_init', 1, REQUEST_TIME + 60*60*24*7, '/');
-        $languages = language_list();
-        $browser_lang = locale_language_from_browser($languages);
-        if ($browser_lang !== $GLOBALS['language']->language && drupal_is_front_page()) {
-          drupal_goto('<front>', array(
-            'language' => $languages[$browser_lang],
-          ));
-        }
-      }
+      // ...
+      $lang = locale_language_from_browser($languages);
+      drupal_goto('<front>', $lang);
     }
 
 <div class="notes">
   This code tries to check if the user has been here before, and if not sends the user to their language's landing page.
 
-  It has other issues!
   But what we care about now is performance.
 </div>
 
@@ -506,7 +489,6 @@ Let's see what's triggering the redirect:
     function tq_home_init() {
       // ...
       drupal_goto('<front>', $lang);
-      // ...
     }
 
 Move the redirection logic to an init hook!
@@ -514,10 +496,6 @@ Move the redirection logic to an init hook!
 --end--
 
 ## Case study: Client X
-
-<div class="notes">
-  All the other problems with this code remain.
-</div>
 
 * Much better performance!
 * We learned a lot about an unfamiliar codebase
