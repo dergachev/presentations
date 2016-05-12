@@ -100,15 +100,16 @@
 * Time spent
 * Resource usage: CPU, memory, DB, network, I/O
 * Hooks into PHP engine, instruments each function call
-  * Finds what parts of your PHP code are slowing things down
 
 --end--
 
 ## Why it matters for Drupal
 
-* Even if core is usually fast, contrib varies, custom + legacy code
-* Why Varnish isn't enough
-* We deal with many projects, working on slow ones makes us sad
+* Real Drupal sites can be heavy
+  * Core is usually well-optimized, but not always
+  * Contrib varies in quality, custom + legacy code more so
+* Varnish isn't enough
+* Working on slow sites makes us sad
 
 --end--
 
@@ -130,7 +131,7 @@
 
 <h2 class="small">How to profile: Measure</h2>
 
-* Figure out exactly what you're profiling (request, cookies)
+* Figure out exactly what you care about (request, cookies)
 * Variations, eg: pages, server env, disable modules…
 * Use a profiler to analyze code
 
@@ -138,7 +139,7 @@
 
 ## How to profile: Analyze
 
-* Look for any low hanging fruit, bottlenecks
+* Look for low hanging fruit, bottlenecks
   * cachable calculations, bad SQL, blocking requests, unecessary loads…
 * Look for signs of overall sluggishness
   * eg: swapping, Vagrant shared folders, server contention, missing opcache
@@ -417,21 +418,16 @@ Moved it to a hook\_init!
 
 ## Blackfire tips
 
-* xdebug conflict
+* xdebug
+  * Turn off for profiling
+  * Turn on for analysis
 * profiling overhead
 * Tradeoff: memory vs time
+* SDK: enableProbe / disableProbe
 
 <div class="notes">
   Can't use blackfire to compare different PHP versions
 </div>
-
---end--
-
-## Diagnostic tips
-
-* References / comparison
-* Read the code, step through it
-* SDK: enableProbe / disableProbe
 
 --end--
 
@@ -441,7 +437,7 @@ Moved it to a hook\_init!
 
 <h2 class="small">Case study: evolvingweb.ca</h2>
 
-We already upgraded our site to Drupal 8!<br/>[http://tiny.cc/midcamp-d8-upgrade](http://tiny.cc/midcamp-d8-upgrade)
+We already upgraded our site to Drupal 8!
 
 D8 is great, we love features like Views in core, CKEditor, Twig…
 
@@ -458,7 +454,7 @@ D8 is great, we love features like Views in core, CKEditor, Twig…
 
 <img src="img/blog.png" width="50%" class="right" />
 
-<h2 style="border: none;">Blog posts</h2>
+<h2 style="border: none;">Blog view</h2>
 
 Really fast when cached!
 
@@ -566,7 +562,7 @@ We saved over 80 ms on every uncached request!
 * Assertions + Scenarios + CI + notifications
 * Custom metrics
 * Recommendations
-* Self-hosted version
+* On-Premise version
 * Talk to the guys in the Blackfire booth!
 
 --end--
@@ -584,10 +580,13 @@ We saved over 80 ms on every uncached request!
 
 ## Calls to Action!
 
-* Our blog: [evolvingweb.ca](http://evolvingweb.ca/blog)
 * Follow <a href="https://twitter.com/dergachev">@dergachev</a> and <a href="https://twitter.com/djvasi">@djvasi</a> on twitter!
-* block\_access\_records: [github.com/vasi/block\_access\_records](https://github.com/vasi/block_access_records)
 * Go to the Blackfire booth
+* Other resources:
+  * block\_access\_records: [github.com/vasi/block\_access\_records](https://github.com/vasi/block_access_records)
+  * Another Blackfire case study: [evolvingweb.ca/blog/improving-drupal-speed-blackfire-io-part-1](https://evolvingweb.ca/blog/improving-drupal-speed-blackfire-io-part-1)
+  * Block visibility case study: [evolvingweb.ca/blog/speed-up-drupal-8-block-rendering-blackfire-io](https://evolvingweb.ca/blog/speed-up-drupal-8-block-rendering-blackfire-io)
+  * Our talk about our D8 upgrade [2016.midcamp.org/session/moving-our-company-site-drupal-8-break-ice](http://2016.midcamp.org/session/moving-our-company-site-drupal-8-break-ice)
 
 --end--
 
@@ -604,3 +603,9 @@ We saved over 80 ms on every uncached request!
 ## Visit us in Canada!
 
 <img src="img/drupal-north-twitter.jpg">
+
+--end--
+
+## Just one more thing…
+
+![](img/blackfire-book.jpg)

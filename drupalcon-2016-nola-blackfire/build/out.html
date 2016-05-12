@@ -142,10 +142,7 @@
 <ul>
 <li>Time spent</li>
 <li>Resource usage: CPU, memory, DB, network, I/O</li>
-<li>Hooks into PHP engine, instruments each function call
-<ul>
-<li>Finds what parts of your PHP code are slowing things down</li>
-</ul></li>
+<li>Hooks into PHP engine, instruments each function call</li>
 </ul>
 
 </section><section class='slide'>
@@ -153,9 +150,13 @@
 <h2>Why it matters for Drupal</h2>
 
 <ul>
-<li>Even if core is usually fast, contrib varies, custom + legacy code</li>
-<li>Why Varnish isn't enough</li>
-<li>We deal with many projects, working on slow ones makes us sad</li>
+<li>Real Drupal sites can be heavy
+<ul>
+<li>Core is usually well-optimized, but not always</li>
+<li>Contrib varies in quality, custom + legacy code more so</li>
+</ul></li>
+<li>Varnish isn't enough</li>
+<li>Working on slow sites makes us sad</li>
 </ul>
 
 </section><section class='slide'>
@@ -179,7 +180,7 @@
 <h2 class="small">How to profile: Measure</h2>
 
 <ul>
-<li>Figure out exactly what you're profiling (request, cookies)</li>
+<li>Figure out exactly what you care about (request, cookies)</li>
 <li>Variations, eg: pages, server env, disable modules…</li>
 <li>Use a profiler to analyze code</li>
 </ul>
@@ -189,7 +190,7 @@
 <h2>How to profile: Analyze</h2>
 
 <ul>
-<li>Look for any low hanging fruit, bottlenecks
+<li>Look for low hanging fruit, bottlenecks
 <ul>
 <li>cachable calculations, bad SQL, blocking requests, unecessary loads…</li>
 </ul></li>
@@ -502,24 +503,19 @@ It has has your API keys, and also instructions for Red Hat, OS X, Windows, dock
 <h2>Blackfire tips</h2>
 
 <ul>
-<li>xdebug conflict</li>
+<li>xdebug
+<ul>
+<li>Turn off for profiling</li>
+<li>Turn on for analysis</li>
+</ul></li>
 <li>profiling overhead</li>
 <li>Tradeoff: memory vs time</li>
+<li>SDK: enableProbe / disableProbe</li>
 </ul>
 
 <div class="notes">
   Can't use blackfire to compare different PHP versions
 </div>
-
-</section><section class='slide'>
-
-<h2>Diagnostic tips</h2>
-
-<ul>
-<li>References / comparison</li>
-<li>Read the code, step through it</li>
-<li>SDK: enableProbe / disableProbe</li>
-</ul>
 
 </section><section class='slide'>
 
@@ -529,7 +525,7 @@ It has has your API keys, and also instructions for Red Hat, OS X, Windows, dock
 
 <h2 class="small">Case study: evolvingweb.ca</h2>
 
-<p>We already upgraded our site to Drupal 8!<br/><a href="http://tiny.cc/midcamp-d8-upgrade">http://tiny.cc/midcamp-d8-upgrade</a></p>
+<p>We already upgraded our site to Drupal 8!</p>
 
 <p>D8 is great, we love features like Views in core, CKEditor, Twig…</p>
 
@@ -546,7 +542,7 @@ It has has your API keys, and also instructions for Red Hat, OS X, Windows, dock
 
 <p><img src="img/blog.png" width="50%" class="right" /></p>
 
-<h2 style="border: none;">Blog posts</h2>
+<h2 style="border: none;">Blog view</h2>
 
 <p>Really fast when cached!</p>
 
@@ -659,7 +655,7 @@ It has has your API keys, and also instructions for Red Hat, OS X, Windows, dock
 <li>Assertions + Scenarios + CI + notifications</li>
 <li>Custom metrics</li>
 <li>Recommendations</li>
-<li>Self-hosted version</li>
+<li>On-Premise version</li>
 <li>Talk to the guys in the Blackfire booth!</li>
 </ul>
 
@@ -683,10 +679,15 @@ It has has your API keys, and also instructions for Red Hat, OS X, Windows, dock
 <h2>Calls to Action!</h2>
 
 <ul>
-<li>Our blog: <a href="http://evolvingweb.ca/blog">evolvingweb.ca</a></li>
 <li>Follow <a href="https://twitter.com/dergachev">@dergachev</a> and <a href="https://twitter.com/djvasi">@djvasi</a> on twitter!</li>
-<li>block_access_records: <a href="https://github.com/vasi/block_access_records">github.com/vasi/block_access_records</a></li>
 <li>Go to the Blackfire booth</li>
+<li>Other resources:
+<ul>
+<li>block_access_records: <a href="https://github.com/vasi/block_access_records">github.com/vasi/block_access_records</a></li>
+<li>Another Blackfire case study: <a href="https://evolvingweb.ca/blog/improving-drupal-speed-blackfire-io-part-1">evolvingweb.ca/blog/improving-drupal-speed-blackfire-io-part-1</a></li>
+<li>Block visibility case study: <a href="https://evolvingweb.ca/blog/speed-up-drupal-8-block-rendering-blackfire-io">evolvingweb.ca/blog/speed-up-drupal-8-block-rendering-blackfire-io</a></li>
+<li>Our talk about our D8 upgrade <a href="http://2016.midcamp.org/session/moving-our-company-site-drupal-8-break-ice">2016.midcamp.org/session/moving-our-company-site-drupal-8-break-ice</a></li>
+</ul></li>
 </ul>
 
 </section><section class='slide'>
@@ -706,6 +707,12 @@ It has has your API keys, and also instructions for Red Hat, OS X, Windows, dock
 <h2>Visit us in Canada!</h2>
 
 <p><img src="img/drupal-north-twitter.jpg"></p>
+
+</section><section class='slide'>
+
+<h2>Just one more thing…</h2>
+
+<p><img src="img/blackfire-book.jpg" alt="" title="" /></p>
 </section>
 <!-- End slides. -->
 
