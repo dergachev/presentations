@@ -140,7 +140,7 @@
 ## How to profile: Analyze
 
 * Look for low hanging fruit, bottlenecks
-  * cachable calculations, bad SQL, blocking requests, unecessary loads…
+  * cachable calculations, bad SQL, blocking requests, unnecessary loads…
 * Look for signs of overall sluggishness
   * eg: swapping, Vagrant shared folders, server contention, missing opcache
 
