@@ -1,6 +1,13 @@
 Talks by Alex Dergachev
 =======================
 
+### Drupalcon NOLA 2016 - Using Blackfire.io to Profile Your Loading Time
+
+* [markdown](https://github.com/dergachev/presentations/tree/gh-pages/drupalcon-2016-nola-blackfire)
+* [slideshow](http://dergachev.github.io/presentations/drupalcon-2016-nola-blackfire/build/out.html#slide-1)
+* [conference website](https://events.drupal.org/neworleans2016/sessions/using-blackfireio-profile-your-loading-time)
+* [video](https://www.youtube.com/watch?v=K0vHmZJ3yuw)
+
 ### NYC Camp 2014 - Test-Driven D7 Upgrades w/ Docker 
 
 * [markdown](https://github.com/dergachev/presentations/tree/gh-pages/nyccamp-2014-docker/)
