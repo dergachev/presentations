@@ -8,6 +8,10 @@ Talks by Alex Dergachev
 * [conference website](https://events.drupal.org/neworleans2016/sessions/using-blackfireio-profile-your-loading-time)
 * [video](https://www.youtube.com/watch?v=K0vHmZJ3yuw)
 
+#### Drupal North 2016 version
+
+* [slideshow](http://dergachev.github.io/presentations/drupal-north-2016-blackfire/build/out.html#slide-1)
+
 ### NYC Camp 2014 - Test-Driven D7 Upgrades w/ Docker 
 
 * [markdown](https://github.com/dergachev/presentations/tree/gh-pages/nyccamp-2014-docker/)
