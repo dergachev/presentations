@@ -1,0 +1,749 @@
+<!DOCTYPE html><html><head>
+<title>Drupal + Blackfire = ❤️</title>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=1024, user-scalable=no">
+
+<!-- Required stylesheet -->
+<link rel="stylesheet" href="deck.js/core/deck.core.css">
+
+<!-- Extension CSS files go here. Remove or add as needed. -->
+<link rel="stylesheet" href="deck.js/extensions/goto/deck.goto.css">
+<link rel="stylesheet" href="deck.js/extensions/menu/deck.menu.css">
+<link rel="stylesheet" href="deck.js/extensions/navigation/deck.navigation.css">
+<link rel="stylesheet" href="deck.js/extensions/status/deck.status.css">
+<link rel="stylesheet" href="deck.js/extensions/hash/deck.hash.css">
+<link rel="stylesheet" href="deck.js/extensions/scale/deck.scale.css">
+<!-- Style theme. More available in /themes/style/ or create your own. -->
+<link rel="stylesheet" href="amir-deck.css">
+
+<!-- Transition theme. More available in /themes/transition/ or create your own. -->
+<link rel="stylesheet" href="deck.js/themes/transition/vertical-slide.css">
+
+<!-- Required Modernizr file -->
+<script src="deck.js/modernizr.custom.js"></script>
+
+<!-- Roboto Slab typeface -->
+<link href='http://fonts.googleapis.com/css?family=Roboto+Slab:300,700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Cardo:400,400italic,700' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+<!-- Google Code Prettify -->
+<link rel="stylesheet" href="google-code-prettify/styles/desert.css">
+</head><body class='deck-container'><section class='slide'>
+<div style="position: absolute; height: 97%; width: 100%;">
+  <h2 style="margin:30px auto 50px 0px; font-size:1.8em; font-weight:bold; width: 90%; text-align: center">
+    Using Blackfire.io to profile Drupal loading time
+  </h2>
+  <table style="width: 90%"><tr>
+    <td style="font-size:0.7em; text-align: center; width:50%;">
+      <div style="font-size:1.2em; font-weight:bold;">Alex Dergachev</div>
+      <div> alex@evolvingweb.ca </div>
+      <div> @dergachev on twitter, github, drupal.org </div>
+    </td>
+    <td style="font-size:0.7em; text-align: center; width:50%;">
+      <div style="font-size:1.2em; font-weight:bold;">Dave Vasilevsky</div>
+      <div> vasi@evolvingweb.ca </div>
+      <div> twitter.com/djvasi </div>
+      <div> @vasi on github, drupal.org </div>
+    </td>
+  </tr></table>
+
+  <p><img src="img/ew-good.png" style="height:130px; margin: 10px 0 0 0; position: absolute; bottom: 0;"></p>
+</div>
+
+</section><section class='slide'>
+
+<h2>About the speakers</h2>
+
+<p><img src="img/speakers.jpg"></p>
+
+</section><section class='slide'>
+
+<p><img src="img/ew-good.png"/></p>
+
+<ul>
+<li>Drupal development, consulting and training since 2007</li>
+<li>Based in Montreal, clients in Canada and USA</li>
+<li>Very involved with the Drupal community</li>
+<li>Specialties
+<ul>
+<li>Content migration</li>
+<li>Design and responsive themes</li>
+<li>Module dev: custom applications built on Drupal</li>
+<li>Infrastructure, Multilingual content, Solr search UI</li>
+</ul></li>
+<li>Extensive Drupal training program</li>
+</ul>
+
+</section><section class='slide'>
+
+<p><img src="img/ew-projects.png" alt="" title="" /></p>
+
+</section><section class='slide'>
+
+<h2>Outline</h2>
+
+<ul>
+<li>Profiling methodology + philosophy</li>
+<li>Blackfire demo and discussion</li>
+<li>Case studies from our projects</li>
+</ul>
+
+<div class="notes">
+* Intro + motivation
+* Profiling methodology + philosophy
+* Demo 1: Blackfire UI Tour
+* Blackfire basics: Terminology, advantages, installation
+* Blackfire features (basic + intermediate)
+* Demo 2: Copy as cURL
+* Blackfire + Drupal tricks
+* Demo 3: Block visibility
+* Drupal performance considerations
+* Q & A
+</div>
+
+</section><section class='slide'>
+
+<h1>Motivation</h1>
+
+</section><section class='slide'>
+
+<h2>Why page loading time is SUPER IMPORTANT</h2>
+
+<ul>
+<li>User experience</li>
+<li>Concurrency + scalability
+<ul>
+<li>"Throw more hardware at it"</li>
+</ul></li>
+<li>Financial implications</li>
+<li>Google's history</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>What profiling doesn't measure</h2>
+
+<ul>
+<li>Browser rendering time (HTML, CSS)</li>
+<li>Network issues</li>
+<li>JavaScript run-time</li>
+<li>Asset fetching (imgs, fonts)</li>
+</ul>
+
+</section><section class='slide'>
+
+<p><img src="img/druplicon-xray.jpg" ></p>
+
+</section><section class='slide'>
+
+<h2>What profiling measures</h2>
+
+<ul>
+<li>Time spent</li>
+<li>Resource usage: CPU, memory, DB, network, I/O</li>
+<li>Hooks into PHP engine, instruments each function call</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Why it matters for Drupal</h2>
+
+<ul>
+<li>Real Drupal sites can be heavy
+<ul>
+<li>Core is usually well-optimized, but not always</li>
+<li>Contrib varies in quality, custom + legacy code more so</li>
+</ul></li>
+<li>Varnish isn't enough</li>
+<li>Working on slow sites makes us sad</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Profiling gets results, fast</h2>
+
+<table>
+  <tr><th>Project</th><th>Improvement</th><th>Time spent</th></tr>
+  <tr><td>McGill academic calendar</td><td>13%</td><td>1 hour</td></tr>
+  <tr><td>Client X</td><td>52%</td><td>6 hours</td></tr>
+  <tr><td>Evolving Web D8</td><td>21%</td><td>2 days</td></tr>
+  <tr><td>AllJoyn Certification</td><td>57%</td><td>3 hours</td></tr>
+</table>
+
+</section><section class='slide'>
+
+<h1>How to profile: M.A.F.I.A.</h1>
+
+</section><section class='slide'>
+
+<h2 class="small">How to profile: Measure</h2>
+
+<ul>
+<li>Figure out exactly what you care about (request, cookies)</li>
+<li>Variations, eg: pages, server env, disable modules…</li>
+<li>Use a profiler to analyze code</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>How to profile: Analyze</h2>
+
+<ul>
+<li>Look for low hanging fruit, bottlenecks
+<ul>
+<li>cachable calculations, bad SQL, blocking requests, unnecessary loads…</li>
+</ul></li>
+<li>Look for signs of overall sluggishness
+<ul>
+<li>eg: swapping, Vagrant shared folders, server contention, missing opcache</li>
+</ul></li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>How to profile: Fix</h2>
+
+<ul>
+<li>Make a change</li>
+<li>Compare to baseline
+<ul>
+<li>In Drupal, static caching means removing "slow" code just pushes it to later in request</li>
+</ul></li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>How to profile: Iterate</h2>
+
+<ul>
+<li>Measure again</li>
+<li>Know when to stop profiling
+<ul>
+<li>Decide what's "fast enough"</li>
+</ul></li>
+<li>Log your runs, later it will be hard to remember all you've changed</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>How to profile: Applause</h2>
+
+<ul>
+<li>I couldn't come up with a better "A"</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Measurement tools</h2>
+
+<ul>
+<li>Front-end: Chrome Developer Tools</li>
+<li>Benchmark: ApacheBench, JMeter</li>
+<li>Application Performance Monitoring: New Relic</li>
+<li>PHP Profiling: xhprof, Blackfire</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Blackfire.io</h2>
+
+<p><img src="img/blackfire-logo.png" width="40%" style="float: right; margin-left: 40px; margin-right: 20px" /></p>
+
+<ul>
+<li>By SensioLabs, creators of Symfony and Twig</li>
+<li>Freemium, SaaS</li>
+<li>Great docs</li>
+<li>Started as a fork of xhprof
+<ul>
+<li>Simpler installation</li>
+<li>Interactive callgraph, better UX</li>
+<li>Supports comparisons</li>
+<li>Actively maintained, support for PHP 7</li>
+<li>No overhead, you can leave it on all the time</li>
+</ul></li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Case study: McGill U</h2>
+
+<p>McGill University listing of courses and programs.</p>
+
+</section><section class='slide'>
+
+<h2>Case study: McGill U</h2>
+
+<p>Let's <a class="presenterlink" href="https://blackfire.io/profiles/131f6f0c-0a90-4ac8-8d7e-7d3e773377ec/graph">profile</a> <a class="presenterlink" href="http://docker4:4569/faculties/engineering/undergraduate/ug_eng_dept_of_bioengineering">a page</a> with Blackfire!</p>
+
+<div class="notes">
+  * Visit page
+  * Make a profile
+  * Tour the profile: read numbers?
+    * Metrics (overall, I/O, cpu, memory...)
+    * Call graph
+      * Hot path -> resources
+    * Function list
+      * Number of calls
+      * Expand: callees (time restricted to call)
+
+  * Let's find a problem function
+    * Hot path: theme()
+    * moriarty_preprocess_page is long for a preprocess hook!
+    * Follow down graph until the time changes significantly
+    * We get to loadAcademicFacultyNodes
+    * Calling node_load 36 times! Could be multiple
+</div>
+
+</section><section class='slide'>
+
+<h2 class="mini">The slow code</h2>
+
+<pre class="prettyprint"><code><span class="code-nofade">public function loadAcademicFacultyNodes($language, $key){</span>
+  <span class="code-highlight">foreach($this-&gt;faculties as $f){</span>
+    if ($f-&gt;nid &amp;&amp; $f-&gt;code){
+      if (!$language || $f-&gt;language === $language){
+        <span class="code-highlight">$node = node_load($f-&gt;nid);</span>
+        if ($key &amp;&amp; $f-&gt;$key){
+          $return[$f-&gt;$key] = $node;
+        } else {
+          $return[] = $node;
+        }
+      }
+    }
+  }
+  // ...
+}
+</code></pre>
+
+<p>Iterate over faculties, load nodes one at a time.</p>
+
+<div class="notes">
+  * Loading nodes one at a time is slow! Should load them all together, to
+    minimize the number of DB queries.
+</div>
+
+</section><section class='slide'>
+
+<h2 class="mini">A fix</h2>
+
+<pre class="prettyprint"><code><span class="code-nofade">public function loadAcademicFacultyNodes($language, $key){</span>
+  <span class="code-highlight">foreach($this-&gt;faculties as $f){</span>
+    if ($f-&gt;nid &amp;&amp; $f-&gt;code){
+      if (!$language || $f-&gt;language === $language){
+        if ($key &amp;&amp; $f-&gt;$key){
+          <span class="code-highlight">$nids[$f-&gt;$key] = $f-&gt;nid;</span>
+        } else {
+          $nids[] = $f-&gt;nid;
+        }
+      }
+    }
+  }
+
+  <span class="code-highlight">$nodes = node_load_multiple($nids);</span>
+  // ...
+}
+</code></pre>
+
+<p>Collect the nids, load all nodes at once.</p>
+
+</section><section class='slide'>
+
+<h2>Case study: McGill U</h2>
+
+<p><img src="img/fixed-coursecal.png" alt="" title="" /></p>
+
+<p>Saved about 25ms!</p>
+
+<p>A real improvement in under an hour of total work, from profiling to committing a fix.</p>
+
+</section><section class='slide'>
+
+<h2>Installing Blackfire</h2>
+
+<p>Sign in with GitHub, then view the super-easy <a href="https://blackfire.io/docs/24-days/06-installation">Blackfire Install Docs</a>.</p>
+
+<p><img src="img/blackfire_installation.png" /></p>
+
+<div class="notes">
+This installs:
+
+* `Probe`, a minimalistic PHP extension
+* `Agent`, a daemon that connects probe to blackfire servers
+* `Companion`, a Chrome extension
+* `Client`, command-line client
+
+It has has your API keys, and also instructions for Red Hat, OS X, Windows, docker, chef, and more. Install steps on Ubuntu:
+
+          wget -O - https://packagecloud.io/gpg.key | sudo apt-key add -
+          echo "deb http://packages.blackfire.io/debian any main" | sudo tee /etc/apt/sources.list.d/blackfire.list
+          sudo apt-get update
+          sudo apt-get install blackfire-agent blackfire-php
+          # fill in server-id and server-token
+          sudo blackfire-agent --register
+          sudo /etc/init.d/blackfire-agent start
+
+          # for command-line use, fill in client-id and client-token
+          blackfire config
+
+          # disable xhprof and xdebug php extensions
+          # restart apache or php-fpm
+</div>
+
+</section><section class='slide'>
+
+<h2>Blackfire features</h2>
+
+<ul>
+<li>Comparison with baseline profile</li>
+<li>Command line profile trigger (for AJAX, cookies, POST requests, web services)</li>
+<li>Profiling command-line / drush commands
+<ul>
+<li><code>blackfire run drush.launcher cc all</code></li>
+</ul></li>
+<li>Sharing profiles publicly</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Case study: Client X</h2>
+
+<p><img src="img/mystery.png" height="400" /></p>
+
+</section><section class='slide'>
+
+<h2>The problem</h2>
+
+<h4>Homepage is slow</h4>
+
+<p><span class="vspace"></div></p>
+
+<p>Let's check it out in Chrome inspector's <em>Network</em> tab:</p>
+
+<p><img src="img/timeline.png" alt="" title="" /></p>
+
+<div class="notes">
+  That's a pretty slow redirect!
+
+  Our browser is at the path `/en`, so that's what Blackfire would profile
+  But we want to profile the redirect itself!
+</div>
+
+</section><section class='slide'>
+
+<h2>Profiling</h2>
+
+<p>Use Chrome's <em>Copy as cURL</em>:</p>
+
+<p><img src="img/copy-curl.png" alt="" title="" /></p>
+
+</section><section class='slide'>
+
+<h2>Profiling</h2>
+
+<p>Give the results of <em>Copy as cURL</em> to Blackfire:</p>
+
+<p><img src="img/pasted.png" alt="" title="" /></p>
+
+</section><section class='slide'>
+
+<h2>Profiling</h2>
+
+<p>Blackfire does its magic:</p>
+
+<p><img src="img/cli-results.png" alt="" title="" /></p>
+
+</section><section class='slide'>
+
+<h2>Analysis</h2>
+
+<pre class="prettyprint"><code>function tq_home_preprocess_page(&amp;$variables) {
+  // ...
+  $lang = locale_language_from_browser($languages);
+  drupal_goto('&lt;front&gt;', $lang);
+}
+</code></pre>
+
+<p>Moved it to a hook_init!</p>
+
+</section><section class='slide'>
+
+<h2>Case study: Client X</h2>
+
+<ul>
+<li>Much better performance!</li>
+<li>We learned a lot about an unfamiliar codebase</li>
+<li>After a few more hours, implemented other dramatic improvements</li>
+</ul>
+
+<p><img src="img/fixed.png" alt="" title="" /></p>
+
+<div class="notes">
+  Took just an hour or two.
+</div>
+
+</section><section class='slide'>
+
+<h1>Blackfire tips</h1>
+
+</section><section class='slide'>
+
+<h2>Blackfire tips</h2>
+
+<ul>
+<li>Aggregation (10 requests, averaged)
+<ul>
+<li>Disable aggregation to control for caching and side effects</li>
+</ul></li>
+<li>Blackfire doesn't keep function arguments</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Blackfire tips</h2>
+
+<ul>
+<li>xdebug
+<ul>
+<li>Turn off for profiling</li>
+<li>Turn on for analysis</li>
+</ul></li>
+<li>profiling overhead</li>
+<li>Tradeoff: memory vs time</li>
+<li>SDK: enableProbe / disableProbe</li>
+</ul>
+
+<div class="notes">
+  Can't use blackfire to compare different PHP versions
+</div>
+
+</section><section class='slide'>
+
+<h2>Case study: evolvingweb.ca</h2>
+
+</section><section class='slide'>
+
+<h2 class="small">Case study: evolvingweb.ca</h2>
+
+<p>We already upgraded our site to Drupal 8!</p>
+
+<p>D8 is great, we love features like Views in core, CKEditor, Twig…</p>
+
+<div class="slide">
+  <p style="float: left;">But it's slower than D7</p>
+  <img src="img/sad-kitty.jpg" style="float: left; padding-left: 2em; position: relative; top: -1em;"/>
+</div>
+
+<div class="notes">
+  We learned a lot about D8, told people all about it.
+</div>
+
+</section><section class='slide'>
+
+<p><img src="img/blog.png" width="50%" class="right" /></p>
+
+<h2 style="border: none;">Blog view</h2>
+
+<p>Really fast when cached!</p>
+
+<p>No so fast after any node is edited, and D8 invalidates cache tags</p>
+
+</section><section class='slide'>
+
+<h2>Uncached requests</h2>
+
+<p>Aggregation makes it hard to profile uncached behavior.</p>
+
+<p>So at the start of each request, pretend a node was edited:</p>
+
+<pre class="prettyprint"><code>class EwsiteSubscriber implements EventSubscriberInterface {
+  public static function getSubscribedEvents() {
+    $events[KernelEvents::REQUEST][] = ['killBlogCache'];
+    return $events;
+  }
+
+  public function killBlogCache(GetResponseEvent $event) {
+    $tags = ['node_list', 'node:239'];
+    \Drupal::service("cache_tags.invalidator")-&gt;invalidateTags($tags);
+  }
+}
+</code></pre>
+
+<div class="notes">
+  If we edit a node and then profile, Blackfire will have one uncached requests, then nine cached ones.
+
+  We still want reliable numbers.
+</div>
+
+</section><section class='slide'>
+
+<h2>Profiling</h2>
+
+<p>Now let's see why it's so slow:</p>
+
+<p><img src="img/getvisibleblocks.png" alt="" title="" /></p>
+
+<p>That's part of D8 core, and it's taking 117 ms!</p>
+
+<div class="notes">
+  * We do have a lot of blocks
+  * But that's normal for a D8 site, so many things are blocks now
+</div>
+
+</section><section class='slide'>
+
+<h2>Analysis</h2>
+
+<pre class="prettyprint"><code>public function getVisibleBlocksPerRegion(array &amp;$cacheable_metadata = []) {
+  // ...
+  foreach ($this-&gt;blockStorage-&gt;loadByProperties(array('theme' =&gt; $active_theme-&gt;getName())) as $block_id =&gt; $block) {
+    $access = $block-&gt;access('view', NULL, TRUE);
+    // ....
+  }
+}
+</code></pre>
+
+<p>To get a list of blocks, Drupal 8:</p>
+
+<ul>
+<li>Loads every single block in the current theme just to check access</li>
+<li>Checks access using visibility conditions—pretty complex!</li>
+</ul>
+
+<div class="notes">
+  * Iterates through lazy collections many times
+  * Merges metadata many times over
+</div>
+
+</section><section class='slide'>
+
+<h2>Does this sound familiar?</h2>
+
+<h3>node_access!</h3>
+
+<div class="notes">
+  Instead of loading and checking each node, uses a single DB query.
+</div>
+
+</section><section class='slide'>
+
+<h2>A fix</h2>
+
+<p>Built a module that determines block visibility in one DB query:
+<a href="http://github.com/vasi/block_access_records">github.com/vasi/block_access_records</a></p>
+
+<p><img src="img/comparison.png" alt="" title="" /></p>
+
+<p>We saved over 80 ms on every uncached request!</p>
+
+<div class="notes">
+* Similar to how `node_access` works, read more about it on our blog.
+* Supports Drupal's built-in block visibility conditions
+
+  Caveats:
+    * Sites with custom block conditions may need to implement them
+    * Not super well tested
+</div>
+
+</section><section class='slide'>
+
+<h2>Blackfire Premium</h2>
+
+<ul>
+<li>Environments (team)</li>
+<li>Data retention</li>
+<li>Assertions + Scenarios + CI + notifications</li>
+<li>Custom metrics</li>
+<li>Recommendations</li>
+<li>On-Premise version</li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Calls to Action!</h2>
+
+<ul>
+<li>Follow <a href="https://twitter.com/dergachev">@dergachev</a> and <a href="https://twitter.com/djvasi">@djvasi</a> on twitter!</li>
+<li>Other resources:
+<ul>
+<li>block_access_records: <a href="https://github.com/vasi/block_access_records">github.com/vasi/block_access_records</a></li>
+<li>Another Blackfire case study: <a href="https://evolvingweb.ca/blog/improving-drupal-speed-blackfire-io-part-1">evolvingweb.ca/blog/improving-drupal-speed-blackfire-io-part-1</a></li>
+<li>Block visibility case study: <a href="https://evolvingweb.ca/blog/speed-up-drupal-8-block-rendering-blackfire-io">evolvingweb.ca/blog/speed-up-drupal-8-block-rendering-blackfire-io</a></li>
+<li>Our talk about our D8 upgrade <a href="http://2016.midcamp.org/session/moving-our-company-site-drupal-8-break-ice">2016.midcamp.org/session/moving-our-company-site-drupal-8-break-ice</a></li>
+</ul></li>
+</ul>
+
+</section><section class='slide'>
+
+<h2>Drupal training program</h2>
+
+<p><img src="img/suzanne-presenting.jpg" width="25%" style="float: right; margin-left: 40px; margin-right: 20px" /></p>
+
+<ul>
+<li>Public: Montreal, Ottawa, Toronto, DC Munich, NJ, NYC, Boston, Chiacgo</li>
+<li>Private: Health Canada, Parks Canada, Tourism Quebec, Trent U, McGill U, remote</li>
+<li>Enterprise teams, dev shops, remote</li>
+</ul>
+</section>
+<!-- End slides. -->
+
+
+<!-- Begin extension snippets. Add or remove as needed. -->
+
+<!-- deck.navigation snippet -->
+<a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+<a href="#" class="deck-next-link" title="Next">&#8594;</a>
+
+<!-- deck.status snippet -->
+<p class="deck-status">
+	<span class="deck-status-current"></span>
+	/
+	<span class="deck-status-total"></span>
+</p>
+
+<!-- deck.goto snippet -->
+<form action="." method="get" class="goto-form">
+	<label for="goto-slide">Go to slide:</label>
+	<input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+	<datalist id="goto-datalist"></datalist>
+	<input type="submit" value="Go">
+</form>
+
+<!-- deck.hash snippet -->
+<a href="." title="Permalink to this slide" class="deck-permalink">#</a>
+
+<!-- End extension snippets. -->
+
+
+<!-- Required JS files. -->
+<script src="deck.js/jquery-1.7.2.min.js"></script>
+<script src="deck.js/core/deck.core.js"></script>
+
+<!-- Extension JS files. Add or remove as needed. -->
+<script src="deck.js/core/deck.core.js"></script>
+<script src="deck.js/extensions/hash/deck.hash.js"></script>
+<script src="deck.js/extensions/menu/deck.menu.js"></script>
+<script src="deck.js/extensions/goto/deck.goto.js"></script>
+<script src="deck.js/extensions/status/deck.status.js"></script>
+<script src="deck.js/extensions/navigation/deck.navigation.js"></script>
+<script src="deck.js/extensions/scale/deck.scale.js"></script>
+
+<!-- Initialize the deck. You can put this in an external file if desired. -->
+<script>
+$(function() {
+	$.deck('.slide');
+
+  $('code .code-highlight').each(function() {
+    $(this).closest('code').addClass('code-fade');
+  });
+
+  window.gotoSlide = function(sel) {
+    var slide = $(sel).closest('.slide');
+    var idx = +slide.attr('id').replace(/slide-/, '');
+    $.deck('go', idx);
+  };
+});
+</script>
+
+<script src="google-code-prettify/src/run_prettify.js?lang=yaml"></script>
+</body></html>
