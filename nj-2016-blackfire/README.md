@@ -121,6 +121,7 @@
   <tr><td>Client X</td><td>52%</td><td>6 hours</td></tr>
   <tr><td>Evolving Web D8</td><td>21%</td><td>2 days</td></tr>
   <tr><td>AllJoyn Certification</td><td>57%</td><td>3 hours</td></tr>
+  <tr><td>Drawn and Quarterly</td><td>92%</td><td>2 hours</td></tr>
 </table>
 
 --end--
