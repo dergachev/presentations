@@ -556,13 +556,22 @@ We saved over 80 ms on every uncached request!
 
 --end--
 
-## Blackfire Premium
+## Blackfire paid plans
+
+Recommendations (Profiler plan and higher)
+
+![](img/recommendations.png)
+
+--end--
+
+## Blackfire paid plans
+
+Premium plans
 
 * Environments (team)
 * Data retention
 * Assertions + Scenarios + CI + notifications
 * Custom metrics
-* Recommendations
 * On-Premise version
 
 --end--
