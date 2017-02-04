@@ -558,9 +558,10 @@ We saved over 80 ms on every uncached request!
 
 ## Blackfire paid plans
 
-Recommendations (Profiler plan and higher)
+_Profiler_ plan and higher
 
-![](img/recommendations.png)
+* Data retention
+* [Recommend](https://blackfire.io/profiles/b6b667bd-3e6d-4ecb-9b36-bfa8aedacc58/graph?settings%5Bdimension%5D=wt&settings%5Bdisplay%5D=landscape&settings%5BtabPane%5D=recommendations)[ations](img/recommendations.png) (_Profiler_ plan and higher)
 
 --end--
 
@@ -569,10 +570,9 @@ Recommendations (Profiler plan and higher)
 Premium plans
 
 * Environments (team)
-* Data retention
-* Assertions + Scenarios + CI + notifications
 * Custom metrics
-* On-Premise version
+* Assertions + Scenarios + CI + notifications
+* On-premise version
 
 --end--
 
