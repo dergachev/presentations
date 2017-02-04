@@ -204,7 +204,7 @@ McGill University listing of courses and programs.
 
 ## Case study: McGill U
 
-Let's <a class="presenterlink" href="https://blackfire.io/profiles/131f6f0c-0a90-4ac8-8d7e-7d3e773377ec/graph">profile</a> <a class="presenterlink" href="http://localhost:20080/faculties/engineering/undergraduate/ug_eng_dept_of_bioengineering">a page</a> with Blackfire!
+Let's <a class="presenterlink" href="https://blackfire.io/profiles/131f6f0c-0a90-4ac8-8d7e-7d3e773377ec/graph">profile</a> <a class="presenterlink" href="http://docker4/faculties/engineering/undergraduate/ug_eng_dept_of_bioengineering">a page</a> with Blackfire!
 
 <div class="notes">
   * Visit page
