@@ -204,7 +204,7 @@ McGill University listing of courses and programs.
 
 ## Case study: McGill U
 
-Let's <a class="presenterlink" href="https://blackfire.io/profiles/131f6f0c-0a90-4ac8-8d7e-7d3e773377ec/graph">profile</a> <a class="presenterlink" href="http://docker4/faculties/engineering/undergraduate/ug_eng_dept_of_bioengineering">a page</a> with Blackfire!
+Let's <a class="presenterlink" href="https://blackfire.io/profiles/131f6f0c-0a90-4ac8-8d7e-7d3e773377ec/graph">profile</a> <a class="presenterlink" href="http://docker4:4569/faculties/engineering/undergraduate/ug_eng_dept_of_bioengineering">a page</a> with Blackfire!
 
 <div class="notes">
   * Visit page
@@ -594,3 +594,11 @@ Premium plans
 * Public: Montreal, Ottawa, Toronto, DC Munich, NJ, NYC, Boston, Chiacgo
 * Private: Health Canada, Parks Canada, Tourism Quebec, Trent U, McGill U, remote
 * Enterprise teams, dev shops, remote
+
+--end--
+
+## Just one more thing…
+
+![](img/blackfire-book.jpg)
+
+[http://bit.ly/free-blackfire-book-nj](http://bit.ly/free-blackfire-book-nj)
