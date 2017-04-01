@@ -601,4 +601,4 @@ Premium plans
 
 ![](img/blackfire-book.jpg)
 
-[http://bit.ly/free-blackfire-book-nj](http://bit.ly/free-blackfire-book-nj)
+[http://bit.ly/blackfire-evolvingweb](http://bit.ly/blackfire-evolvingweb)
