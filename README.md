@@ -12,6 +12,13 @@ Talks by Alex Dergachev
 
 * [slideshow](http://dergachev.github.io/presentations/drupal-north-2016-blackfire/build/out.html#slide-1)
 
+#### New Jersey Drupalcamp 2017
+
+* [markdown](https://github.com/dergachev/presentations/tree/gh-pages/nj-2017-blackfire)
+* [slideshow](http://dergachev.github.io/presentations/nj-2017-blackfire/build/out.html#slide-1)
+* [conference website](https://www.drupalcampnj.org/program/sessions/using-blackfire-profile-your-loading-time)
+* [video](https://www.youtube.com/watch?v=r9jYnQIK3lw)
+
 ### NYC Camp 2014 - Test-Driven D7 Upgrades w/ Docker 
 
 * [markdown](https://github.com/dergachev/presentations/tree/gh-pages/nyccamp-2014-docker/)
