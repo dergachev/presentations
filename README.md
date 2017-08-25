@@ -1,6 +1,11 @@
 Talks by Alex Dergachev
 =======================
 
+### Drupal North 2017 - How to speed up your Drupal site loading time by profiling your code
+
+* [markdown](https://github.com/dergachev/presentations/tree/gh-pages/drupal-north-2017-blackfire)
+* [conference website](http://www.drupalnorth.org/)
+
 ### Drupalcon NOLA 2016 - Using Blackfire.io to Profile Your Loading Time
 
 * [markdown](https://github.com/dergachev/presentations/tree/gh-pages/drupalcon-2016-nola-blackfire)
