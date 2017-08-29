@@ -1,10 +1,19 @@
 Talks by Alex Dergachev
 =======================
 
+### Drupal North 2017 - Evolving Web Case Study: Princeton University Press on Drupal 8
+
+* [slideshow on slideshare](https://www.slideshare.net/dergachev/princeton-university-press-to-drupal-8-migration-case-study-by-evolving-web)
+* [conference website](http://www.drupalnorth.org/en/session/princeton-university-press-drupal-8-case-study)
+* [video](https://www.youtube.com/watch?v=52gAQDXS8Zc)
+
+
 ### Drupal North 2017 - How to speed up your Drupal site loading time by profiling your code
 
 * [markdown](https://github.com/dergachev/presentations/tree/gh-pages/drupal-north-2017-blackfire)
-* [conference website](http://www.drupalnorth.org/)
+* [slideshow](http://dergachev.github.io/presentations/drupal-north-2017-blackfire/build/out.html)
+* [conference website](http://www.drupalnorth.org/en/session/how-speed-your-drupal-site-loading-time-profiling-your-code)
+* [video](https://youtu.be/om0YoTw0gYo)
 
 ### Drupalcon NOLA 2016 - Using Blackfire.io to Profile Your Loading Time
 
